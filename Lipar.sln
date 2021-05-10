@@ -3,13 +3,19 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar", "Lipar\Lipar.csproj", "{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar", "Lipar\Lipar.csproj", "{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{65552297-33D2-4AE8-8E56-C9F19BD2669B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Core.DomainModels", "Lipar.Core.DomainModels\Lipar.Core.DomainModels.csproj", "{66B214CE-D352-41CE-B66C-03CCE585ED79}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Core.DomainModels", "Lipar.Core.DomainModels\Lipar.Core.DomainModels.csproj", "{66B214CE-D352-41CE-B66C-03CCE585ED79}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Core.ApplicationServises", "Lipar.Core.ApplicationServises\Lipar.Core.ApplicationServises.csproj", "{6CD893EE-3965-4485-B740-CF533A833639}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Core.ApplicationServises", "Lipar.Core.ApplicationServises\Lipar.Core.ApplicationServises.csproj", "{6CD893EE-3965-4485-B740-CF533A833639}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastructure", "{7CB9B90B-ADFB-4B9F-B213-6317F6B57C56}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{56B67CEE-71CA-491E-8518-78DF48360CE9}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Data.SqlServer", "Lipar.Infrastructure.Data.SqlServer\Lipar.Infrastructure.Data.SqlServer\Lipar.Infrastructure.Data.SqlServer.csproj", "{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -29,6 +35,10 @@ Global
 		{6CD893EE-3965-4485-B740-CF533A833639}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6CD893EE-3965-4485-B740-CF533A833639}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6CD893EE-3965-4485-B740-CF533A833639}.Release|Any CPU.Build.0 = Release|Any CPU
+		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -36,6 +46,8 @@ Global
 	GlobalSection(NestedProjects) = preSolution
 		{66B214CE-D352-41CE-B66C-03CCE585ED79} = {65552297-33D2-4AE8-8E56-C9F19BD2669B}
 		{6CD893EE-3965-4485-B740-CF533A833639} = {65552297-33D2-4AE8-8E56-C9F19BD2669B}
+		{56B67CEE-71CA-491E-8518-78DF48360CE9} = {7CB9B90B-ADFB-4B9F-B213-6317F6B57C56}
+		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7} = {56B67CEE-71CA-491E-8518-78DF48360CE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {205E35E8-C906-40DE-AC18-1C7D76A04B2E}

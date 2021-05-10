@@ -1,4 +1,4 @@
-﻿using Lipar.Core.ApplicationServises.Mediator;
+﻿using Lipar.Core.ApplicationServises.Common;
 using System.Collections.Generic;
 
 namespace Lipar.Core.ApplicationServises.Extensions

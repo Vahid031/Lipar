@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.ApplicationServises.Mediator
+namespace Lipar.Core.ApplicationServises.Common
 {
 
     public delegate object ServiceFactory(Type serviceType);

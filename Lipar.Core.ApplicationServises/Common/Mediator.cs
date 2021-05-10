@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.ApplicationServises.Mediator
+namespace Lipar.Core.ApplicationServises.Common
 {
     public class Mediator : IMediator
     {

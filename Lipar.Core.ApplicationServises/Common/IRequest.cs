@@ -1,4 +1,4 @@
-﻿namespace Lipar.Core.ApplicationServises.Mediator
+﻿namespace Lipar.Core.ApplicationServises.Common
 {
     public interface IRequest
     {
