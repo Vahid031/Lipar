@@ -16,31 +16,19 @@ namespace Lipar.Core.ApplicationServises.Common
     {
         protected static THandler GetHandler<THandler>(ServiceFactory factory)
         {
-            THandler handler;
-
-            try
-            {
-                handler = factory.GetInstance<THandler>();
-            }
-            catch (Exception e)
-            {
-                throw new InvalidOperationException($"Error constructing handler for request of type {typeof(THandler)}. Register your handlers with the container. See the samples in GitHub for examples.", e);
-            }
+            THandler handler = factory.GetInstance<THandler>();
 
             if (handler is null)
-            {
                 throw new InvalidOperationException($"Handler was not found for request of type {typeof(THandler)}. Register your handlers with the container. See the samples in GitHub for examples.");
-            }
 
             return handler;
         }
     }
 
-    public abstract class RequestHandlerWrapper2<TRequest> : RequestHandlerBase
-        where TRequest : IRequest
+    public abstract class RequestHandlerWrapper : RequestHandlerBase
     {
-        public abstract Task Handle(TRequest request, CancellationToken cancellationToken,
-            ServiceFactory serviceFactory);
+        public abstract Task Handle<TRequest>(TRequest request, CancellationToken cancellationToken,
+            ServiceFactory serviceFactory) where TRequest : IRequest;
     }
 
     public abstract class RequestHandlerWrapper<TResponse> : RequestHandlerBase
@@ -68,10 +56,10 @@ namespace Lipar.Core.ApplicationServises.Common
 
     }
 
-    public class RequestHandlerWrapperImpl<TRequest> : RequestHandlerWrapper2<TRequest>
-        where TRequest : IRequest
+    public class RequestHandlerWrapperImpl : RequestHandlerWrapper
     {
-        public override Task Handle(TRequest request, CancellationToken cancellationToken, ServiceFactory serviceFactory)
+        public override Task Handle<TRequest>(TRequest request, CancellationToken cancellationToken,
+            ServiceFactory serviceFactory)
         {
             Task Handler() => GetHandler<IRequestHandler<TRequest>>(serviceFactory).Handle(request, cancellationToken);
 

@@ -1,10 +1,12 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Lipar.Infrastructure.Data.SqlServer.Extensions;
+using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
-    public abstract class BaseCommandDBContext : DbContext
+    public abstract class CommandDBContext : DbContext
     {
-        public BaseCommandDBContext(DbContextOptions<BaseCommandDBContext> options)
+        public CommandDBContext(DbContextOptions<CommandDBContext> options)
         {
 
         }
@@ -16,7 +18,21 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.AddEntityId();
+            modelBuilder.AddAuditableProperties();
+
             base.OnModelCreating(modelBuilder);
+        }
+
+        public async Task<int> SaveChangesAsync()
+        {
+            ChangeTracker.DetectChanges();
+            ChangeTracker.AutoDetectChangesEnabled = false;
+            ChangeTracker.SetShadowProperties();
+            var rowAffect = await base.SaveChangesAsync();
+            ChangeTracker.AutoDetectChangesEnabled = true;
+
+            return rowAffect;
         }
     }
 }

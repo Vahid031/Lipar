@@ -1,0 +1,22 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Vahid Goodarzi</Authors>
+    <Version>5.0.6</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Http.Abstractions" Version="2.2.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Mvc.Core" Version="2.2.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lipar.Core.ApplicationServises\Lipar.Core.ApplicationServises.csproj" />
+    <ProjectReference Include="..\..\Lipar.Tools.IoC\Lipar.Tools.IoC\Lipar.Tools.IoC.csproj" />
+    <ProjectReference Include="..\..\Lipar.Tools.Utilities\Lipar.Tools.Utilities\Lipar.Tools.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

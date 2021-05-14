@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Vahid Goodarzi</Authors>
+    <Version>5.0.6</Version>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\Lipar.Core.ApplicationServises\Lipar.Core.ApplicationServises.csproj" />
+    <ProjectReference Include="..\..\Lipar.Core.DomainModels\Lipar.Core.DomainModels.csproj" />
+    <ProjectReference Include="..\..\Lipar.Tools.Utilities\Lipar.Tools.Utilities\Lipar.Tools.Utilities.csproj" />
+  </ItemGroup>
+
+</Project>

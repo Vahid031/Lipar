@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31105.61
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar", "Lipar\Lipar.csproj", "{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}"
-EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{65552297-33D2-4AE8-8E56-C9F19BD2669B}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Core.DomainModels", "Lipar.Core.DomainModels\Lipar.Core.DomainModels.csproj", "{66B214CE-D352-41CE-B66C-03CCE585ED79}"
@@ -15,7 +13,17 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Infrastructure", "Infrastru
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Data", "Data", "{56B67CEE-71CA-491E-8518-78DF48360CE9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Data.SqlServer", "Lipar.Infrastructure.Data.SqlServer\Lipar.Infrastructure.Data.SqlServer\Lipar.Infrastructure.Data.SqlServer.csproj", "{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Data.SqlServer", "Lipar.Infrastructure.Data.SqlServer\Lipar.Infrastructure.Data.SqlServer\Lipar.Infrastructure.Data.SqlServer.csproj", "{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{D1E6F0E0-0D43-4DBF-A2DE-854BFD65BF96}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Presentation.Api", "Lipar.Presentation.Api\Lipar.Presentation.Api\Lipar.Presentation.Api.csproj", "{F6BAD055-A13C-4B5D-83D6-9ED49667C0BF}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tools", "Tools", "{16DB0E26-E59E-4D88-B842-8DEA1845794B}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Tools.Utilities", "Lipar.Tools.Utilities\Lipar.Tools.Utilities\Lipar.Tools.Utilities.csproj", "{D5063F0E-2722-4A26-BE4D-D1A5F23AA7BE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Tools.IoC", "Lipar.Tools.IoC\Lipar.Tools.IoC\Lipar.Tools.IoC.csproj", "{278AA0E5-0F9D-4876-9DEB-CDA074BFB229}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -23,10 +31,6 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{16C2968E-B8D1-4998-9F0A-9A39A4AE04A0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{66B214CE-D352-41CE-B66C-03CCE585ED79}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{66B214CE-D352-41CE-B66C-03CCE585ED79}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66B214CE-D352-41CE-B66C-03CCE585ED79}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -39,6 +43,18 @@ Global
 		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F6BAD055-A13C-4B5D-83D6-9ED49667C0BF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F6BAD055-A13C-4B5D-83D6-9ED49667C0BF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F6BAD055-A13C-4B5D-83D6-9ED49667C0BF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F6BAD055-A13C-4B5D-83D6-9ED49667C0BF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5063F0E-2722-4A26-BE4D-D1A5F23AA7BE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5063F0E-2722-4A26-BE4D-D1A5F23AA7BE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5063F0E-2722-4A26-BE4D-D1A5F23AA7BE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5063F0E-2722-4A26-BE4D-D1A5F23AA7BE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{278AA0E5-0F9D-4876-9DEB-CDA074BFB229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{278AA0E5-0F9D-4876-9DEB-CDA074BFB229}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{278AA0E5-0F9D-4876-9DEB-CDA074BFB229}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{278AA0E5-0F9D-4876-9DEB-CDA074BFB229}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +64,10 @@ Global
 		{6CD893EE-3965-4485-B740-CF533A833639} = {65552297-33D2-4AE8-8E56-C9F19BD2669B}
 		{56B67CEE-71CA-491E-8518-78DF48360CE9} = {7CB9B90B-ADFB-4B9F-B213-6317F6B57C56}
 		{72B82BDC-C1D8-4D55-9488-93F861F9C1C7} = {56B67CEE-71CA-491E-8518-78DF48360CE9}
+		{F6BAD055-A13C-4B5D-83D6-9ED49667C0BF} = {D1E6F0E0-0D43-4DBF-A2DE-854BFD65BF96}
+		{16DB0E26-E59E-4D88-B842-8DEA1845794B} = {7CB9B90B-ADFB-4B9F-B213-6317F6B57C56}
+		{D5063F0E-2722-4A26-BE4D-D1A5F23AA7BE} = {16DB0E26-E59E-4D88-B842-8DEA1845794B}
+		{278AA0E5-0F9D-4876-9DEB-CDA074BFB229} = {16DB0E26-E59E-4D88-B842-8DEA1845794B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {205E35E8-C906-40DE-AC18-1C7D76A04B2E}
