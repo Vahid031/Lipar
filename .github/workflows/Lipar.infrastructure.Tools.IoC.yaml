@@ -27,5 +27,5 @@ jobs:
     - name: Publish
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-       PROJECT_FILE_PATH: src/Lipar.infrastructure.Tools.IoC/Lipar.infrastructure.Tools.IoC.csproj
+       PROJECT_FILE_PATH: src/Lipar.Infrastructure.Tools.IoC/Lipar.Infrastructure.Tools.IoC.csproj
        NUGET_KEY: ${{secrets.Lipar_Nuget_ApiKey}}
