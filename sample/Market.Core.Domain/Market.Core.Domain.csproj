@@ -9,7 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>
