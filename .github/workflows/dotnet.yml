@@ -25,7 +25,7 @@ jobs:
       run: dotnet test --no-build --verbosity normal
       working-directory: ./Lipar
     - name: Publish
-      uses: brandedoutcast/publish-nuget@v5.0.6
+      uses: brandedoutcast/publish-nuget@v2.5.2
       with:
        PROJECT_FILE_PATH: src/Lipar.Core.Domain/Lipar.Core.Domain.csproj
        NUGET_KEY: ${{secrets.Lipar_Nuget_ApiKey}}
