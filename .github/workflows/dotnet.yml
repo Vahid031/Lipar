@@ -27,5 +27,5 @@ jobs:
     - name: Publish
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
-       PROJECT_FILE_PATH: src/Lipar.Core.Domain/Lipar.Core.Domain.csproj
+       PROJECT_FILE_PATH: src/Lipar.Core.Application/Lipar.Core.Application.csproj
        NUGET_KEY: ${{secrets.Lipar_Nuget_ApiKey}}
