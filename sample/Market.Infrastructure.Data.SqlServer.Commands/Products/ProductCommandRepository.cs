@@ -1,9 +1,9 @@
 ﻿using Lipar.Infrastructure.Data.SqlServer.Commands;
 using Market.Core.Domain.Products.Entities;
 using Market.Core.Domain.Products.Repositories;
-using Market.Infrastructure.Data.SqlServerCommand.Common;
+using Market.Infrastructure.Data.SqlServer.Commands.Common;
 
-namespace Market.Infrastructure.Data.SqlServerCommand.Products
+namespace Market.Infrastructure.Data.SqlServer.Commands.Products
 {
     public class ProductCommandRepository : CommandRepository<Product, MarketCommandDbContext>,
         IProductCommandRepository

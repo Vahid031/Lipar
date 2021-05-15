@@ -1,7 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Design;
 
-namespace Market.Infrastructure.Data.SqlServerCommand.Common
+namespace Market.Infrastructure.Data.SqlServer.Commands.Common
 {
     public class MarketCommandDbContextFactory : IDesignTimeDbContextFactory<MarketCommandDbContext>
     {

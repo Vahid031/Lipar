@@ -2,7 +2,7 @@
 using Market.Core.Domain.Products.Entities;
 using Microsoft.EntityFrameworkCore;
 
-namespace Market.Infrastructure.Data.SqlServerCommand.Common
+namespace Market.Infrastructure.Data.SqlServer.Commands.Common
 {
     public class MarketCommandDbContext : CommandDbContext
     {
@@ -13,7 +13,7 @@ namespace Market.Infrastructure.Data.SqlServerCommand.Common
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-            base.OnModelCreating(modelBuilder); 
+            base.OnModelCreating(modelBuilder);
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

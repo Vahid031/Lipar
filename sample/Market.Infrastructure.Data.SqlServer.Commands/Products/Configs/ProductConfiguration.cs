@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Market.Infrastructure.Data.SqlServerCommand.Products.Configs
+namespace Market.Infrastructure.Data.SqlServer.Commands.Products.Configs
 {
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {

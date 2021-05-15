@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using Lipar.Presentation.Api.Extensions;
-using Market.Infrastructure.Data.SqlServerCommand.Common;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Microsoft.EntityFrameworkCore;
+using Market.Infrastructure.Data.SqlServer.Commands.Common;
 
 namespace Market.Presentation.Api
 {
@@ -41,6 +41,9 @@ namespace Market.Presentation.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
+            
+
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
