@@ -2,7 +2,7 @@
 using Newtonsoft.Json.Serialization;
 using System;
 
-namespace Lipar.Tools.Utilities.Implementation
+namespace Lipar.Infrastructure.Tools.Utilities.Implementation
 {
     public class NewtonSoftSerializer : IJson
     {

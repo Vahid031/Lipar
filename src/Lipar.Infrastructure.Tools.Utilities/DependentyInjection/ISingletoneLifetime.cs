@@ -1,4 +1,4 @@
-﻿namespace Lipar.Tools.Utilities.DependentyInjection
+﻿namespace Lipar.Infrastructure.Tools.Utilities.DependentyInjection
 {
     public interface ISingletoneLifetime
     {
