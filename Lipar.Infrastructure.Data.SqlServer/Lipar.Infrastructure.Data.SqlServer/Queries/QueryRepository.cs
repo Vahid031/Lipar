@@ -1,4 +1,4 @@
-﻿using Lipar.Core.DomainModels.Data;
+﻿using Lipar.Core.Domain.Data;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Queries
 {

@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Vahid Goodarzi</Authors>
+    <Version>5.0.6</Version>
+    <AssemblyName>Lipar.Core.Application</AssemblyName>
+    <RootNamespace>Lipar.Core.Application</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="FluentValidation" Version="10.1.0" />
+  </ItemGroup>
+
+</Project>

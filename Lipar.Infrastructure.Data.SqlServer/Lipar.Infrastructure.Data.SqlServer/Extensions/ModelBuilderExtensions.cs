@@ -1,4 +1,4 @@
-﻿using Lipar.Core.DomainModels.Entities;
+﻿using Lipar.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;

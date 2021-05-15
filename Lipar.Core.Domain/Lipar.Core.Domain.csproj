@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+    <Authors>Vahid Goodarzi</Authors>
+    <Version>5.0.6</Version>
+    <AssemblyName>Lipar.Core.Domain</AssemblyName>
+    <RootNamespace>Lipar.Core.Domain</RootNamespace>
+    <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
+  </PropertyGroup>
+
+</Project>

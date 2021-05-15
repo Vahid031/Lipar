@@ -12,7 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Lipar.Core.DomainModels\Lipar.Core.DomainModels.csproj" />
+    <ProjectReference Include="..\..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>

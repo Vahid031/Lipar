@@ -7,13 +7,15 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.1.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="5.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Scrutor" Version="3.3.0" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Lipar.Core.ApplicationServises\Lipar.Core.ApplicationServises.csproj" />
-    <ProjectReference Include="..\..\Lipar.Core.DomainModels\Lipar.Core.DomainModels.csproj" />
+    <ProjectReference Include="..\..\Lipar.Core.Application\Lipar.Core.Application.csproj" />
+    <ProjectReference Include="..\..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
     <ProjectReference Include="..\..\Lipar.Tools.Utilities\Lipar.Tools.Utilities\Lipar.Tools.Utilities.csproj" />
   </ItemGroup>
 

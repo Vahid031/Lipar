@@ -1,6 +1,6 @@
 ﻿using FluentValidation;
-using Lipar.Core.ApplicationServises.Common;
-using Lipar.Core.DomainModels.Data;
+using Lipar.Core.Application.Common;
+using Lipar.Core.Domain.Data;
 using Lipar.Tools.Utilities;
 using Lipar.Tools.Utilities.Implementation;
 using Microsoft.Extensions.DependencyInjection;
@@ -13,7 +13,7 @@ namespace Lipar.Tools.IoC.Extensions
 {
     public static class DependencyInjection
     {
-        public static void AddApplication(this IServiceCollection services, 
+        public static void AddApplication(this IServiceCollection services,
             IEnumerable<Assembly> assemblies)
         {
             services.AddTransient<IMediator, Mediator>();
@@ -62,5 +62,5 @@ namespace Lipar.Tools.IoC.Extensions
                 .AsImplementedInterfaces()
                 .WithSingletonLifetime());
         }
-        }
+    }
 }
