@@ -1,13 +1,13 @@
 ﻿using FluentValidation;
 using Lipar.Core.Application.Common;
 using Lipar.Core.Domain.Data;
-using Lipar.Infrastructure.Tools.Utilities;
 using Lipar.Infrastructure.Tools.Utilities.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
 using Lipar.Infrastructure.Tools.Utilities.DependentyInjection;
+using Lipar.Infrastructure.Tools.Utilities.Services;
 
 namespace Lipar.Tools.IoC.Extensions
 {

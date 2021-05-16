@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lipar.Infrastructure.Tools.Utilities
+namespace Lipar.Infrastructure.Tools.Utilities.Services
 {
     public interface IJson
     {

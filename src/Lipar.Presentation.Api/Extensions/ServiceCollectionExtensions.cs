@@ -5,21 +5,46 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Lipar.Tools.IoC.Extensions;
+using Microsoft.OpenApi.Models;
+using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using FluentValidation.AspNetCore;
+using Lipar.Infrastructure.Tools.Utilities.Services;
+using Lipar.Presentation.Api.Services;
 
 namespace Lipar.Presentation.Api.Extensions
 {
     public static class ServiceCollectionExtensions
     {
-        public static IServiceCollection AddLiparServices(this IServiceCollection services,
+        public static void AddLiparServices(this IServiceCollection services,
            IConfiguration configuration,
            params string[] assemblyNames)
         {
+            var liparOptions = new LiparOptions();
+            configuration.GetSection(nameof(LiparOptions)).Bind(liparOptions);
+            services.AddSingleton(liparOptions);
+
+            services.AddSingleton<IUserInfo, UserInfo>();
+
             var assembies = GetAssemblies(assemblyNames);
 
             services.AddApplication(assembies);
             services.AddUtilities(assembies);
 
-            return services;
+
+            services.AddControllers(
+                options =>
+                {
+                    //options.Filters.Add(typeof(TrackActionPerformanceFilter));
+                }).AddFluentValidation();
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(liparOptions.Swagger.Version,
+                    new OpenApiInfo
+                    {
+                        Title = liparOptions.Swagger.Title,
+                        Version = liparOptions.Swagger.Version
+                    });
+            });
         }
 
         private static List<Assembly> GetAssemblies(string[] assmblyName)

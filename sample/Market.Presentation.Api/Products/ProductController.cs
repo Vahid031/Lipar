@@ -5,14 +5,11 @@ using System.Threading.Tasks;
 
 namespace Market.Presentation.Api.Products
 {
-    [ApiController]
-    [Route("api/[controller]")]
+    //[ApiVersion("1.0")]
     public class ProductController : BaseController
     {
         [HttpPost("create")]
-        public async Task<IActionResult> Create(CreateProductCommand command)
-        {
-            return await Execute(command);
-        }
+        public async Task<IActionResult> Create(CreateProductCommand command) => await SendAsync(command);
+        
     }
 }

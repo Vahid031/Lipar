@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Lipar.Presentation.Api.Controllers
 {
+    [ApiController]
+    [Route("api/[controller]")]
     //[Route("api/v{version:apiVersion}/[controller]")]
     public abstract class BaseController : ControllerBase
     {
@@ -13,17 +15,12 @@ namespace Lipar.Presentation.Api.Controllers
 
         protected IMediator mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
-        protected async Task<IActionResult> Execute<TResponse>(IRequest<TResponse> command) where TResponse : notnull
+        protected async Task<OkObjectResult> SendAsync<TResponse>(IRequest<TResponse> command) where TResponse : notnull
         {
-            var result = await mediator.Send(command);
-            if (result is null)
-            {
-                return NoContent();
-            }
-            return Ok(result);
+            return Ok(await mediator.Send(command));
         }
 
-        protected async Task<IActionResult> Execute<TRequest>(TRequest command) where TRequest : IRequest
+        public async Task<OkResult> SendAsync<TRequest>(TRequest command) where TRequest : IRequest
         {
             await mediator.Send(command);
             return Ok();
