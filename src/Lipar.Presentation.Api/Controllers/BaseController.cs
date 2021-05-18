@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
+using System.Net;
 using System.Threading.Tasks;
 
 namespace Lipar.Presentation.Api.Controllers
@@ -15,15 +16,18 @@ namespace Lipar.Presentation.Api.Controllers
 
         protected IMediator mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
 
-        protected async Task<OkObjectResult> SendAsync<TResponse>(IRequest<TResponse> command) where TResponse : notnull
+        protected async Task<IActionResult> SendAsync<TResponse>(IRequest<TResponse> command,
+            HttpStatusCode statusCode = HttpStatusCode.OK) where TResponse : notnull
         {
-            return Ok(await mediator.Send(command));
+            var result = await mediator.Send(command);
+            return StatusCode(200, result);
         }
 
-        public async Task<OkResult> SendAsync<TRequest>(TRequest command) where TRequest : IRequest
+        public async Task<IActionResult> SendAsync<TRequest>(TRequest command, 
+            HttpStatusCode statusCode = HttpStatusCode.OK) where TRequest : IRequest
         {
             await mediator.Send(command);
-            return Ok();
+            return StatusCode((int)statusCode);
         }
     }
 }

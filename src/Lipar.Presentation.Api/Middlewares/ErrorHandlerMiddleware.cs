@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 
@@ -32,13 +33,13 @@ namespace Lipar.Presentation.Api.Middlewares
             {
                 await next(context);
             }
-            catch (ValidationException ex)
-            {
-                var problem = HandleValidationException(ex, context) ;
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-                context.Response.ContentType = "application/problem+json";
-                await context.Response.WriteAsync(json.SerializeObject(problem));
-            }
+            //catch (ValidationException ex)
+            //{
+            //    var problem = HandleValidationException(ex, context) ;
+            //    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+            //    context.Response.ContentType = "application/problem+json";
+            //    await context.Response.WriteAsync(json.SerializeObject(problem));
+            //}
             catch (Exception ex)
             {
                 var problem = HandleUnknownException(ex, context);
@@ -69,12 +70,12 @@ namespace Lipar.Presentation.Api.Middlewares
             
             return new ApiProblemDetails
             {
-                TraceId = Guid.NewGuid(),
+                TraceId = Activity.Current?.Id ?? context.TraceIdentifier,
                 Status = (int)HttpStatusCode.BadRequest,
                 Title = "an error has been accured!",
                 Details = GetInnerExceptionMessage(ex),
                 Instance = context.Request.Path,
-                Errors = errors
+                //Errors = errors
             };
         }
 
@@ -82,7 +83,7 @@ namespace Lipar.Presentation.Api.Middlewares
         {
             var problem = new ApiProblemDetails
             {
-                TraceId = Guid.NewGuid(),
+                TraceId = Activity.Current?.Id ?? context.TraceIdentifier,
                 Status = (int)HttpStatusCode.BadRequest,
                 Title = ex.Message,
                 Details = context.Request.PathBase,

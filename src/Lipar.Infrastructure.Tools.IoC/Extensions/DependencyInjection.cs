@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Lipar.Infrastructure.Tools.Utilities.DependentyInjection;
 using Lipar.Infrastructure.Tools.Utilities.Services;
+using Lipar.Core.Application.Behaviors;
 
 namespace Lipar.Tools.IoC.Extensions
 {

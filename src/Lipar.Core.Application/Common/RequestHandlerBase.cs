@@ -1,4 +1,5 @@
-﻿using Lipar.Core.Application.Extensions;
+﻿using Lipar.Core.Application.Behaviors;
+using Lipar.Core.Application.Extensions;
 using System;
 using System.Linq;
 using System.Threading;
