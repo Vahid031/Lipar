@@ -51,6 +51,8 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
         }
 
 
+        public static readonly string EntityId = "Id";
+
         public static readonly string CreatedDate = nameof(CreatedDate);
 
         public static readonly string ModifedDate = nameof(ModifedDate);

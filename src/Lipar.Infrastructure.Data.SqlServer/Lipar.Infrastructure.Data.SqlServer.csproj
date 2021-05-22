@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
+    <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
