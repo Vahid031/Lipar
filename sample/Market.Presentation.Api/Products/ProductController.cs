@@ -19,8 +19,6 @@ namespace Market.Presentation.Api.Products
         [HttpPost("create")]
         public async Task<IActionResult> Create(CreateProductCommand command)
         {
-            logger.LogWarning("salam");
-
             return await SendAsync(command, HttpStatusCode.Created);
         }
 

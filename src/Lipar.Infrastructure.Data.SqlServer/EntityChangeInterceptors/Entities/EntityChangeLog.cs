@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
+namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities
 {
     public class EntityChangeLog
     {

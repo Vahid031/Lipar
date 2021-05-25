@@ -5,11 +5,19 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Linq;
+using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities;
+using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs;
+using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors;
+using Microsoft.EntityFrameworkCore.Infrastructure;
+using Lipar.Infrastructure.Tools.Utilities.Services;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
     public abstract class CommandDbContext : DbContext
     {
+        public DbSet<PropertyChangeLog> PropertyChangeLogs { get; set; }
+        public DbSet<EntityChangeLog>  EntityChangeLogs{ get; set; }
+
         public CommandDbContext(DbContextOptions options) : base(options)
         {
 
@@ -23,15 +31,21 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
         {
             modelBuilder.AddEntityId();
             modelBuilder.AddAuditableProperties();
+            new PropertyChangeLogConfiguration().Configure(modelBuilder.Entity<PropertyChangeLog>());
+            new EntityChangeLogConfiguration().Configure(modelBuilder.Entity<EntityChangeLog>());
 
             base.OnModelCreating(modelBuilder);
         }
 
         public async Task<int> SaveChangesAsync()
         {
+             var userInfo = this.GetService<IUserInfo>();
+             var dateTime = this.GetService<IDateTime>();
+
             ChangeTracker.DetectChanges();
             ChangeTracker.AutoDetectChangesEnabled = false;
             ChangeTracker.SetShadowProperties();
+            this.AuditAllChangeTracking(userInfo, dateTime);
             var rowAffect = await base.SaveChangesAsync();
             ChangeTracker.AutoDetectChangesEnabled = true;
 

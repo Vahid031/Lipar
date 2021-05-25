@@ -1,4 +1,6 @@
-﻿using Lipar.Infrastructure.Data.SqlServer.Extensions;
+﻿using Lipar.Core.Domain.Entities;
+using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities;
+using Lipar.Infrastructure.Data.SqlServer.Extensions;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
@@ -9,9 +11,9 @@ using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
 {
-    public class EntityChangeInterceptor
+    public static class EntityChangeInterceptor
     {
-        public void AuditAllChangeTracking()
+        public static void AuditAllChangeTracking(this DbContext db, IUserInfo userInfo, IDateTime dateTime)
         {
             var auditProperties = new List<string>
             {
@@ -22,14 +24,15 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
                 ModelBuilderExtensions.EntityId,
             };
 
-            //foreach (EntityEntry entry in appDbContext.ChangeTrackerEntries)
-            //    ApplyAuditLog(entry, memberId);
+            foreach (EntityEntry entry in db.ChangeTracker.Entries<AggregateRoot>()
+                .Where(m => m.State == EntityState.Added || m.State == EntityState.Modified))
+                db.ApplyAuditLog(entry, auditProperties, userInfo.UserId, dateTime.DateTime);
         }
 
-        private void ApplyAuditLog(EntityEntry entry, List<string> auditProperties, 
+        private static void ApplyAuditLog(this DbContext db, EntityEntry entry, List<string> auditProperties,
             string userId, DateTime dateTime)
         {
-            var log = new PropertyLog()
+            var log = new EntityChangeLog()
             {
                 Id = Guid.NewGuid(),
                 EntityType = entry.Entity.GetType().FullName,
@@ -37,26 +40,40 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
                 State = entry.State.ToString(),
                 UserId = userId,
                 Date = dateTime,
-                PropertyLogDetails = new List<PropertyLogDetail>()
+                PropertyChangeLogs = new List<PropertyChangeLog>()
             };
 
-
-            Parallel.ForEach(entry.Properties.Where(c => auditProperties.All(d => d != c.Metadata.Name)),
-                item =>
+            foreach (var item in entry.Properties.Where(m => auditProperties.All(p => p != m.Metadata.Name)))
+            {
+                if (entry.State == EntityState.Added || item.IsModified)
                 {
-                    if (entry.State == EntityState.Added || item.IsModified)
+                    var logDetail = new PropertyChangeLog
                     {
-                        PropertyLogDetail logDetail = new PropertyLogDetail
-                        {
-                            Id = Guid.NewGuid(),
-                            Key = item.Metadata.Name,
-                            Value = item.CurrentValue?.ToString()
-                        };
-                        log.PropertyLogDetails.Add(logDetail);
-                    }
-                });
+                        Id = Guid.NewGuid(),
+                        EntityChangeLogId = log.Id,
+                        Key = item.Metadata.Name,
+                        Value = item.CurrentValue?.ToString()
+                    };
+                    log.PropertyChangeLogs.Add(logDetail);
+                }
+            }
 
-            appDbContext.Set<PropertyLog>().Add(log);
+            //Parallel.ForEach(entry.Properties.Where(m => auditProperties.All(p => p != m.Metadata.Name)),
+            //    item =>
+            //    {
+            //        if (entry.State == EntityState.Added || item.IsModified)
+            //        {
+            //            var logDetail = new PropertyChangeLog
+            //            {
+            //                Id = Guid.NewGuid(),
+            //                Key = item.Metadata.Name,
+            //                Value = item.CurrentValue?.ToString()
+            //            };
+            //            log.PropertyChangeLogs.Add(logDetail);
+            //        }
+            //    });
+
+            db.Set<EntityChangeLog>().Add(log);
 
         }
     }

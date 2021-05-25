@@ -29,6 +29,7 @@ namespace Lipar.Tools.IoC.Extensions
             IEnumerable<Assembly> assemblies)
         {
             services.AddTransient<IJson, NewtonSoftSerializer>();
+            services.AddTransient<IDateTime, UtcDateTime>();
             services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
             services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));
             services.AddWithSingletonLifetime(assemblies, typeof(ISingletoneLifetime));

@@ -15,7 +15,7 @@ namespace Lipar.Presentation.Api.Services
             context = httpContextAccessor.HttpContext;
         }
 
-        Guid IUserInfo.UserId => Guid.Parse(context.User?.GetClaim(ClaimTypes.NameIdentifier));
+        public string UserId => context.User?.GetClaim(ClaimTypes.NameIdentifier);
 
         public string UserAgent => context.Request.Headers["User-Agent"];
 
