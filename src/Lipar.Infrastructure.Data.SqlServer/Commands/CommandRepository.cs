@@ -26,7 +26,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public TEntity Get(EntityId id)
         {
-            return db.Set<TEntity>().FirstOrDefault(c => c.Id == id);
+            return db.Set<TEntity>().SingleOrDefault(c => c.Id == id);
         }
 
         public void Insert(TEntity entity)
@@ -48,7 +48,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             {
                 query = query.Include(item);
             }
-            return query.FirstOrDefault(c => c.Id == id);
+            return query.SingleOrDefault(c => c.Id == id);
         }
 
         public async Task InsertAsync(TEntity entity)
@@ -58,7 +58,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public async Task<TEntity> GetAsync(EntityId id)
         {
-            return await db.Set<TEntity>().FirstOrDefaultAsync(c => c.Id == id);
+            return await db.Set<TEntity>().SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<TEntity> GetGraphAsync(EntityId id)
@@ -70,7 +70,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             {
                 query = query.Include(item);
             }
-            return await query.FirstOrDefaultAsync(c => c.Id == id);
+            return await query.SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)

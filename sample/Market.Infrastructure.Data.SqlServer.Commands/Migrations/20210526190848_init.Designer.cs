@@ -10,8 +10,8 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
     [DbContext(typeof(MarketCommandDbContext))]
-    [Migration("20210525170144_add_Entitiy_Property_logs")]
-    partial class add_Entitiy_Property_logs
+    [Migration("20210526190848_init")]
+    partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -30,25 +30,28 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                     b.Property<DateTime>("Date")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("EntityId")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                    b.Property<Guid>("EntityId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("EntityType")
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("State")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
-                    b.Property<string>("UserId")
-                        .HasMaxLength(25)
-                        .HasColumnType("nvarchar(25)");
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uniqueidentifier");
 
-                    b.HasKey("Id");
+                    b.HasKey("Id")
+                        .IsClustered(false);
 
-                    b.ToTable("EntityChangeLogs");
+                    b.HasIndex("Date")
+                        .IsUnique()
+                        .IsClustered();
+
+                    b.ToTable("EntityChangeLog");
                 });
 
             modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.PropertyChangeLog", b =>
@@ -57,12 +60,12 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("EntityChangeLogId")
+                    b.Property<Guid>("EntityChangeLogId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Value")
                         .HasMaxLength(250)
@@ -72,7 +75,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 
                     b.HasIndex("EntityChangeLogId");
 
-                    b.ToTable("PropertyChangeLogs");
+                    b.ToTable("PropertyChangeLog");
                 });
 
             modelBuilder.Entity("Market.Core.Domain.Products.Entities.Product", b =>
@@ -112,11 +115,11 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 
             modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.PropertyChangeLog", b =>
                 {
-                    b.HasOne("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.EntityChangeLog", "EntityChangeLog")
+                    b.HasOne("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.EntityChangeLog", null)
                         .WithMany("PropertyChangeLogs")
-                        .HasForeignKey("EntityChangeLogId");
-
-                    b.Navigation("EntityChangeLog");
+                        .HasForeignKey("EntityChangeLogId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.EntityChangeLog", b =>

@@ -15,9 +15,6 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
     public abstract class CommandDbContext : DbContext
     {
-        public DbSet<PropertyChangeLog> PropertyChangeLogs { get; set; }
-        public DbSet<EntityChangeLog>  EntityChangeLogs{ get; set; }
-
         public CommandDbContext(DbContextOptions options) : base(options)
         {
 
@@ -39,14 +36,18 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public async Task<int> SaveChangesAsync()
         {
-             var userInfo = this.GetService<IUserInfo>();
-             var dateTime = this.GetService<IDateTime>();
+            var userInfo = this.GetService<IUserInfo>();
+            var dateTime = this.GetService<IDateTime>();
 
             ChangeTracker.DetectChanges();
             ChangeTracker.AutoDetectChangesEnabled = false;
             ChangeTracker.SetShadowProperties();
-            this.AuditAllChangeTracking(userInfo, dateTime);
+            var list = EntityChangeInterceptor.AuditAllChangeTracking(
+                  ChangeTracker.GetTrackingAggrigates(), userInfo, dateTime).ToList();
+            Set<EntityChangeLog>().AddRange(list);
+
             var rowAffect = await base.SaveChangesAsync();
+
             ChangeTracker.AutoDetectChangesEnabled = true;
 
             return rowAffect;

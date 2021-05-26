@@ -4,7 +4,7 @@ namespace Lipar.Infrastructure.Tools.Utilities.Services
 {
     public interface IUserInfo
     {
-        string UserId { get; }
+        Guid UserId { get; }
         string UserAgent { get; }
         string UserName { get; }
         string IpAddress { get; }

@@ -2,6 +2,8 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -46,6 +48,11 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 });
         }
 
-
+        public static IEnumerable<EntityEntry<Entity>> GetTrackingAggrigates(this ChangeTracker changeTracker)
+        {
+            return changeTracker
+                .Entries<Entity>()
+                .Where(m => m.State == EntityState.Added || m.State == EntityState.Modified);
+        }
     }
 }

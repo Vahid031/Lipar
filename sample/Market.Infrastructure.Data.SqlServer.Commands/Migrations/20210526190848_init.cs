@@ -3,24 +3,25 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
-    public partial class add_Entitiy_Property_logs : Migration
+    public partial class init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EntityChangeLogs",
+                name: "EntityChangeLog",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     EntityType = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    EntityId = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
-                    State = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true),
+                    EntityId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    State = table.Column<string>(type: "nvarchar(10)", maxLength: 10, nullable: true),
                     Date = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    UserId = table.Column<string>(type: "nvarchar(25)", maxLength: 25, nullable: true)
+                    UserId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityChangeLogs", x => x.Id);
+                    table.PrimaryKey("PK_EntityChangeLog", x => x.Id)
+                        .Annotation("SqlServer:Clustered", false);
                 });
 
             migrationBuilder.CreateTable(
@@ -42,24 +43,31 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyChangeLogs",
+                name: "PropertyChangeLog",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    Key = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Key = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
                     Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    EntityChangeLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    EntityChangeLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PropertyChangeLogs", x => x.Id);
+                    table.PrimaryKey("PK_PropertyChangeLog", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PropertyChangeLogs_EntityChangeLogs_EntityChangeLogId",
+                        name: "FK_PropertyChangeLog_EntityChangeLog_EntityChangeLogId",
                         column: x => x.EntityChangeLogId,
-                        principalTable: "EntityChangeLogs",
+                        principalTable: "EntityChangeLog",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityChangeLog_Date",
+                table: "EntityChangeLog",
+                column: "Date",
+                unique: true)
+                .Annotation("SqlServer:Clustered", true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_Products_CreatedDate",
@@ -69,8 +77,8 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 .Annotation("SqlServer:Clustered", true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_PropertyChangeLogs_EntityChangeLogId",
-                table: "PropertyChangeLogs",
+                name: "IX_PropertyChangeLog_EntityChangeLogId",
+                table: "PropertyChangeLog",
                 column: "EntityChangeLogId");
         }
 
@@ -80,10 +88,10 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "PropertyChangeLogs");
+                name: "PropertyChangeLog");
 
             migrationBuilder.DropTable(
-                name: "EntityChangeLogs");
+                name: "EntityChangeLog");
         }
     }
 }

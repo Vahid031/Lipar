@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Security.Claims;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Microsoft.AspNetCore.Http;
@@ -15,7 +13,14 @@ namespace Lipar.Presentation.Api.Services
             context = httpContextAccessor.HttpContext;
         }
 
-        public string UserId => context.User?.GetClaim(ClaimTypes.NameIdentifier);
+        public Guid UserId
+        {
+            get
+            {
+                Guid.TryParse(context.User?.GetClaim(ClaimTypes.NameIdentifier), out Guid userId);
+                return userId;
+            }
+        }
 
         public string UserAgent => context.Request.Headers["User-Agent"];
 

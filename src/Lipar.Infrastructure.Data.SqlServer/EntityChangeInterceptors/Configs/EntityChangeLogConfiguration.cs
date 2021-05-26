@@ -8,10 +8,21 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs
     {
         public void Configure(EntityTypeBuilder<EntityChangeLog> builder)
         {
-            builder.Property(m => m.EntityId).HasMaxLength(25);
-            builder.Property(m => m.EntityType).HasMaxLength(50);
-            builder.Property(m => m.State).HasMaxLength(25);
-            builder.Property(m => m.UserId).HasMaxLength(25);
+            builder.Property(m => m.EntityType)
+                .HasMaxLength(50);
+
+            builder.Property(m => m.State)
+                .HasMaxLength(10);
+
+            builder.HasMany(b => b.PropertyChangeLogs)
+                .WithOne().HasForeignKey(m => m.EntityChangeLogId);
+
+            builder.HasIndex(m => m.Date)
+                .IsUnique()
+                .IsClustered(true);
+
+            builder.HasKey(m => m.Id)             
+                .IsClustered(false);
         }
     }
 }
