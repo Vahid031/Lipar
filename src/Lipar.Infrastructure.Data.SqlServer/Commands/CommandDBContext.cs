@@ -10,6 +10,7 @@ using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs;
 using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Infrastructure.Tools.Utilities.Services;
+using Lipar.Infrastructure.Events.OutBox;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
@@ -86,6 +87,34 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
                 if (stack.Count == 0) break;
                 entityType = stack.Peek().Current.TargetEntityType;
             }
+        }
+
+        private void AddOutboxEvetItems()
+        {
+            var changedAggregates = ChangeTracker.GetAggregatesWithEvent();
+            var userInfo = this.GetService<IUserInfo>();
+            var jsonConvert = this.GetService<IJson>();
+
+            //foreach (var aggregate in changedAggregates)
+            //{
+            //    var events = aggregate.GetChanges();
+            //    foreach (var @event in events)
+            //    {
+            //        OutBoxEvents.Add(new OutBoxEvent
+            //        {
+            //            EventId = Guid.NewGuid(),
+            //            AccuredByUserId = userInfoService.UserId().ToString(),
+            //            AccuredOn = DateTime.Now,
+            //            AggregateId = aggregate.BusinessId.ToString(),
+            //            AggregateName = aggregate.GetType().Name,
+            //            AggregateTypeName = aggregate.GetType().FullName,
+            //            EventName = @event.GetType().Name,
+            //            EventTypeName = @event.GetType().FullName,
+            //            EventPayload = serializer.Serilize(@event),
+            //            IsProcessed = false
+            //        });
+            //    }
+            //}
         }
     }
 }

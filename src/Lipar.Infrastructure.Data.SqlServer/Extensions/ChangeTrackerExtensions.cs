@@ -48,11 +48,17 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 });
         }
 
-        public static IEnumerable<EntityEntry<Entity>> GetTrackingAggrigates(this ChangeTracker changeTracker)
-        {
-            return changeTracker
-                .Entries<Entity>()
-                .Where(m => m.State == EntityState.Added || m.State == EntityState.Modified);
-        }
+        public static List<EntityEntry<Entity>> GetTrackingAggrigates(this ChangeTracker changeTracker) =>
+            changeTracker.Entries<Entity>()
+                .Where(m => m.State == EntityState.Added || m.State == EntityState.Modified)
+                .ToList();
+
+        public static List<AggregateRoot> GetAggregatesWithEvent(this ChangeTracker changeTracker) =>
+           changeTracker.Entries<AggregateRoot>()
+                .Where(x => x.State != EntityState.Detached)
+                .Select(c => c.Entity)
+                .Where(c => c.GetChanges().Any())
+                .ToList();
+
     }
 }
