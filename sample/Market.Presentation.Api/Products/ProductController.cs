@@ -1,5 +1,5 @@
 ﻿using Lipar.Presentation.Api.Controllers;
-using Market.Core.Application.Products.Commands.CreateProduct;
+using Market.Core.Application.Products.Commands;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using System.Net;

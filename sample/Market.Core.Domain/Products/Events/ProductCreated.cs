@@ -2,7 +2,7 @@
 
 namespace Market.Core.Domain.Products.Events
 {
-    public class ProductCreated : IDomainEvent
+    public class ProductCreated : IEvent
     {
         public string Id { get; }
         public string Name { get; }

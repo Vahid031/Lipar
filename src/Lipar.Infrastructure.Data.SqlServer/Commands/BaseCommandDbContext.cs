@@ -14,14 +14,14 @@ using Lipar.Infrastructure.Events.OutBox;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
-    public abstract class CommandDbContext : DbContext
+    public abstract class BaseCommandDbContext : DbContext
     {
-        public CommandDbContext(DbContextOptions options) : base(options)
+        public BaseCommandDbContext(DbContextOptions options) : base(options)
         {
 
         }
 
-        protected CommandDbContext()
+        protected BaseCommandDbContext()
         {
         }
 

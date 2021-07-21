@@ -8,13 +8,13 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
-    public class CommandRepository<TEntity, TDbContext> : ICommandRepository<TEntity>, IUnitOfWork
+    public class BaseCommandRepository<TEntity, TDbContext> : ICommandRepository<TEntity>, IUnitOfWork
         where TEntity : AggregateRoot
-        where TDbContext : CommandDbContext
+        where TDbContext : BaseCommandDbContext
     {
         protected readonly TDbContext db;
 
-        public CommandRepository(TDbContext db)
+        public BaseCommandRepository(TDbContext db)
         {
             this.db = db;
         }

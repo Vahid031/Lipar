@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Common
 {
-    public class MarketCommandDbContext : CommandDbContext
+    public class MarketCommandDbContext : BaseCommandDbContext
     {
         public MarketCommandDbContext(DbContextOptions<MarketCommandDbContext> options) : base(options)
         {

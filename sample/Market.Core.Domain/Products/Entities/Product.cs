@@ -19,10 +19,5 @@ namespace Market.Core.Domain.Products.Entities
 
             Apply(new ProductCreated(Id.ToString(), Barcode, Name));
         }
-
-        protected override void EnsureValidState()
-        {
-            //throw new NotImplementedException();
-        }
     }
 }

@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Queries
 {
-    public abstract class QueryDbContext : DbContext
+    public abstract class BaseQueryDbContext : DbContext
     {
-        public QueryDbContext(DbContextOptions options) : base(options)
+        public BaseQueryDbContext(DbContextOptions options) : base(options)
         {
         }
 

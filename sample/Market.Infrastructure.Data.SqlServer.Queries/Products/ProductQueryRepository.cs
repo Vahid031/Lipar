@@ -4,7 +4,7 @@ using Market.Infrastructure.Data.SqlServerQuery.Common;
 
 namespace Market.Infrastructure.Data.SqlServerQuery.Products
 {
-    public class ProductQueryRepository : QueryRepository<MarketQueryDbContext>,
+    public class ProductQueryRepository : BaseQueryRepository<MarketQueryDbContext>,
         IProductQueryRepository
     {
         public ProductQueryRepository(MarketQueryDbContext db) : base(db)

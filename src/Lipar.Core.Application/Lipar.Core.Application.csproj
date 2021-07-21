@@ -10,6 +10,11 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.1.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
   </ItemGroup>
 
 </Project>

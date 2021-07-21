@@ -2,12 +2,12 @@
 
 namespace Lipar.Infrastructure.Data.SqlServer.Queries
 {
-    public abstract class QueryRepository<TDbContext> : IQueryRepository
-        where TDbContext : QueryDbContext
+    public abstract class BaseQueryRepository<TDbContext> : IQueryRepository
+        where TDbContext : BaseQueryDbContext
     {
         protected readonly TDbContext db;
 
-        public QueryRepository(TDbContext db)
+        public BaseQueryRepository(TDbContext db)
         {
             this.db = db;
         }
