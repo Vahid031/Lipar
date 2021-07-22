@@ -5,25 +5,28 @@ namespace Lipar.Core.Domain.Entities
 {
     public class EntityId : ValueObject<EntityId>
     {
-        public Guid Id { get; private set; }
+        public Guid Value { get; private set; }
 
         private EntityId() { }
         public EntityId(string id)
         {
             if (Guid.TryParse(id, out Guid guid))
-                Id = guid;
+                Value = guid;
             else
                 throw new InvalidValueObjectException("cannot cast {0} to {1} type", id, nameof(Guid));
         }
 
-        public static EntityId FromString(string id) => new EntityId(id);
-        public static EntityId FromGuid(Guid id) => new EntityId() { Id = id };
-        public string ToString(EntityId id) => Id.ToString();
+        public static EntityId FromString(string id) => new(id);
+        public static EntityId FromGuid(Guid id) => new() { Value = id };
+        public override string ToString() => Value.ToString();
 
-        public override int ObjectGetHashCode() => Id.GetHashCode();
-        public override bool ObjectIsEqual(EntityId otherObject) => Id.Equals(otherObject.Id);
+        public override int ObjectGetHashCode() => Value.GetHashCode();
+        public override bool ObjectIsEqual(EntityId otherObject) => Value.Equals(otherObject.Value);
 
-        public static explicit operator Guid(EntityId entityId) => entityId.Id;
-        public static implicit operator EntityId(Guid id) => new EntityId { Id = id };
+        public static explicit operator string(EntityId id) => id.Value.ToString();
+        public static implicit operator EntityId(string value) => new (value);
+
+        public static explicit operator Guid(EntityId id) => id.Value;
+        public static implicit operator EntityId(Guid value) => new() { Value = value };
     }
 }

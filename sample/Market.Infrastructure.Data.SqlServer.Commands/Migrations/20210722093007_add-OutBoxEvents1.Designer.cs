@@ -4,14 +4,16 @@ using Market.Infrastructure.Data.SqlServer.Commands.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
     [DbContext(typeof(MarketCommandDbContext))]
-    partial class MarketCommandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210722093007_add-OutBoxEvents1")]
+    partial class addOutBoxEvents1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

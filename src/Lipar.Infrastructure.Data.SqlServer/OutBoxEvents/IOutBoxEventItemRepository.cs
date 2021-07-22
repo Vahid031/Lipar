@@ -4,7 +4,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
 {
     public interface IOutBoxEventItemRepository
     {
-        List<OutBoxEventItem> GetOutBoxEventItemsForPublishe(int maxCount = 100);
+        List<OutBoxEventItem> GetOutBoxEventItemsForPublish(int maxCount);
         void MarkAsRead(List<OutBoxEventItem> outBoxEventItems);
     }
 }

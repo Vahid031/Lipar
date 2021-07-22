@@ -16,7 +16,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
             this.liparOptions = options.Value;
         }
 
-        public List<OutBoxEventItem> GetOutBoxEventItemsForPublishe(int maxCount = 100)
+        public List<OutBoxEventItem> GetOutBoxEventItemsForPublish(int maxCount)
         {
             using var connection = new SqlConnection(liparOptions.OutBoxEvent.ConnectionString);
             string query = string.Format(liparOptions.OutBoxEvent.SelectCommand, maxCount);
@@ -25,7 +25,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
         }
         public void MarkAsRead(List<OutBoxEventItem> outBoxEventItems)
         {
-            string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => c.OutBoxEventItemId).ToList());
+            string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => c.Id).ToList());
             if (!string.IsNullOrWhiteSpace(idForMark))
             {
                 using var connection = new SqlConnection(liparOptions.OutBoxEvent.ConnectionString);

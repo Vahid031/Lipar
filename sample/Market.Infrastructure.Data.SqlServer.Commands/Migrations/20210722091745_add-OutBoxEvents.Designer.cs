@@ -4,14 +4,16 @@ using Market.Infrastructure.Data.SqlServer.Commands.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
     [DbContext(typeof(MarketCommandDbContext))]
-    partial class MarketCommandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20210722091745_add-OutBoxEvents")]
+    partial class addOutBoxEvents
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -83,15 +85,15 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("AccuredByUserId")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<DateTime>("AccuredOn")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("AggregateId")
-                        .HasMaxLength(40)
-                        .HasColumnType("nvarchar(40)");
+                        .HasMaxLength(25)
+                        .HasColumnType("nvarchar(25)");
 
                     b.Property<string>("AggregateName")
                         .HasMaxLength(200)

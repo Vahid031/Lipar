@@ -43,7 +43,7 @@ namespace Lipar.Presentation.Api.Middlewares
             catch (Exception ex)
             {
                 var problem = HandleUnknownException(ex, context);
-                context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+                context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/problem+json";
                 await context.Response.WriteAsync(json.SerializeObject(problem));
             }

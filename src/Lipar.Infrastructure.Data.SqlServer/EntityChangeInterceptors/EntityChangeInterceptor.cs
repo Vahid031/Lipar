@@ -35,7 +35,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
             var log = new EntityChangeLog(
                 Guid.NewGuid(),
                 entry.Entity.GetType().Name,
-                ((EntityId)entry.Property(ModelBuilderExtensions.EntityId).CurrentValue).Id,
+                ((EntityId)entry.Property(ModelBuilderExtensions.EntityId).CurrentValue).Value,
                 entry.State.ToString(),
                 dateTime,
                 userId);
