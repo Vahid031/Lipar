@@ -11,7 +11,7 @@ using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs;
-using Lipar.Infrastructure.Data.SqlServer.OutBoxEvents;
+using Lipar.Infrastructure.Events.OutboxEvent;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {

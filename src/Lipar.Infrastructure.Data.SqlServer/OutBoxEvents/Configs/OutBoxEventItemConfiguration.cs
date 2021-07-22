@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Lipar.Infrastructure.Events.OutboxEvent;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs

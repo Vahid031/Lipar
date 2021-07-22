@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 
-namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
+namespace Lipar.Infrastructure.Events.OutboxEvent
 {
-    public interface IOutBoxEventItemRepository
+    public interface IOutBoxEventRepository
     {
         List<OutBoxEventItem> GetOutBoxEventItemsForPublish(int maxCount);
         void MarkAsRead(List<OutBoxEventItem> outBoxEventItems);

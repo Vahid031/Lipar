@@ -39,8 +39,6 @@ namespace Lipar.Core.Application.Common
             ServiceFactory serviceFactory);
     }
 
-
-
     public class RequestHandlerWrapperImpl<TRequest, TResponse> : RequestHandlerWrapper<TResponse>
        where TRequest : IRequest<TResponse>
     {
@@ -71,6 +69,5 @@ namespace Lipar.Core.Application.Common
         }
     }
 
-
-
+   
 }

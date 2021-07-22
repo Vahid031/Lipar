@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
+namespace Lipar.Infrastructure.Events.OutboxEvent
 {
     public class OutBoxEventItem
     {

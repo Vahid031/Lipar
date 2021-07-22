@@ -4,16 +4,17 @@ using System.Collections.Generic;
 using System.Linq;
 using Microsoft.Extensions.Options;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using Lipar.Infrastructure.Events.OutboxEvent;
 
 namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
 {
-    public class SqlOutBoxEventItemRepository : IOutBoxEventItemRepository
+    public class SqlOutBoxEventRepository : IOutBoxEventRepository
     {
         private readonly LiparOptions liparOptions;
 
-        public SqlOutBoxEventItemRepository(IOptions<LiparOptions> options)
+        public SqlOutBoxEventRepository(LiparOptions liparOptions)
         {
-            this.liparOptions = options.Value;
+            this.liparOptions = liparOptions;
         }
 
         public List<OutBoxEventItem> GetOutBoxEventItemsForPublish(int maxCount)
@@ -25,7 +26,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
         }
         public void MarkAsRead(List<OutBoxEventItem> outBoxEventItems)
         {
-            string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => c.Id).ToList());
+            string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'" ).ToList());
             if (!string.IsNullOrWhiteSpace(idForMark))
             {
                 using var connection = new SqlConnection(liparOptions.OutBoxEvent.ConnectionString);

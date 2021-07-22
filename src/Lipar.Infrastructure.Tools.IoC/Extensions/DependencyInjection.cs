@@ -9,6 +9,8 @@ using System.Reflection;
 using Lipar.Infrastructure.Tools.Utilities.DependentyInjection;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Lipar.Core.Application.Behaviors;
+using Lipar.Core.Application.Events;
+using Lipar.Infrastructure.Events.OutboxEvent;
 
 namespace Lipar.Tools.IoC.Extensions
 {
@@ -17,10 +19,12 @@ namespace Lipar.Tools.IoC.Extensions
         public static void AddApplication(this IServiceCollection services,
             IEnumerable<Assembly> assemblies)
         {
+            services.AddTransient<ServiceFactory>(p => p.GetService);
             services.AddTransient<IMediator, Mediator>();
-            services.AddScoped<ServiceFactory>(p => p.GetService);
+            services.AddTransient<IEventPublisher, EventPublisher>();
             services.AddValidatorsFromAssemblies(assemblies);
             services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
+            services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository));
             services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
             services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
         }

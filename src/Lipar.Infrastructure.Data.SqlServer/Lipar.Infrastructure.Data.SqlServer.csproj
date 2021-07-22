@@ -14,6 +14,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
+    <ProjectReference Include="..\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
     <ProjectReference Include="..\Lipar.Presentation.Api\Lipar.Presentation.Api.csproj" />
   </ItemGroup>
