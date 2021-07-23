@@ -11,7 +11,6 @@ using FluentValidation.AspNetCore;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Lipar.Presentation.Api.Services;
 using Lipar.Infrastructure.Events.PoolingPublisher;
-using Lipar.Infrastructure.Events.OutboxEvent;
 
 namespace Lipar.Presentation.Api.Extensions
 {

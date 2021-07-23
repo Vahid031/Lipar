@@ -51,9 +51,9 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3F409B32
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Events", "Events", "{7288DCEA-719E-4D78-B046-A12D988D0895}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Events.PoolingPublisher", "src\Lipar.Infrastructure.Events.PoolingPublisher\Lipar.Infrastructure.Events.PoolingPublisher\Lipar.Infrastructure.Events.PoolingPublisher.csproj", "{66A1B833-A0C7-4A8A-A77E-D743490A2F85}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Events.PoolingPublisher", "src\Lipar.Infrastructure.Events.PoolingPublisher\Lipar.Infrastructure.Events.PoolingPublisher.csproj", "{66A1B833-A0C7-4A8A-A77E-D743490A2F85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Events.OutboxEvent", "src\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent.csproj", "{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Events.OutboxEvent", "src\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent.csproj", "{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

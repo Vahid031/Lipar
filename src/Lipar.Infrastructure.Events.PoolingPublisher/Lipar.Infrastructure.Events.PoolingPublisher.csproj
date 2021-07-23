@@ -2,21 +2,18 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
-    <Authors>Vahid Goodarzi</Authors>
-    <Version>5.0.8</Version>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="dapper" Version="2.0.90" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="5.0.6" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="5.0.6" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Lipar.Core.Application\Lipar.Core.Application.csproj" />
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
-    <ProjectReference Include="..\Lipar.Presentation.Api\Lipar.Presentation.Api.csproj" />
   </ItemGroup>
 
 </Project>
