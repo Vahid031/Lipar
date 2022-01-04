@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.0.9</Version>
+    <Version>5.0.10</Version>
     <AssemblyName>Lipar.Core.Application</AssemblyName>
     <RootNamespace>Lipar.Core.Application</RootNamespace>
   </PropertyGroup>
@@ -14,7 +14,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\sample\Market.Core.Domain\Market.Core.Domain.csproj" />
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
   </ItemGroup>
 
