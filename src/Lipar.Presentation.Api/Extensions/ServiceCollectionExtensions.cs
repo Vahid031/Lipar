@@ -10,7 +10,6 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using FluentValidation.AspNetCore;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Lipar.Presentation.Api.Services;
-using Lipar.Infrastructure.Events.PoolingPublisher;
 
 namespace Lipar.Presentation.Api.Extensions
 {
@@ -31,7 +30,7 @@ namespace Lipar.Presentation.Api.Extensions
             services.AddApplication(assembies);
             services.AddUtilities(assembies);
 
-            services.AddHostedService<PoolingPublisherHostedService>();
+            //services.AddHostedService<PoolingPublisherHostedService>();
 
             services.AddControllers(
                 options =>
