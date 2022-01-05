@@ -43,7 +43,7 @@ namespace Lipar.Infrastructure.Events.PoolingPublisher
             _timer.Change(Timeout.Infinite, 0);
 
 
-
+            return;
 
             var outboxItems = _outBoxEventRepository.GetOutBoxEventItemsForPublish(_liparOptions.PoolingPublisher.SendOutBoxCount);
 
