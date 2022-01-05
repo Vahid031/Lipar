@@ -10,7 +10,7 @@ using Lipar.Infrastructure.Tools.Utilities.DependentyInjection;
 using Lipar.Infrastructure.Tools.Utilities.Services;
 using Lipar.Core.Application.Behaviors;
 using Lipar.Core.Application.Events;
-using Lipar.Infrastructure.Events.OutboxEvent;
+//using Lipar.Infrastructure.Events.OutboxEvent;
 
 namespace Lipar.Tools.IoC.Extensions
 {
@@ -24,7 +24,7 @@ namespace Lipar.Tools.IoC.Extensions
             services.AddTransient<IEventPublisher, EventPublisher>();
             services.AddValidatorsFromAssemblies(assemblies);
             services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
-            services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository));
+            //services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository));
             services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
             services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
         }
