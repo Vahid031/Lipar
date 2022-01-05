@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.0.9</Version>
+    <Version>5.0.11</Version>
+    <AssemblyName>Lipar.Infrastructure.Events.PoolingPublisher</AssemblyName>
+    <RootNamespace>Lipar.Infrastructure.Events.PoolingPublisher</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

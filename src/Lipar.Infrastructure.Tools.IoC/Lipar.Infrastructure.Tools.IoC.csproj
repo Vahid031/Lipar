@@ -3,7 +3,9 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.0.10</Version>
+    <Version>5.0.11</Version>
+    <AssemblyName>Lipar.Infrastructure.Tools.IoC</AssemblyName>
+    <RootNamespace>Lipar.Infrastructure.Tools.IoC</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>

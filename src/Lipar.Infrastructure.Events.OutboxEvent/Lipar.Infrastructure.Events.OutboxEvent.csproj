@@ -1,9 +1,11 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.0.10</Version>
+    <Version>5.0.11</Version>
+    <AssemblyName>Lipar.Infrastructure.Events.OutboxEvent</AssemblyName>
+    <RootNamespace>Lipar.Infrastructure.Events.OutboxEvent</RootNamespace>
   </PropertyGroup>
 
 </Project>
