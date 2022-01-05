@@ -28,4 +28,4 @@ jobs:
       uses: brandedoutcast/publish-nuget@v2.5.2
       with:
        PROJECT_FILE_PATH: src/Lipar.Infrastructure.Events.PoolingPublisher/Lipar.Infrastructure.Events.PoolingPublisher.csproj
-       NUGET_KEY: ${{secrets.Lipar_Nuget_ApiKey}}
+       NUGET_KEY: ${{secrets.Lipar_Events_Api_Secret}}
