@@ -46,9 +46,9 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             ChangeTracker.DetectChanges();
             ChangeTracker.AutoDetectChangesEnabled = false;
             ChangeTracker.SetShadowProperties();
-            var list = EntityChangeInterceptor.AuditAllChangeTracking(
-                  ChangeTracker.GetTrackingAggrigates(), userInfo, dateTime).ToList();
-            Set<EntityChangeLog>().AddRange(list);
+            //var list = EntityChangeInterceptor.AuditAllChangeTracking(
+            //      ChangeTracker.GetTrackingAggrigates(), userInfo, dateTime).ToList();
+            //Set<EntityChangeLog>().AddRange(list);
 
             AddOutboxEvetItems();
 
