@@ -10,7 +10,11 @@ namespace Lipar.Presentation.Api.Extensions
         public static void AddLiparConfiguration(this IApplicationBuilder app, IWebHostEnvironment env, LiparOptions liparOptions)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c => c.SwaggerEndpoint(liparOptions.Swagger.Url, liparOptions.Swagger.Name));
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(liparOptions.Swagger.Url, liparOptions.Swagger.Name);
+                c.RoutePrefix = "swagger";
+            });
 
             app.UseApiExceptionHandler();
 
