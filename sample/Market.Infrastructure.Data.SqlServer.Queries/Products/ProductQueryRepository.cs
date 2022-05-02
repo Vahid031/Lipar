@@ -1,5 +1,6 @@
 ﻿using Lipar.Core.Domain.Queries;
 using Lipar.Infrastructure.Data.SqlServer.Queries;
+using Lipar.Infrastructure.Data.SqlServer.Extensions;
 using Market.Core.Domain.Products.Queries;
 using Market.Core.Domain.Products.Repositories;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
@@ -18,21 +19,22 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Products
         public Task<PagedData<ProductDto>> Select(ProductVM input)
         {
 
-            var result = db.Products.Select(m => new ProductDto
+            var query = db.Products.Select(m => new ProductDto
             {
                 Id = m.Id,
                 Name = m.Name,
                 Barcode = m.Barcode,
             });
 
+            if (!string.IsNullOrEmpty(input.Name))
+                query = query.Where(m => m.Name.Contains(input.Name));
 
-            return Task.FromResult(new PagedData<ProductDto>
-            {
-                PageNumber = input.PageNumber,
-                PageSize = input.PageSize,
-                TotalCount = result.Count(),
-                Result = result.ToList()
-            });
+
+            if (!string.IsNullOrEmpty(input.Barcode))
+                query = query.Where(m => m.Barcode.Contains(input.Barcode));
+
+
+            return query.PagingAsync(input);
         }
     }
 }
