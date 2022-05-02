@@ -8,4 +8,8 @@
     <RootNamespace>Lipar.Core.Domain</RootNamespace>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Folder Include="Commands\" />
+  </ItemGroup>
+
 </Project>

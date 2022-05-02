@@ -5,10 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Products\QyeryModels\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\src\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
   </ItemGroup>
 

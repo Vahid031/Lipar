@@ -1,12 +1,17 @@
-﻿using Lipar.Infrastructure.Data.SqlServer.Queries;
-using Market.Infrastructure.Data.SqlServer.Queries.Models;
-using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.EntityFrameworkCore;
 
-namespace Market.Infrastructure.Data.SqlServerQuery.Common
+#nullable disable
+
+namespace Market.Infrastructure.Data.SqlServer.Queries.Models
 {
-    public partial class MarketQueryDbContext : BaseQueryDbContext
+    public partial class MarketQueryDbContext : DbContext
     {
-        public MarketQueryDbContext(DbContextOptions options) : base(options)
+        public MarketQueryDbContext()
+        {
+        }
+
+        public MarketQueryDbContext(DbContextOptions<MarketQueryDbContext> options)
+            : base(options)
         {
         }
 
@@ -14,6 +19,15 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Common
         public virtual DbSet<OutBoxEventItem> OutBoxEventItems { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<PropertyChangeLog> PropertyChangeLogs { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+#warning To protect potentially sensitive information in your connection string, you should move it out of source code. You can avoid scaffolding the connection string by using the Name= syntax to read it from configuration - see https://go.microsoft.com/fwlink/?linkid=2131148. For more guidance on storing connection strings, see http://go.microsoft.com/fwlink/?LinkId=723263.
+                optionsBuilder.UseSqlServer("Server=.;Database=Market;user id=sa;password=V@hid031;");
+            }
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
