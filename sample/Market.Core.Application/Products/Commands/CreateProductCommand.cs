@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Lipar.Core.Application.Common;
+using Lipar.Core.Contract.Common;
 using Market.Core.Domain.Products.Entities;
 using Market.Core.Domain.Products.Repositories;
 using System;

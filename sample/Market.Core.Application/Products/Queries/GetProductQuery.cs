@@ -1,4 +1,5 @@
 ﻿using Lipar.Core.Application.Common;
+using Lipar.Core.Contract.Common;
 using Lipar.Core.Domain.Queries;
 using Market.Core.Domain.Products.Queries;
 using Market.Core.Domain.Products.Repositories;

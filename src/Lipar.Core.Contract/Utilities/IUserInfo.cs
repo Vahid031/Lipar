@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lipar.Infrastructure.Tools.Utilities.Services
+namespace Lipar.Core.Contract.Utilities
 {
     public interface IUserInfo
     {

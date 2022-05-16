@@ -1,4 +1,4 @@
-﻿namespace Lipar.Core.Application.Common
+﻿namespace Lipar.Core.Contract.Common
 {
     public interface IRequest
     {

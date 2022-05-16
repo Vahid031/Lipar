@@ -1,7 +1,7 @@
-﻿using Lipar.Core.Domain.Entities;
+﻿using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Domain.Entities;
 using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities;
 using Lipar.Infrastructure.Data.SqlServer.Extensions;
-using Lipar.Infrastructure.Tools.Utilities.Services;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;

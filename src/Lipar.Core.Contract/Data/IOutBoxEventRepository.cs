@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using Lipar.Infrastructure.Events.OutboxEvent;
+using System.Collections.Generic;
 
-namespace Lipar.Infrastructure.Events.OutboxEvent
+namespace Lipar.Core.Contract.Data
 {
     public interface IOutBoxEventRepository
     {

@@ -1,5 +1,5 @@
-﻿using Lipar.Core.Application.Behaviors;
-using Lipar.Core.Application.Extensions;
+﻿using Lipar.Core.Contract.Common;
+using Lipar.Core.Contract.Extensions;
 using System;
 using System.Linq;
 using System.Threading;
@@ -7,25 +7,6 @@ using System.Threading.Tasks;
 
 namespace Lipar.Core.Application.Common
 {
-
-    public delegate object ServiceFactory(Type serviceType);
-    public delegate Task<TResponse> RequestHandlerDelegate<TResponse>();
-    public delegate Task RequestHandlerDelegate();
-
-
-    public abstract class RequestHandlerBase
-    {
-        protected static THandler GetHandler<THandler>(ServiceFactory factory)
-        {
-            THandler handler = factory.GetInstance<THandler>();
-
-            if (handler is null)
-                throw new InvalidOperationException($"Handler was not found for request of type {typeof(THandler)}. Register your handlers with the container. See the samples in GitHub for examples.");
-
-            return handler;
-        }
-    }
-
     public abstract class RequestHandlerWrapper : RequestHandlerBase
     {
         public abstract Task Handle<TRequest>(TRequest request, CancellationToken cancellationToken,

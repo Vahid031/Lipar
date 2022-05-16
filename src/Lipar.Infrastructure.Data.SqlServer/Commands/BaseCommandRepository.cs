@@ -2,7 +2,7 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Lipar.Core.Domain.Data;
+using Lipar.Core.Contract.Data;
 using Lipar.Core.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
 

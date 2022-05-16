@@ -3,7 +3,7 @@ using System;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.Domain.Data
+namespace Lipar.Core.Contract.Data
 {
     public interface ICommandRepository<TEntity> : IUnitOfWork
        where TEntity : AggregateRoot

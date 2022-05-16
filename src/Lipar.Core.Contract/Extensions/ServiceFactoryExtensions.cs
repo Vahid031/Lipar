@@ -1,7 +1,7 @@
-﻿using Lipar.Core.Application.Common;
+﻿using Lipar.Core.Contract.Common;
 using System.Collections.Generic;
 
-namespace Lipar.Core.Application.Extensions
+namespace Lipar.Core.Contract.Extensions
 {
     public static class ServiceFactoryExtensions
     {

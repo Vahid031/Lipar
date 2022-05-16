@@ -1,8 +1,8 @@
-﻿using Lipar.Core.Application.Events;
+﻿using Lipar.Core.Contract.Data;
+using Lipar.Core.Contract.Events;
+using Lipar.Core.Contract.Utilities;
 using Lipar.Core.Domain.Events;
-using Lipar.Infrastructure.Events.OutboxEvent;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
-using Lipar.Infrastructure.Tools.Utilities.Services;
 using Microsoft.Extensions.Hosting;
 using System;
 using System.Threading;

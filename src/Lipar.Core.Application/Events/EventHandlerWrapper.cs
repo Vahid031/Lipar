@@ -1,5 +1,6 @@
-﻿using Lipar.Core.Application.Common;
-using Lipar.Core.Application.Extensions;
+﻿using Lipar.Core.Contract.Common;
+using Lipar.Core.Contract.Events;
+using Lipar.Core.Contract.Extensions;
 using Lipar.Core.Domain.Events;
 using System;
 using System.Collections.Generic;

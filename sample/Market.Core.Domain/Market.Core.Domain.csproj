@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
     <ProjectReference Include="..\..\src\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
   </ItemGroup>
 

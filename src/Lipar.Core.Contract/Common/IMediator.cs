@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.Application.Common
+namespace Lipar.Core.Contract.Common
 {
     public interface IMediator
     {

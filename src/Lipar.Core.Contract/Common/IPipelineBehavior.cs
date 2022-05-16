@@ -1,8 +1,7 @@
-﻿using Lipar.Core.Application.Common;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.Application.Behaviors
+namespace Lipar.Core.Contract.Common
 {
     public interface IPipelineBehavior<in TRequest> where TRequest : IRequest
     {

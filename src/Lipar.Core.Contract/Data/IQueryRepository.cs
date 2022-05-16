@@ -1,4 +1,4 @@
-﻿namespace Lipar.Core.Domain.Data
+﻿namespace Lipar.Core.Contract.Data
 {
     public interface IQueryRepository
     {

@@ -1,11 +1,10 @@
 ﻿using FluentValidation;
-using Lipar.Core.Application.Common;
 using System;
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.Application.Behaviors
+namespace Lipar.Core.Contract.Common
 {
     public interface IRequestDispacher
     {

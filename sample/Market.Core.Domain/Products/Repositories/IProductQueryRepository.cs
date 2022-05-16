@@ -1,4 +1,4 @@
-﻿using Lipar.Core.Domain.Data;
+﻿using Lipar.Core.Contract.Data;
 using Lipar.Core.Domain.Queries;
 using Market.Core.Domain.Products.Queries;
 using System.Threading.Tasks;

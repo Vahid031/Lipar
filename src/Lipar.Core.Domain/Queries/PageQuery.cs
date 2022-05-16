@@ -1,6 +1,6 @@
 ﻿namespace Lipar.Core.Domain.Queries
 {
-    public class PageQuery 
+    public abstract class PageQuery 
     {
         public int PageNumber { get; set; } = 1;
         public int PageSize { get; set; } = 5;

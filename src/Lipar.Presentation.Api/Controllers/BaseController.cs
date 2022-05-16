@@ -1,4 +1,4 @@
-﻿using Lipar.Core.Application.Common;
+﻿using Lipar.Core.Contract.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;

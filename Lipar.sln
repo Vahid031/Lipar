@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.31105.61
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32414.318
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Core", "Core", "{65552297-33D2-4AE8-8E56-C9F19BD2669B}"
 EndProject
@@ -53,7 +53,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Events", "Events", "{7288DC
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Events.PoolingPublisher", "src\Lipar.Infrastructure.Events.PoolingPublisher\Lipar.Infrastructure.Events.PoolingPublisher.csproj", "{66A1B833-A0C7-4A8A-A77E-D743490A2F85}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Events.OutboxEvent", "src\Lipar.Infrastructure.Events.OutboxEvent\Lipar.Infrastructure.Events.OutboxEvent.csproj", "{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Core.Contract", "src\Lipar.Core.Contract\Lipar.Core.Contract.csproj", "{1314C18A-B7DE-4489-A625-C978CDA5605F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -109,10 +109,10 @@ Global
 		{66A1B833-A0C7-4A8A-A77E-D743490A2F85}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{66A1B833-A0C7-4A8A-A77E-D743490A2F85}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{66A1B833-A0C7-4A8A-A77E-D743490A2F85}.Release|Any CPU.Build.0 = Release|Any CPU
-		{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -140,7 +140,7 @@ Global
 		{138FAB02-6DDB-4F96-B04A-376C1AC37C33} = {1C00D48C-3626-4939-AB02-3125AD79B478}
 		{7288DCEA-719E-4D78-B046-A12D988D0895} = {7CB9B90B-ADFB-4B9F-B213-6317F6B57C56}
 		{66A1B833-A0C7-4A8A-A77E-D743490A2F85} = {7288DCEA-719E-4D78-B046-A12D988D0895}
-		{ECFD07D8-E747-44E6-BE52-F7A9FF3D4229} = {7288DCEA-719E-4D78-B046-A12D988D0895}
+		{1314C18A-B7DE-4489-A625-C978CDA5605F} = {65552297-33D2-4AE8-8E56-C9F19BD2669B}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {205E35E8-C906-40DE-AC18-1C7D76A04B2E}

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Security.Claims;
-using Lipar.Infrastructure.Tools.Utilities.Services;
+using Lipar.Core.Contract.Utilities;
 using Microsoft.AspNetCore.Http;
 
 namespace Lipar.Presentation.Api.Services

@@ -1,4 +1,4 @@
-﻿using Lipar.Infrastructure.Tools.Utilities.Services;
+﻿using Lipar.Core.Contract.Utilities;
 using Lipar.Presentation.Api.Controllers;
 using Market.Core.Application.Products.Commands;
 using Market.Core.Application.Products.Queries;

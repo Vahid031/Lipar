@@ -9,7 +9,7 @@ using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities;
 using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs;
 using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Lipar.Infrastructure.Tools.Utilities.Services;
+using Lipar.Core.Contract.Utilities;
 //using Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs;
 //using Lipar.Infrastructure.Events.OutboxEvent;
 

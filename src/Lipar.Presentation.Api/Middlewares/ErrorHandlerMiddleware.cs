@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Lipar.Infrastructure.Tools.Utilities.Services;
+using Lipar.Core.Contract.Utilities;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;

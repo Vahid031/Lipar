@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using Lipar.Core.Contract.Common;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace Lipar.Core.Application.Common

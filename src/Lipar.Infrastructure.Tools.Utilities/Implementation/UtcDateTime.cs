@@ -1,4 +1,4 @@
-﻿using Lipar.Infrastructure.Tools.Utilities.Services;
+﻿using Lipar.Core.Contract.Utilities;
 using System;
 
 namespace Lipar.Infrastructure.Tools.Utilities.Implementation

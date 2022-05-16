@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Lipar.Core.Domain.Data
+namespace Lipar.Core.Contract.Data
 {
     public interface IUnitOfWork
     {

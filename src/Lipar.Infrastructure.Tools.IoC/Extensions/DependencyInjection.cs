@@ -1,16 +1,16 @@
 ﻿using FluentValidation;
 using Lipar.Core.Application.Common;
-using Lipar.Core.Domain.Data;
 using Lipar.Infrastructure.Tools.Utilities.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Lipar.Infrastructure.Tools.Utilities.DependentyInjection;
-using Lipar.Infrastructure.Tools.Utilities.Services;
-using Lipar.Core.Application.Behaviors;
 using Lipar.Core.Application.Events;
-//using Lipar.Infrastructure.Events.OutboxEvent;
+using Lipar.Core.Contract.DependentyInjection;
+using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Data;
+using Lipar.Core.Contract.Events;
+using Lipar.Core.Contract.Common;
 
 namespace Lipar.Tools.IoC.Extensions
 {

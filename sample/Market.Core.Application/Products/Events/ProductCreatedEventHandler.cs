@@ -1,4 +1,5 @@
 ﻿using Lipar.Core.Application.Events;
+using Lipar.Core.Contract.Events;
 using Market.Core.Domain.Products.Events;
 using System;
 using System.Threading;
