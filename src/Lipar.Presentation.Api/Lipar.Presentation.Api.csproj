@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.0.13</Version>
+    <Version>5.1.0</Version>
     <AssemblyName>Lipar.Presentation.Api</AssemblyName>
     <RootNamespace>Lipar.Presentation.Api</RootNamespace>
   </PropertyGroup>

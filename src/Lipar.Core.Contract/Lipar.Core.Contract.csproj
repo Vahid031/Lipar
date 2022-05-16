@@ -2,6 +2,10 @@
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Vahid Goodarzi</Authors>
+    <Version>5.1.0</Version>
+    <AssemblyName>Lipar.Core.Contract</AssemblyName>
+    <RootNamespace>Lipar.Core.Contract</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
