@@ -9,6 +9,32 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
     {
         public static PagedData<T> Paging<T>(this IQueryable<T> query, PageQuery pageQuery)
         {
+            var pagedData = query.PrepareObject(pageQuery);
+
+            pagedData.Result = 
+                query
+                    .Skip((pagedData.PageNumber - 1) * pagedData.PageSize)
+                    .Take(pagedData.PageSize)
+                    .ToList();
+
+            return pagedData;
+        }
+
+        public static async Task<PagedData<T>> PagingAsync<T>(this IQueryable<T> query, PageQuery pageQuery)
+        {
+            var pagedData = query.PrepareObject(pageQuery);
+
+            pagedData.Result =
+              await query
+                    .Skip((pagedData.PageNumber - 1) * pagedData.PageSize)
+                    .Take(pagedData.PageSize)
+                    .ToListAsync();
+
+            return pagedData;
+        }
+
+        private static PagedData<T> PrepareObject<T>(this IQueryable<T> query, PageQuery pageQuery)
+        {
             var pagedData = new PagedData<T>();
 
             if (pageQuery.PageNumber > 0)
@@ -26,15 +52,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 else
                     query = query.OrderByDescending(m => EF.Property<T>(m, pageQuery.SortBy));
 
-
-            pagedData.Result = query.Skip((pagedData.PageNumber - 1) * pagedData.PageSize).Take(pagedData.PageSize).ToList();
-
             return pagedData;
-        }
-
-        public static Task<PagedData<T>> PagingAsync<T>(this IQueryable<T> query, PageQuery pageQuery)
-        {
-            return Task.FromResult(query.Paging(pageQuery));
         }
     }
 }

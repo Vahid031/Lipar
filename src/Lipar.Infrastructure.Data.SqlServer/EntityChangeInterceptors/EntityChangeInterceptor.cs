@@ -7,13 +7,12 @@ using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
 {
     public class EntityChangeInterceptor
     {
-        public static IEnumerable<EntityChangeLog> AuditAllChangeTracking(IEnumerable<EntityEntry<Entity>> entries, 
+        public static IEnumerable<AuditLog> AuditAllChangeTracking(IEnumerable<EntityEntry<Entity>> entries, 
             IUserInfo userInfo, IDateTime dateTime)
         {
             var auditProperties = new List<string>
@@ -29,10 +28,10 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
                 yield return ApplyAuditLog(entry, auditProperties, userInfo.UserId, dateTime.DateTime);
         }
 
-        private static EntityChangeLog ApplyAuditLog(EntityEntry entry, List<string> auditProperties,
+        private static AuditLog ApplyAuditLog(EntityEntry entry, List<string> auditProperties,
             Guid userId, DateTime dateTime)
         {
-            var log = new EntityChangeLog(
+            var log = new AuditLog(
                 Guid.NewGuid(),
                 entry.Entity.GetType().Name,
                 ((EntityId)entry.Property(ModelBuilderExtensions.EntityId).CurrentValue).Value,
@@ -48,20 +47,6 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors
                 }
             }
             return log;
-            //Parallel.ForEach(entry.Properties.Where(m => auditProperties.All(p => p != m.Metadata.Name)),
-            //    item =>
-            //    {
-            //        if (entry.State == EntityState.Added || item.IsModified)
-            //        {
-            //            var logDetail = new PropertyChangeLog
-            //            {
-            //                Id = Guid.NewGuid(),
-            //                Key = item.Metadata.Name,
-            //                Value = item.CurrentValue?.ToString()
-            //            };
-            //            log.PropertyChangeLogs.Add(logDetail);
-            //        }
-            //    });
         }
     }
 }

@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs
 {
-    public class EntityChangeLogConfiguration : IEntityTypeConfiguration<EntityChangeLog>
+    public class AuditLogConfiguration : IEntityTypeConfiguration<AuditLog>
     {
-        public void Configure(EntityTypeBuilder<EntityChangeLog> builder)
+        public void Configure(EntityTypeBuilder<AuditLog> builder)
         {
             builder.Property(m => m.EntityType)
                 .HasMaxLength(50);
@@ -15,7 +15,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs
                 .HasMaxLength(10);
 
             builder.HasMany(b => b.PropertyChangeLogs)
-                .WithOne().HasForeignKey(m => m.EntityChangeLogId);
+                .WithOne().HasForeignKey(m => m.AuditLogId);
 
             builder.HasIndex(m => m.Date)
                 .IsUnique()

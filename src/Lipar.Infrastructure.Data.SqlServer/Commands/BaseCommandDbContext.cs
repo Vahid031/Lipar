@@ -5,13 +5,9 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Linq;
-using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities;
 using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs;
-using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Utilities;
-//using Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs;
-//using Lipar.Infrastructure.Events.OutboxEvent;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
@@ -32,8 +28,8 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             modelBuilder.AddEntityId();
             modelBuilder.AddAuditableProperties();
             //modelBuilder.ApplyConfiguration(new OutBoxEventItemConfiguration());
-            modelBuilder.ApplyConfiguration(new EntityChangeLogConfiguration());
-            modelBuilder.ApplyConfiguration(new PropertyChangeLogConfiguration());
+            modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
+            modelBuilder.ApplyConfiguration(new AuditLogDetailConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }

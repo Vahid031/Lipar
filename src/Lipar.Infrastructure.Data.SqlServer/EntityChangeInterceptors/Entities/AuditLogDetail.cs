@@ -2,21 +2,21 @@
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities
 {
-    public class PropertyChangeLog
+    public class AuditLogDetail
     {
         public Guid Id { get; private set; }
         public string Key { get; private set; }
         public string Value { get; private set; }
-        public Guid EntityChangeLogId { get; private set; }
+        public Guid AuditLogId { get; private set; }
 
-        private PropertyChangeLog() { }
+        private AuditLogDetail() { }
 
-        public PropertyChangeLog(Guid id, string key, string value, Guid entityChangeLogId)
+        public AuditLogDetail(Guid id, string key, string value, Guid auditLogId)
         {
             Id = id;
             Key = key;
             Value = value;
-            EntityChangeLogId = entityChangeLogId;
+            AuditLogId = auditLogId;
         }
     }
 }

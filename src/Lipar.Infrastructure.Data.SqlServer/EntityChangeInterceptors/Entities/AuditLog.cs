@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities
 {
-    public class EntityChangeLog
+    public class AuditLog
     {
         public Guid Id { get; private set; }
         public string EntityType { get; private set; }
@@ -12,12 +12,12 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities
         public string State { get; private set; }
         public DateTime Date { get; private set; }
         public Guid UserId { get; private set; }
-        public IReadOnlyCollection<PropertyChangeLog> PropertyChangeLogs  => _propertyChangeLogs.ToList();
-        private HashSet<PropertyChangeLog> _propertyChangeLogs { get; set; } = new HashSet<PropertyChangeLog>();
+        public IReadOnlyCollection<AuditLogDetail> PropertyChangeLogs  => _propertyChangeLogs.ToList();
+        private HashSet<AuditLogDetail> _propertyChangeLogs { get; set; } = new HashSet<AuditLogDetail>();
 
-        private EntityChangeLog() { }
+        private AuditLog() { }
 
-        public EntityChangeLog(Guid id, string entityType, Guid entityId, string state, DateTime date, Guid userId)
+        public AuditLog(Guid id, string entityType, Guid entityId, string state, DateTime date, Guid userId)
         {
             Id = id;
             EntityType = entityType;
@@ -28,6 +28,6 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities
         }
 
         public void AddPropertyChangeLog(string key, string value) =>
-            _propertyChangeLogs.Add(new PropertyChangeLog(Guid.NewGuid(), key, value, Id));
+            _propertyChangeLogs.Add(new AuditLogDetail(Guid.NewGuid(), key, value, (Guid)this.Id));
     }
 }
