@@ -23,6 +23,7 @@ namespace Lipar.Tools.IoC.Extensions
             services.AddTransient<IMediator, Mediator>();
             services.AddTransient<IEventPublisher, EventPublisher>();
             services.AddValidatorsFromAssemblies(assemblies);
+          
             services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
             services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository), typeof(IEntityChangesInterceptorRepository));
             services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
@@ -32,8 +33,8 @@ namespace Lipar.Tools.IoC.Extensions
         public static void AddUtilities(this IServiceCollection services,
             IEnumerable<Assembly> assemblies)
         {
-            services.AddTransient<IJson, NewtonSoftSerializer>();
-            services.AddTransient<IDateTime, UtcDateTime>();
+            services.AddWithScopedLifetime(assemblies, typeof(IUserInfo));
+            services.AddWithTransientLifetime(assemblies, typeof(IJson), typeof(IDateTime));
             services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
             services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));
             services.AddWithSingletonLifetime(assemblies, typeof(ISingletoneLifetime));

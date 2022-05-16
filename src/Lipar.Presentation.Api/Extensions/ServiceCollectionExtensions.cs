@@ -23,8 +23,6 @@ namespace Lipar.Presentation.Api.Extensions
             configuration.GetSection(nameof(LiparOptions)).Bind(liparOptions);
             services.AddSingleton(liparOptions);
 
-            services.AddSingleton<IUserInfo, UserInfo>();
-
             var assembies = GetAssemblies(assemblyNames);
 
             services.AddApplication(assembies);
