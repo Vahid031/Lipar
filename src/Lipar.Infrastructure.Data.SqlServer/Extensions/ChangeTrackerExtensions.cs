@@ -1,4 +1,5 @@
 ﻿using Lipar.Core.Domain.Entities;
+using Lipar.Core.Domain.Events;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.ChangeTracking;
 using System;
@@ -59,6 +60,41 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 .Select(c => c.Entity)
                 .Where(c => c.GetChanges().Any())
                 .ToList();
+
+        public static IEnumerable<EntityChangesInterceptor> GetEntityChangesInterceptor(this ChangeTracker changeTracker)
+        {
+            IEnumerable<EntityEntry<Entity>> entries = changeTracker.GetTrackingAggrigates();
+
+            var auditProperties = new List<string>
+            {
+                ModelBuilderExtensions.CreatedBy,
+                ModelBuilderExtensions.CreatedDate,
+                ModelBuilderExtensions.ModifedBy,
+                ModelBuilderExtensions.ModifedDate,
+                ModelBuilderExtensions.EntityId,
+            };
+
+            foreach (EntityEntry entry in entries)
+                yield return ApplyAuditLog(entry, auditProperties);
+        }
+
+        private static EntityChangesInterceptor ApplyAuditLog(EntityEntry entry, List<string> auditProperties)
+        {
+            var log = new EntityChangesInterceptor(
+                Guid.NewGuid(),
+                entry.Entity.GetType().Name,
+                ((EntityId)entry.Property(ModelBuilderExtensions.EntityId).CurrentValue).Value,
+                entry.State.ToString());
+
+            foreach (var item in entry.Properties.Where(m => auditProperties.All(p => p != m.Metadata.Name)))
+            {
+                if (entry.State == EntityState.Added || item.IsModified)
+                {
+                    log.AddPropertyChangeLog(item.Metadata.Name, item.CurrentValue?.ToString());
+                }
+            }
+            return log;
+        }
 
     }
 }

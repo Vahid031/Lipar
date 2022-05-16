@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Lipar.Infrastructure.Events.OutboxEvent
+namespace Lipar.Core.Domain.Events
 {
     public class OutBoxEventItem
     {

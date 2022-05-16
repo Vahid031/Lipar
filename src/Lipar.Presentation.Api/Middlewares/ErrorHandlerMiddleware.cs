@@ -71,7 +71,7 @@ namespace Lipar.Presentation.Api.Middlewares
             return new ApiProblemDetails
             {
                 TraceId = Activity.Current?.Id ?? context.TraceIdentifier,
-                Status = (int)HttpStatusCode.BadRequest,
+                Status = (int)HttpStatusCode.InternalServerError,
                 Title = "an error has been accured!",
                 Details = GetInnerExceptionMessage(ex),
                 Instance = context.Request.Path,
@@ -84,7 +84,7 @@ namespace Lipar.Presentation.Api.Middlewares
             var problem = new ApiProblemDetails
             {
                 TraceId = Activity.Current?.Id ?? context.TraceIdentifier,
-                Status = (int)HttpStatusCode.BadRequest,
+                Status = (int)HttpStatusCode.InternalServerError,
                 Title = ex.Message,
                 Details = context.Request.PathBase,
                 Instance = context.Request.Path

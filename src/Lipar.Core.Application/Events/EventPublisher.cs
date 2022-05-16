@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Lipar.Core.Domain.Events;
 using System.Threading;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Lipar.Core.Contract.Events;
 using Lipar.Core.Contract.Common;
+using Lipar.Core.Domain.Events;
 
 namespace Lipar.Core.Application.Events
 {

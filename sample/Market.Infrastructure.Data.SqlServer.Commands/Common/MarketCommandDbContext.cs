@@ -1,4 +1,6 @@
 ﻿using Lipar.Infrastructure.Data.SqlServer.Commands;
+using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor.Configs;
+using Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs;
 using Market.Core.Domain.Products.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -13,6 +15,11 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Common
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
+
+            modelBuilder.ApplyConfiguration(new OutBoxEventItemConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityChangesInterceptorConfiguration());
+            modelBuilder.ApplyConfiguration(new EntityChangesInterceptorDetailConfiguration());
+
             base.OnModelCreating(modelBuilder);
         }
 

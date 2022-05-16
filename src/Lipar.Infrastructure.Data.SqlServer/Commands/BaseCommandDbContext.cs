@@ -5,15 +5,15 @@ using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore.Metadata;
 using System;
 using System.Linq;
-using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Configs;
 using Microsoft.EntityFrameworkCore.Infrastructure;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Data;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
     public abstract class BaseCommandDbContext : DbContext
     {
-        //public DbSet<OutBoxEventItem> OutBoxEventItems { get; set; }
+
+        #region Ctreator and Configuration
         public BaseCommandDbContext(DbContextOptions options) : base(options)
         {
 
@@ -27,25 +27,21 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
         {
             modelBuilder.AddEntityId();
             modelBuilder.AddAuditableProperties();
-            //modelBuilder.ApplyConfiguration(new OutBoxEventItemConfiguration());
-            modelBuilder.ApplyConfiguration(new AuditLogConfiguration());
-            modelBuilder.ApplyConfiguration(new AuditLogDetailConfiguration());
 
             base.OnModelCreating(modelBuilder);
         }
 
+        #endregion
+
+        #region Commit Process
+
         public async Task<int> SaveChangesAsync()
         {
-            var userInfo = this.GetService<IUserInfo>();
-            var dateTime = this.GetService<IDateTime>();
-
             ChangeTracker.DetectChanges();
             ChangeTracker.AutoDetectChangesEnabled = false;
-            ChangeTracker.SetShadowProperties();
-            //var list = EntityChangeInterceptor.AuditAllChangeTracking(
-            //      ChangeTracker.GetTrackingAggrigates(), userInfo, dateTime).ToList();
-            //Set<EntityChangeLog>().AddRange(list);
 
+            ChangeTracker.SetShadowProperties();
+            AddEntityChangesInterceptors();
             AddOutboxEvetItems();
 
             var rowAffect = await base.SaveChangesAsync();
@@ -54,6 +50,26 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
             return rowAffect;
         }
+
+        private void AddEntityChangesInterceptors()
+        {
+            var entityChangesInterceptors = ChangeTracker.GetEntityChangesInterceptor();
+            var repository = this.GetService<IEntityChangesInterceptorRepository>();
+
+            repository.AddEntityChanges(entityChangesInterceptors);
+        }
+
+        private void AddOutboxEvetItems()
+        {
+            var changedAggregates = ChangeTracker.GetAggregatesWithEvent();
+            var repository = this.GetService<IOutBoxEventRepository>();
+
+            repository.AddOutboxEvetItems(changedAggregates);
+        }
+
+        #endregion
+
+        #region Methods
 
         public IEnumerable<string> GetIncludePaths(Type clrEntityType)
         {
@@ -90,32 +106,6 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             }
         }
 
-        private void AddOutboxEvetItems()
-        {
-            var changedAggregates = ChangeTracker.GetAggregatesWithEvent();
-            var userInfo = this.GetService<IUserInfo>();
-            var jsonConvert = this.GetService<IJson>();
-
-            foreach (var aggregate in changedAggregates)
-            {
-                var events = aggregate.GetChanges();
-                //foreach (var @event in events)
-                //{
-                //    OutBoxEventItems.Add(new OutBoxEventItem
-                //    {
-                //        Id = Guid.NewGuid(),
-                //        AccuredByUserId = userInfo.UserId.ToString(),
-                //        AccuredOn = DateTime.UtcNow,
-                //        AggregateId = aggregate.Id.ToString(),
-                //        AggregateName = aggregate.GetType().Name,
-                //        AggregateTypeName = aggregate.GetType().FullName,
-                //        EventName = @event.GetType().Name,
-                //        EventTypeName = @event.GetType().FullName,
-                //        EventPayload = jsonConvert.SerializeObject(@event),
-                //        IsProcessed = false
-                //    });
-                //}
-            }
-        }
+        #endregion
     }
 }

@@ -24,7 +24,7 @@ namespace Lipar.Tools.IoC.Extensions
             services.AddTransient<IEventPublisher, EventPublisher>();
             services.AddValidatorsFromAssemblies(assemblies);
             services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
-            //services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository));
+            services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository), typeof(IEntityChangesInterceptorRepository));
             services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
             services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
         }

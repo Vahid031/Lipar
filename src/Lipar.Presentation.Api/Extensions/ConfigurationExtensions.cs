@@ -13,7 +13,7 @@ namespace Lipar.Presentation.Api.Extensions
             app.UseSwaggerUI(c =>
             {
                 c.SwaggerEndpoint(liparOptions.Swagger.Url, liparOptions.Swagger.Name);
-                c.RoutePrefix = "";
+                //c.RoutePrefix = "";
             });
 
             app.UseApiExceptionHandler();

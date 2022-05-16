@@ -19,7 +19,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 .HasAnnotation("ProductVersion", "5.0.6")
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.EntityChangeLog", b =>
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptor", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -49,16 +49,16 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .IsUnique()
                         .IsClustered();
 
-                    b.ToTable("EntityChangeLog");
+                    b.ToTable("EntityChangesInterceptors");
                 });
 
-            modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.PropertyChangeLog", b =>
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptorDetail", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid>("EntityChangeLogId")
+                    b.Property<Guid>("EntityChangesInterceptorId")
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Key")
@@ -66,17 +66,17 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.Property<string>("Value")
-                        .HasMaxLength(250)
-                        .HasColumnType("nvarchar(250)");
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("EntityChangeLogId");
+                    b.HasIndex("EntityChangesInterceptorId");
 
-                    b.ToTable("PropertyChangeLog");
+                    b.ToTable("EntityChangesInterceptorDetails");
                 });
 
-            modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.OutBoxEventItem", b =>
+            modelBuilder.Entity("Lipar.Core.Domain.Events.OutBoxEventItem", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -160,18 +160,18 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                     b.ToTable("Products");
                 });
 
-            modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.PropertyChangeLog", b =>
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptorDetail", b =>
                 {
-                    b.HasOne("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.EntityChangeLog", null)
-                        .WithMany("PropertyChangeLogs")
-                        .HasForeignKey("EntityChangeLogId")
+                    b.HasOne("Lipar.Core.Domain.Events.EntityChangesInterceptor", null)
+                        .WithMany("EntityChangesInterceptorDetails")
+                        .HasForeignKey("EntityChangesInterceptorId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptors.Entities.EntityChangeLog", b =>
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptor", b =>
                 {
-                    b.Navigation("PropertyChangeLogs");
+                    b.Navigation("EntityChangesInterceptorDetails");
                 });
 #pragma warning restore 612, 618
         }

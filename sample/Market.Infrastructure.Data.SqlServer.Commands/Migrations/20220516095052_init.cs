@@ -8,7 +8,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EntityChangeLog",
+                name: "EntityChangesInterceptors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -20,7 +20,28 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityChangeLog", x => x.Id)
+                    table.PrimaryKey("PK_EntityChangesInterceptors", x => x.Id)
+                        .Annotation("SqlServer:Clustered", false);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "OutBoxEventItems",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AccuredByUserId = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    AccuredOn = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    AggregateName = table.Column<string>(type: "nvarchar(200)", maxLength: 200, nullable: true),
+                    AggregateTypeName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    AggregateId = table.Column<string>(type: "nvarchar(40)", maxLength: 40, nullable: true),
+                    EventName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    EventTypeName = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    EventPayload = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    IsProcessed = table.Column<bool>(type: "bit", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_OutBoxEventItems", x => x.Id)
                         .Annotation("SqlServer:Clustered", false);
                 });
 
@@ -43,29 +64,41 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "PropertyChangeLog",
+                name: "EntityChangesInterceptorDetails",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     Key = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    Value = table.Column<string>(type: "nvarchar(250)", maxLength: 250, nullable: true),
-                    EntityChangeLogId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    Value = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
+                    EntityChangesInterceptorId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_PropertyChangeLog", x => x.Id);
+                    table.PrimaryKey("PK_EntityChangesInterceptorDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_PropertyChangeLog_EntityChangeLog_EntityChangeLogId",
-                        column: x => x.EntityChangeLogId,
-                        principalTable: "EntityChangeLog",
+                        name: "FK_EntityChangesInterceptorDetails_EntityChangesInterceptors_EntityChangesInterceptorId",
+                        column: x => x.EntityChangesInterceptorId,
+                        principalTable: "EntityChangesInterceptors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityChangeLog_Date",
-                table: "EntityChangeLog",
+                name: "IX_EntityChangesInterceptorDetails_EntityChangesInterceptorId",
+                table: "EntityChangesInterceptorDetails",
+                column: "EntityChangesInterceptorId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_EntityChangesInterceptors_Date",
+                table: "EntityChangesInterceptors",
                 column: "Date",
+                unique: true)
+                .Annotation("SqlServer:Clustered", true);
+
+            migrationBuilder.CreateIndex(
+                name: "IX_OutBoxEventItems_AccuredOn",
+                table: "OutBoxEventItems",
+                column: "AccuredOn",
                 unique: true)
                 .Annotation("SqlServer:Clustered", true);
 
@@ -75,23 +108,21 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 column: "CreatedDate",
                 unique: true)
                 .Annotation("SqlServer:Clustered", true);
-
-            migrationBuilder.CreateIndex(
-                name: "IX_PropertyChangeLog_EntityChangeLogId",
-                table: "PropertyChangeLog",
-                column: "EntityChangeLogId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
+                name: "EntityChangesInterceptorDetails");
+
+            migrationBuilder.DropTable(
+                name: "OutBoxEventItems");
+
+            migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "PropertyChangeLog");
-
-            migrationBuilder.DropTable(
-                name: "EntityChangeLog");
+                name: "EntityChangesInterceptors");
         }
     }
 }
