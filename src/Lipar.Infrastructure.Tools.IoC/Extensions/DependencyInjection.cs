@@ -1,6 +1,5 @@
 ﻿using FluentValidation;
 using Lipar.Core.Application.Common;
-using Lipar.Infrastructure.Tools.Utilities.Implementation;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
@@ -33,8 +32,8 @@ namespace Lipar.Tools.IoC.Extensions
         public static void AddUtilities(this IServiceCollection services,
             IEnumerable<Assembly> assemblies)
         {
-            services.AddWithScopedLifetime(assemblies, typeof(IUserInfo));
-            services.AddWithTransientLifetime(assemblies, typeof(IJson), typeof(IDateTime));
+            services.AddWithTransientLifetime(assemblies, typeof(IJson), typeof(IDateTime), typeof(IUserInfo));
+
             services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
             services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));
             services.AddWithSingletonLifetime(assemblies, typeof(ISingletoneLifetime));

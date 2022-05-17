@@ -8,8 +8,7 @@ using Lipar.Tools.IoC.Extensions;
 using Microsoft.OpenApi.Models;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using FluentValidation.AspNetCore;
-using Lipar.Presentation.Api.Services;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Application.Events;
 
 namespace Lipar.Presentation.Api.Extensions
 {
@@ -28,7 +27,7 @@ namespace Lipar.Presentation.Api.Extensions
             services.AddApplication(assembies);
             services.AddUtilities(assembies);
 
-            //services.AddHostedService<PoolingPublisherHostedService>();
+            services.AddHostedService<PoolingPublisherHostedService>();
 
             services.AddControllers(
                 options =>

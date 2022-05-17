@@ -8,7 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Lipar.Infrastructure.Events.PoolingPublisher
+namespace Lipar.Core.Application.Events
 {
     public class PoolingPublisherHostedService : IHostedService
     {
@@ -18,7 +18,6 @@ namespace Lipar.Infrastructure.Events.PoolingPublisher
         private readonly IOutBoxEventRepository _outBoxEventRepository;
         private readonly IJson _json;
 
-        //private readonly IMessageBus _messageBus;
         private Timer _timer;
 
         public PoolingPublisherHostedService(LiparOptions liparOptions,

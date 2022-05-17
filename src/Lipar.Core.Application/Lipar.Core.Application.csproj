@@ -11,11 +11,13 @@
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
+    <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
