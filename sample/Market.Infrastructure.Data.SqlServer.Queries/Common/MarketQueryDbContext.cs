@@ -11,7 +11,7 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Common
         }
 
         public virtual DbSet<EntityChangeLog> EntityChangeLogs { get; set; }
-        public virtual DbSet<OutBoxEventItem> OutBoxEventItems { get; set; }
+        public virtual DbSet<OutBoxEvent> OutBoxEventItems { get; set; }
         public virtual DbSet<Product> Products { get; set; }
         public virtual DbSet<PropertyChangeLog> PropertyChangeLogs { get; set; }
 
@@ -37,7 +37,7 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Common
                 entity.Property(e => e.State).HasMaxLength(10);
             });
 
-            modelBuilder.Entity<OutBoxEventItem>(entity =>
+            modelBuilder.Entity<OutBoxEvent>(entity =>
             {
                 entity.HasKey(e => e.Id)
                     .IsClustered(false);

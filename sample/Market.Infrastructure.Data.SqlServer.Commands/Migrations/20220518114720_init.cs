@@ -8,7 +8,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "EntityChangesInterceptors",
+                name: "_EntityChangesInterceptors",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -20,12 +20,12 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityChangesInterceptors", x => x.Id)
+                    table.PrimaryKey("PK__EntityChangesInterceptors", x => x.Id)
                         .Annotation("SqlServer:Clustered", false);
                 });
 
             migrationBuilder.CreateTable(
-                name: "OutBoxEventItems",
+                name: "_OutBoxEvents",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -41,7 +41,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_OutBoxEventItems", x => x.Id)
+                    table.PrimaryKey("PK__OutBoxEvents", x => x.Id)
                         .Annotation("SqlServer:Clustered", false);
                 });
 
@@ -64,7 +64,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "EntityChangesInterceptorDetails",
+                name: "_EntityChangesInterceptorDetails",
                 columns: table => new
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
@@ -74,30 +74,30 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_EntityChangesInterceptorDetails", x => x.Id);
+                    table.PrimaryKey("PK__EntityChangesInterceptorDetails", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_EntityChangesInterceptorDetails_EntityChangesInterceptors_EntityChangesInterceptorId",
+                        name: "FK__EntityChangesInterceptorDetails__EntityChangesInterceptors_EntityChangesInterceptorId",
                         column: x => x.EntityChangesInterceptorId,
-                        principalTable: "EntityChangesInterceptors",
+                        principalTable: "_EntityChangesInterceptors",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityChangesInterceptorDetails_EntityChangesInterceptorId",
-                table: "EntityChangesInterceptorDetails",
+                name: "IX__EntityChangesInterceptorDetails_EntityChangesInterceptorId",
+                table: "_EntityChangesInterceptorDetails",
                 column: "EntityChangesInterceptorId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_EntityChangesInterceptors_Date",
-                table: "EntityChangesInterceptors",
+                name: "IX__EntityChangesInterceptors_Date",
+                table: "_EntityChangesInterceptors",
                 column: "Date",
                 unique: true)
                 .Annotation("SqlServer:Clustered", true);
 
             migrationBuilder.CreateIndex(
-                name: "IX_OutBoxEventItems_AccuredOn",
-                table: "OutBoxEventItems",
+                name: "IX__OutBoxEvents_AccuredOn",
+                table: "_OutBoxEvents",
                 column: "AccuredOn",
                 unique: true)
                 .Annotation("SqlServer:Clustered", true);
@@ -113,16 +113,16 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "EntityChangesInterceptorDetails");
+                name: "_EntityChangesInterceptorDetails");
 
             migrationBuilder.DropTable(
-                name: "OutBoxEventItems");
+                name: "_OutBoxEvents");
 
             migrationBuilder.DropTable(
                 name: "Products");
 
             migrationBuilder.DropTable(
-                name: "EntityChangesInterceptors");
+                name: "_EntityChangesInterceptors");
         }
     }
 }

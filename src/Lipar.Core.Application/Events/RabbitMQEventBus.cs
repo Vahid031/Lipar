@@ -9,7 +9,7 @@ namespace Lipar.Core.Application.Events
     {
         public Task Publish(IEvent @event)
         {
-            throw new NotImplementedException();
+           return Task.CompletedTask;
         }
     }
 }

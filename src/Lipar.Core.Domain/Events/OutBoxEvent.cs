@@ -1,11 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 
-#nullable disable
-
-namespace Market.Infrastructure.Data.SqlServer.Queries.Models
+namespace Lipar.Core.Domain.Events
 {
-    public partial class OutBoxEventItem
+    public class OutBoxEvent
     {
         public Guid Id { get; set; }
         public string AccuredByUserId { get; set; }

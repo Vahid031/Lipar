@@ -23,8 +23,8 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
         public void AddEntityChanges(IEnumerable<EntityChangesInterceptor> entities)
         {
             using var connection = new SqlConnection(liparOptions.EntityChangesInterceptor.ConnectionString);
-            var insertCommand = "Insert Into dbo.EntityChangesInterceptors(Id, Date, State, EntityId, EntityType, UserId) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId)";
-            var insertDetailCommand = "Insert Into dbo.EntityChangesInterceptorDetails(Id, [Key], [Value], EntityChangesInterceptorId) Values(@Id, @Key, @Value, @EntityChangesInterceptorId)";
+            var insertCommand = "Insert Into _EntityChangesInterceptors(Id, Date, State, EntityId, EntityType, UserId) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId)";
+            var insertDetailCommand = "Insert Into _EntityChangesInterceptorDetails(Id, [Key], [Value], EntityChangesInterceptorId) Values(@Id, @Key, @Value, @EntityChangesInterceptorId)";
 
             foreach (var entity in entities)
             {

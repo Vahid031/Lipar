@@ -4,11 +4,11 @@ using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
 namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs
 {
-    public class OutBoxEventItemConfiguration : IEntityTypeConfiguration<OutBoxEventItem>
+    public class OutBoxEventConfiguration : IEntityTypeConfiguration<OutBoxEvent>
     {
-        public void Configure(EntityTypeBuilder<OutBoxEventItem> builder)
+        public void Configure(EntityTypeBuilder<OutBoxEvent> builder)
         {
-            builder.ToTable($"{nameof(OutBoxEventItem)}s");
+            builder.ToTable($"_{nameof(OutBoxEvent)}s");
 
             builder.Property(c => c.AccuredByUserId)
                 .HasMaxLength(40);

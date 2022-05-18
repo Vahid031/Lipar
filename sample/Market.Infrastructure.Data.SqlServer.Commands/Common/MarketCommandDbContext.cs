@@ -8,6 +8,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Common
 {
     public class MarketCommandDbContext : BaseCommandDbContext
     {
+        #region Create and Configuration
         public MarketCommandDbContext(DbContextOptions<MarketCommandDbContext> options) : base(options)
         {
         }
@@ -16,7 +17,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Common
         {
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
-            modelBuilder.ApplyConfiguration(new OutBoxEventItemConfiguration());
+            modelBuilder.ApplyConfiguration(new OutBoxEventConfiguration());
             modelBuilder.ApplyConfiguration(new EntityChangesInterceptorConfiguration());
             modelBuilder.ApplyConfiguration(new EntityChangesInterceptorDetailConfiguration());
 
@@ -28,7 +29,9 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Common
             //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Market;Trusted_Connection=True;");
             base.OnConfiguring(optionsBuilder);
         }
-
+        #endregion
+        
         DbSet<Product> Products { get; set; }
+
     }
 }

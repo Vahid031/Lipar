@@ -34,7 +34,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
             {
                 foreach (var @event in aggregate.GetChanges())
                 {
-                    connection.Execute(liparOptions.OutBoxEvent.InsertCommand, new OutBoxEventItem
+                    connection.Execute(liparOptions.OutBoxEvent.InsertCommand, new Core.Domain.Events.OutBoxEvent
                     {
                         Id = Guid.NewGuid(),
                         AccuredByUserId = userInfo.UserId.ToString(),
@@ -51,15 +51,15 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
             }
         }
 
-        public List<OutBoxEventItem> GetOutBoxEventItemsForPublish(int maxCount)
+        public List<Core.Domain.Events.OutBoxEvent> GetOutBoxEventItemsForPublish(int maxCount)
         {
             using var connection = new SqlConnection(liparOptions.OutBoxEvent.ConnectionString);
             string query = string.Format(liparOptions.OutBoxEvent.SelectCommand, maxCount);
 
-            return connection.Query<OutBoxEventItem>(query).ToList();
+            return connection.Query<Core.Domain.Events.OutBoxEvent>(query).ToList();
         }
 
-        public void MarkAsRead(List<OutBoxEventItem> outBoxEventItems)
+        public void MarkAsRead(List<Core.Domain.Events.OutBoxEvent> outBoxEventItems)
         {
             string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'").ToList());
             if (!string.IsNullOrWhiteSpace(idForMark))

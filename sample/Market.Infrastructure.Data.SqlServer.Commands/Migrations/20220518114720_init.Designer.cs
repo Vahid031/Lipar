@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
     [DbContext(typeof(MarketCommandDbContext))]
-    [Migration("20220516095052_init")]
+    [Migration("20220518114720_init")]
     partial class init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -51,7 +51,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .IsUnique()
                         .IsClustered();
 
-                    b.ToTable("EntityChangesInterceptors");
+                    b.ToTable("_EntityChangesInterceptors");
                 });
 
             modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptorDetail", b =>
@@ -75,10 +75,10 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 
                     b.HasIndex("EntityChangesInterceptorId");
 
-                    b.ToTable("EntityChangesInterceptorDetails");
+                    b.ToTable("_EntityChangesInterceptorDetails");
                 });
 
-            modelBuilder.Entity("Lipar.Core.Domain.Events.OutBoxEventItem", b =>
+            modelBuilder.Entity("Lipar.Core.Domain.Events.OutBoxEvent", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -124,7 +124,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .IsUnique()
                         .IsClustered();
 
-                    b.ToTable("OutBoxEventItems");
+                    b.ToTable("_OutBoxEvents");
                 });
 
             modelBuilder.Entity("Market.Core.Domain.Products.Entities.Product", b =>

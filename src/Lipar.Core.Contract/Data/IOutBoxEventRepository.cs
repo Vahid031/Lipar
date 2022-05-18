@@ -6,8 +6,8 @@ namespace Lipar.Core.Contract.Data
 {
     public interface IOutBoxEventRepository
     {
-        List<OutBoxEventItem> GetOutBoxEventItemsForPublish(int maxCount);
-        void MarkAsRead(List<OutBoxEventItem> outBoxEventItems);
+        List<OutBoxEvent> GetOutBoxEventItemsForPublish(int maxCount);
+        void MarkAsRead(List<OutBoxEvent> outBoxEventItems);
         void AddOutboxEvetItems(List<AggregateRoot> outBoxEventItems);
     }
 }

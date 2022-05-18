@@ -8,7 +8,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor.Configs
     {
         public void Configure(EntityTypeBuilder<EntityChangesInterceptorDetail> builder)
         {
-            builder.ToTable($"{nameof(EntityChangesInterceptorDetail)}s");
+            builder.ToTable($"_{nameof(EntityChangesInterceptorDetail)}s");
 
             builder.Property(m => m.Key)
                 .HasMaxLength(50);
