@@ -14,21 +14,22 @@ namespace Lipar.Core.Application.Events
     {
         private readonly LiparOptions _liparOptions;
         private readonly IEventPublisher _publisher;
-
         private readonly IOutBoxEventRepository _outBoxEventRepository;
         private readonly IJson _json;
-
+        private readonly IEventBus _eventBus;
         private Timer _timer;
 
         public PoolingPublisherHostedService(LiparOptions liparOptions,
             IEventPublisher publisher,
             IOutBoxEventRepository outBoxEventRepository,
-            IJson json)
+            IJson json,
+            IEventBus eventBus)
         {
             _liparOptions = liparOptions;
             _publisher = publisher;
             _outBoxEventRepository = outBoxEventRepository;
             _json = json;
+            _eventBus = eventBus;
         }
 
         public Task StartAsync(CancellationToken cancellationToken)
@@ -47,6 +48,7 @@ namespace Lipar.Core.Application.Events
             {
                 IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
                 _publisher.Raise(@event);
+                _eventBus.Publish(@event);
 
                 item.IsProcessed = true;
             }

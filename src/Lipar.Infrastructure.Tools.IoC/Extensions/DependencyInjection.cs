@@ -21,6 +21,7 @@ namespace Lipar.Tools.IoC.Extensions
             services.AddTransient<ServiceFactory>(p => p.GetService);
             services.AddTransient<IMediator, Mediator>();
             services.AddTransient<IEventPublisher, EventPublisher>();
+            services.AddTransient<IEventBus, RabbitMQEventBus>();
             services.AddValidatorsFromAssemblies(assemblies);
           
             services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
