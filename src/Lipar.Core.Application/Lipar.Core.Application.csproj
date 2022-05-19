@@ -12,6 +12,7 @@
     <PackageReference Include="FluentValidation" Version="10.1.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
     <PackageReference Include="Microsoft.Extensions.Hosting.Abstractions" Version="5.0.0" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>

@@ -5,6 +5,9 @@ namespace Lipar.Core.Contract.Events
 {
     public interface IEventBus
     {
-        Task Publish(IEvent @event);
+        void Publish<T>(T input);
+        void Send(Parcel parcel);
+        void Subscribe(string serviceId, string eventName);
+        void ConsumeEvent(string sender, Parcel parcel);
     }
 }

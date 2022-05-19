@@ -18,6 +18,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Common
             modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
             modelBuilder.ApplyConfiguration(new OutBoxEventConfiguration());
+            modelBuilder.ApplyConfiguration(new InBoxEventConfiguration());
             modelBuilder.ApplyConfiguration(new EntityChangesInterceptorConfiguration());
             modelBuilder.ApplyConfiguration(new EntityChangesInterceptorDetailConfiguration());
 

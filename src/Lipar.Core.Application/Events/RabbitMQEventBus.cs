@@ -1,15 +1,118 @@
-﻿using Lipar.Core.Contract.Events;
+﻿using Lipar.Core.Application.Extensions;
+using Lipar.Core.Contract.Data;
+using Lipar.Core.Contract.Events;
+using Lipar.Core.Contract.Utilities;
 using Lipar.Core.Domain.Events;
+using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using RabbitMQ.Client;
+using RabbitMQ.Client.Events;
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 
 namespace Lipar.Core.Application.Events
 {
     public class RabbitMQEventBus : IEventBus
     {
-        public Task Publish(IEvent @event)
+        private readonly IJson _json;
+        private readonly IInBoxEventRepository _inBoxEventRepository;
+        private readonly IEventPublisher _eventPublisher;
+        private readonly IConnection _connection;
+        private readonly LiparOptions _liparOptions;
+        private readonly Dictionary<string, string> _messageTypeMap;
+
+        public RabbitMQEventBus(LiparOptions liparOptions, IJson json, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
         {
-           return Task.CompletedTask;
+            _liparOptions = liparOptions;
+            _json = json;
+            _inBoxEventRepository = inBoxEventRepository;
+            _eventPublisher = eventPublisher;
+            var connectionFactory = new ConnectionFactory
+            {
+                Uri = liparOptions.MessageBus.RabbitMQ.Uri
+            };
+            _connection = connectionFactory.CreateConnection();
+
+            var channel = _connection.CreateModel();
+            channel.ExchangeDeclare(liparOptions.MessageBus.RabbitMQ.ExchangeName,
+                ExchangeType.Topic,
+                liparOptions.MessageBus.RabbitMQ.ExchangeDurable,
+                liparOptions.MessageBus.RabbitMQ.ExchangeAutoDeleted);
+
+
+            _messageTypeMap = new Dictionary<string, string>();
+            if (_liparOptions?.MessageBus?.Events?.Any() == true)
+            {
+                foreach (var @event in _liparOptions.MessageBus.Events)
+                    _messageTypeMap.Add($"{@event.ServiceId}.{@event.EventName}", @event.MapToClass);
+            }
+        }
+
+        public void Publish<T>(T input)
+        {
+            string messageName = input.GetType().Name;
+            Parcel parcel = new Parcel
+            {
+                MessageId = Guid.NewGuid().ToString(),
+                MessageBody = _json.SerializeObject(input),
+                MessageName = messageName,
+                Route = $"{_liparOptions.ServiceId}.{messageName}",
+                Headers = new Dictionary<string, object>
+                {
+                    ["AccuredOn"] = DateTime.Now.ToString(),
+                }
+            };
+            Send(parcel);
+        }
+
+        public void Send(Parcel parcel)
+        {
+            var channel = _connection.CreateModel();
+            var basicProperties = channel.CreateBasicProperties();
+            basicProperties.AppId = _liparOptions.ServiceId;
+            basicProperties.CorrelationId = parcel?.CorrelationId;
+            basicProperties.MessageId = parcel?.MessageId;
+            basicProperties.Headers = parcel.Headers;
+            basicProperties.Type = parcel.MessageName;
+            channel.BasicPublish(_liparOptions.MessageBus.RabbitMQ.ExchangeName,
+                parcel.Route,
+                basicProperties,
+                Encoding.UTF8.GetBytes(parcel.MessageBody));
+        }
+
+        public void Subscribe(string serviceId, string eventName)
+        {
+            var queueName = $"{serviceId}.{eventName}";
+            MessageReceiver(queueName, Consumer_EventReceived);
+        }
+
+        private void MessageReceiver(string route, EventHandler<BasicDeliverEventArgs> eventHandler)
+        {
+            var channel = _connection.CreateModel();
+            var consumer = new EventingBasicConsumer(channel);
+            consumer.Received += eventHandler;
+            var queue = channel.QueueDeclare($"{ _liparOptions.ServiceId}", true, false, false);
+
+            channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, route);
+            channel.BasicConsume(queue.QueueName, true, consumer);
+        }
+
+        private void Consumer_EventReceived(object sender, BasicDeliverEventArgs e)
+        {
+            ConsumeEvent(e.BasicProperties.AppId, e.ToParcel());
+        }
+
+        public void ConsumeEvent(string sender, Parcel parcel)
+        {
+            if (_inBoxEventRepository.AllowReceive(parcel.MessageId, sender))
+            {
+                var mapToClass = _messageTypeMap[parcel.Route];
+                var eventType = Type.GetType(mapToClass);
+                dynamic @event = _json.DeserializeObject(parcel.MessageBody, eventType);
+                _eventPublisher.Raise(@event);
+                _inBoxEventRepository.Receive(parcel.MessageId, sender);
+            }
         }
     }
 }
