@@ -10,7 +10,6 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace Lipar.Core.Application.Events
 {
@@ -48,7 +47,6 @@ namespace Lipar.Core.Application.Events
                 foreach (var @event in _liparOptions.MessageBus.Events)
                 {
                     _messageTypeMap.Add($"{@event.ServiceId}.{@event.EventName}", @event.MapToClass);
-                    Subscribe(@event.ServiceId, @event.EventName);
                 }
             }
         }
@@ -87,15 +85,11 @@ namespace Lipar.Core.Application.Events
 
         public void Subscribe(string serviceId, string eventName)
         {
-            var queueName = $"{serviceId}.{eventName}";
-            MessageReceiver(queueName, Consumer_EventReceived);
-        }
+            var route = $"{serviceId}.{eventName}";
 
-        private void MessageReceiver(string route, EventHandler<BasicDeliverEventArgs> eventHandler)
-        {
             var channel = _connection.CreateModel();
             var consumer = new EventingBasicConsumer(channel);
-            consumer.Received += eventHandler;
+            consumer.Received += Consumer_EventReceived;
             var queue = channel.QueueDeclare($"{ _liparOptions.ServiceId}", true, false, false);
 
             channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, route);
@@ -104,21 +98,18 @@ namespace Lipar.Core.Application.Events
 
         private void Consumer_EventReceived(object sender, BasicDeliverEventArgs e)
         {
-            ConsumeEvent(e.BasicProperties.AppId, e.ToParcel());
-        }
+            var parcel = e.ToParcel();
 
-        public void ConsumeEvent(string sender, Parcel parcel)
-        {
-            if (_inBoxEventRepository.AllowReceive(parcel.MessageId, sender))
+            if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
             {
                 var mapToClass = _messageTypeMap[parcel.Route];
                 var @event = GetEvent(mapToClass, parcel.MessageBody);
                 _eventPublisher.Raise(@event);
-                _inBoxEventRepository.Receive(parcel.MessageId, sender);
+                _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
             }
         }
 
-        public IEvent GetEvent(string typeName, string data)
+        private IEvent GetEvent(string typeName, string data)
         {
             Type type = Type.GetType(typeName);
             foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())

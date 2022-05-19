@@ -8,7 +8,7 @@ using Lipar.Tools.IoC.Extensions;
 using Microsoft.OpenApi.Models;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using FluentValidation.AspNetCore;
-using Lipar.Core.Application.Events;
+using Lipar.Core.Application.Services;
 
 namespace Lipar.Presentation.Api.Extensions
 {
