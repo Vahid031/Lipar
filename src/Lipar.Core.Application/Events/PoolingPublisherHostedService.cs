@@ -5,6 +5,7 @@ using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -46,12 +47,33 @@ namespace Lipar.Core.Application.Events
 
             foreach (var item in outboxItems)
             {
+
+                // Sending on Message Broker
+                _eventBus.Send(new Parcel
+                {
+                    CorrelationId = item.AggregateId,
+                    MessageBody = item.EventPayload,
+                    MessageId = item.Id.ToString(),
+                    MessageName = item.EventName,
+                    Route = $"{_liparOptions.ServiceId}.{item.EventName}",
+                    Headers = new Dictionary<string, object>
+                    {
+                        ["AccuredByUserId"] = item.AccuredByUserId,
+                        ["AccuredOn"] = item.AccuredOn.ToString(),
+                        ["AggregateName"] = item.AggregateName,
+                        ["AggregateTypeName"] = item.AggregateTypeName,
+                        ["EventTypeName"] = item.EventTypeName,
+                    }
+                });
+
+                // Raize event inside the application
                 IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
-                _publisher.Raise(@event);
-                _eventBus.Publish(@event);
+                //_publisher.Raise(@event);
 
                 item.IsProcessed = true;
             }
+
+            // Done
             _outBoxEventRepository.MarkAsRead(outboxItems);
             _timer.Change(0, _liparOptions.PoolingPublisher.SendOutBoxInterval);
 

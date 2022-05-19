@@ -7,7 +7,5 @@ namespace Lipar.Core.Contract.Events
     {
         void Publish<T>(T input);
         void Send(Parcel parcel);
-        void Subscribe(string serviceId, string eventName);
-        void ConsumeEvent(string sender, Parcel parcel);
-    }
+        void Subscribe(string serviceId, string eventName);    }
 }

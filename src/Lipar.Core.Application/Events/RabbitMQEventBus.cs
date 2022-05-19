@@ -10,6 +10,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
 
 namespace Lipar.Core.Application.Events
 {
@@ -45,7 +46,10 @@ namespace Lipar.Core.Application.Events
             if (_liparOptions?.MessageBus?.Events?.Any() == true)
             {
                 foreach (var @event in _liparOptions.MessageBus.Events)
+                {
                     _messageTypeMap.Add($"{@event.ServiceId}.{@event.EventName}", @event.MapToClass);
+                    Subscribe(@event.ServiceId, @event.EventName);
+                }
             }
         }
 
@@ -108,11 +112,23 @@ namespace Lipar.Core.Application.Events
             if (_inBoxEventRepository.AllowReceive(parcel.MessageId, sender))
             {
                 var mapToClass = _messageTypeMap[parcel.Route];
-                var eventType = Type.GetType(mapToClass);
-                dynamic @event = _json.DeserializeObject(parcel.MessageBody, eventType);
+                var @event = GetEvent(mapToClass, parcel.MessageBody);
                 _eventPublisher.Raise(@event);
                 _inBoxEventRepository.Receive(parcel.MessageId, sender);
             }
+        }
+
+        public IEvent GetEvent(string typeName, string data)
+        {
+            Type type = Type.GetType(typeName);
+            foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                type = asm.GetType(typeName);
+                if (type != null)
+                    break;
+            }
+
+            return (IEvent)_json.DeserializeObject(data, type);
         }
     }
 }
