@@ -4,7 +4,7 @@ using System.Linq;
 
 namespace Lipar.Core.Domain.Events
 {
-    public class EntityChangesInterceptor
+    public class EntityChangesInterception
     {
         public Guid Id { get; private set; }
         public string EntityType { get; private set; }
@@ -12,12 +12,12 @@ namespace Lipar.Core.Domain.Events
         public string State { get; private set; }
         public DateTime Date { get; private set; }
         public Guid UserId { get; private set; }
-        public IReadOnlyCollection<EntityChangesInterceptorDetail> EntityChangesInterceptorDetails => _entityChangesInterceptorDetails.ToList();
-        private HashSet<EntityChangesInterceptorDetail> _entityChangesInterceptorDetails { get; set; } = new HashSet<EntityChangesInterceptorDetail>();
+        public IReadOnlyCollection<EntityChangesInterceptionDetail> Details => _details.ToList();
+        private HashSet<EntityChangesInterceptionDetail> _details { get; set; } = new HashSet<EntityChangesInterceptionDetail>();
 
-        private EntityChangesInterceptor() { }
+        private EntityChangesInterception() { }
 
-        public EntityChangesInterceptor(Guid id, string entityType, Guid entityId, string state)
+        public EntityChangesInterception(Guid id, string entityType, Guid entityId, string state)
         {
             Id = id;
             EntityType = entityType;
@@ -35,7 +35,7 @@ namespace Lipar.Core.Domain.Events
             UserId = userId;
         }
 
-        public void AddPropertyChangeLog(string key, string value) =>
-            _entityChangesInterceptorDetails.Add(new EntityChangesInterceptorDetail(Guid.NewGuid(), key, value, Id));
+        public void AddDetail(string key, string value) =>
+            _details.Add(new EntityChangesInterceptionDetail(Guid.NewGuid(), key, value));
     }
 }

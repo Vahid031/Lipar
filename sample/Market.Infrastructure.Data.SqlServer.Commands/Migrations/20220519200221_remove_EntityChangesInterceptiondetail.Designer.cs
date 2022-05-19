@@ -4,14 +4,16 @@ using Market.Infrastructure.Data.SqlServer.Commands.Common;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
     [DbContext(typeof(MarketCommandDbContext))]
-    partial class MarketCommandDbContextModelSnapshot : ModelSnapshot
+    [Migration("20220519200221_remove_EntityChangesInterceptiondetail")]
+    partial class remove_EntityChangesInterceptiondetail
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -53,6 +55,28 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .IsClustered();
 
                     b.ToTable("_EntityChangesInterceptions");
+                });
+
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptionDetail", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid?>("EntityChangesInterceptionId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("Key")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Value")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("EntityChangesInterceptionId");
+
+                    b.ToTable("EntityChangesInterceptionDetail");
                 });
 
             modelBuilder.Entity("Lipar.Core.Domain.Events.InBoxEvent", b =>
@@ -164,6 +188,18 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
                         .IsClustered();
 
                     b.ToTable("Products");
+                });
+
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterceptionDetail", b =>
+                {
+                    b.HasOne("Lipar.Core.Domain.Events.EntityChangesInterception", null)
+                        .WithMany("Details")
+                        .HasForeignKey("EntityChangesInterceptionId");
+                });
+
+            modelBuilder.Entity("Lipar.Core.Domain.Events.EntityChangesInterception", b =>
+                {
+                    b.Navigation("Details");
                 });
 #pragma warning restore 612, 618
         }

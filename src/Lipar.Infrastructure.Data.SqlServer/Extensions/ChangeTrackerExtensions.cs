@@ -61,7 +61,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 .Where(c => c.GetChanges().Any())
                 .ToList();
 
-        public static IEnumerable<EntityChangesInterceptor> GetEntityChangesInterceptor(this ChangeTracker changeTracker)
+        public static IEnumerable<EntityChangesInterception> GetEntityChangesInterceptor(this ChangeTracker changeTracker)
         {
             IEnumerable<EntityEntry<Entity>> entries = changeTracker.GetTrackingAggrigates();
 
@@ -78,9 +78,9 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 yield return ApplyAuditLog(entry, auditProperties);
         }
 
-        private static EntityChangesInterceptor ApplyAuditLog(EntityEntry entry, List<string> auditProperties)
+        private static EntityChangesInterception ApplyAuditLog(EntityEntry entry, List<string> auditProperties)
         {
-            var log = new EntityChangesInterceptor(
+            var log = new EntityChangesInterception(
                 Guid.NewGuid(),
                 entry.Entity.GetType().Name,
                 ((EntityId)entry.Property(ModelBuilderExtensions.EntityId).CurrentValue).Value,
@@ -90,7 +90,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
             {
                 if (entry.State == EntityState.Added || item.IsModified)
                 {
-                    log.AddPropertyChangeLog(item.Metadata.Name, item.CurrentValue?.ToString());
+                    log.AddDetail(item.Metadata.Name, item.CurrentValue?.ToString());
                 }
             }
             return log;

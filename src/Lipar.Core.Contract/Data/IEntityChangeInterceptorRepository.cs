@@ -5,6 +5,6 @@ namespace Lipar.Core.Contract.Data
 {
     public interface IEntityChangesInterceptorRepository
     {
-        void AddEntityChanges(IEnumerable<EntityChangesInterceptor> entities);
+        void AddEntityChanges(IEnumerable<EntityChangesInterception> entities);
     }
 }

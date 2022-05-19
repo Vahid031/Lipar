@@ -5,6 +5,7 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using Dapper;
+using System.Linq;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
 {
@@ -13,23 +14,29 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
         private readonly LiparOptions liparOptions;
         private readonly IUserInfo userInfo;
         private readonly IDateTime dateTime;
+        private readonly IJson json;
 
-        public EntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfo userInfo, IDateTime dateTime)
+        public EntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfo userInfo, IDateTime dateTime, IJson json)
         {
             this.liparOptions = liparOptions;
             this.userInfo = userInfo;
             this.dateTime = dateTime;
+            this.json = json;
         }
-        public void AddEntityChanges(IEnumerable<EntityChangesInterceptor> entities)
+        public void AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
         {
             using var connection = new SqlConnection(liparOptions.EntityChangesInterceptor.ConnectionString);
-            var insertCommand = "Insert Into _EntityChangesInterceptors(Id, Date, State, EntityId, EntityType, UserId) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId)";
-            var insertDetailCommand = "Insert Into _EntityChangesInterceptorDetails(Id, [Key], [Value], EntityChangesInterceptorId) Values(@Id, @Key, @Value, @EntityChangesInterceptorId)";
+            var insertCommand = "Insert Into _EntityChangesInterceptions(Id, Date, State, EntityId, EntityType, UserId, Payload) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId, @Payload)";
 
             foreach (var entity in entities)
             {
                 entity.SetDateTime(dateTime.DateTime);
                 entity.SetUserId(userInfo.UserId);
+
+                var details = new Dictionary<string, object>();
+
+                foreach (var detail in entity.Details)
+                    details.Add(detail.Key, detail.Value);
 
                 connection.Execute(insertCommand, new
                 {
@@ -39,18 +46,9 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
                     entity.EntityId,
                     entity.EntityType,
                     entity.UserId,
+                    Payload = json.SerializeObject(details)
                 });
 
-                foreach (var detail in entity.EntityChangesInterceptorDetails)
-                {
-                    connection.Execute(insertDetailCommand, new
-                    {
-                        detail.Id,
-                        detail.Key,
-                        detail.Value,
-                        detail.EntityChangesInterceptorId
-                    });
-                }
             }
         }
     }
