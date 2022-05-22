@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.1.1</Version>
+    <Version>5.1.2</Version>
     <AssemblyName>Lipar.Core.Contract</AssemblyName>
     <RootNamespace>Lipar.Core.Contract</RootNamespace>
   </PropertyGroup>

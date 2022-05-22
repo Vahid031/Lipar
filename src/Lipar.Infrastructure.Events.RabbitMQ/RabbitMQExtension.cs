@@ -1,12 +1,9 @@
 ﻿using Lipar.Core.Domain.Events;
 using RabbitMQ.Client.Events;
-using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
-namespace Lipar.Core.Application.Extensions
+namespace Lipar.Infrastructure.Events.RabbitMQ
 {
     public static class RabbitMQExtension
     {

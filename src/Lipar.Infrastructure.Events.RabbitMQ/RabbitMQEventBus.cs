@@ -1,5 +1,4 @@
-﻿using Lipar.Core.Application.Extensions;
-using Lipar.Core.Contract.Data;
+﻿using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Events;
 using Lipar.Core.Contract.Utilities;
 using Lipar.Core.Domain.Events;
@@ -11,7 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace Lipar.Core.Application.Events
+namespace Lipar.Infrastructure.Events.RabbitMQ
 {
     public class RabbitMQEventBus : IEventBus
     {

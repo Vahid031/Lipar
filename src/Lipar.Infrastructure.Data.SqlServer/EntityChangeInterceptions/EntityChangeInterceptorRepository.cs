@@ -25,7 +25,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
         }
         public void AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
         {
-            using var connection = new SqlConnection(liparOptions.EntityChangesInterceptor.ConnectionString);
+            using var connection = new SqlConnection(liparOptions.EntityChangesInterception.ConnectionString);
             var insertCommand = "Insert Into _EntityChangesInterceptions(Id, Date, State, EntityId, EntityType, UserId, Payload) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId, @Payload)";
 
             foreach (var entity in entities)

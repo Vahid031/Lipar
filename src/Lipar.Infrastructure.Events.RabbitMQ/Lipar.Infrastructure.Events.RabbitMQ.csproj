@@ -4,16 +4,17 @@
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
     <Version>5.1.2</Version>
-    <AssemblyName>Lipar.Infrastructure.Tools.Utilities</AssemblyName>
-    <RootNamespace>Lipar.Infrastructure.Tools.Utilities</RootNamespace>
+    <AssemblyName>Lipar.Infrastructure.Events.RabbitMQ</AssemblyName>
+    <RootNamespace>Lipar.Infrastructure.Events.RabbitMQ</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+    <PackageReference Include="RabbitMQ.Client" Version="6.3.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
+    <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

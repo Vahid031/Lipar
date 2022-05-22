@@ -4,11 +4,11 @@ using Microsoft.Extensions.DependencyModel;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using Lipar.Tools.IoC.Extensions;
 using Microsoft.OpenApi.Models;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using FluentValidation.AspNetCore;
 using Lipar.Core.Application.Services;
+using Lipar.Infrastructure.Tools.IoC;
 
 namespace Lipar.Presentation.Api.Extensions
 {
@@ -25,7 +25,6 @@ namespace Lipar.Presentation.Api.Extensions
             var assembies = GetAssemblies(assemblyNames);
 
             services.AddApplication(assembies);
-            services.AddUtilities(assembies);
 
             services.AddHostedService<PoolingPublisherHostedService>();
 

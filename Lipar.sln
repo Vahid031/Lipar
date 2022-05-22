@@ -51,6 +51,10 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{3F409B32
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Core.Contract", "src\Lipar.Core.Contract\Lipar.Core.Contract.csproj", "{1314C18A-B7DE-4489-A625-C978CDA5605F}"
 EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Events", "Events", "{575CF619-CACD-4109-86F5-5C7F1C5F9E34}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Events.RabbitMQ", "src\Lipar.Infrastructure.Events.RabbitMQ\Lipar.Infrastructure.Events.RabbitMQ.csproj", "{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -105,6 +109,10 @@ Global
 		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1314C18A-B7DE-4489-A625-C978CDA5605F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -131,6 +139,8 @@ Global
 		{1C00D48C-3626-4939-AB02-3125AD79B478} = {2E6864AF-3629-4575-AC8D-E857DEFEC298}
 		{138FAB02-6DDB-4F96-B04A-376C1AC37C33} = {1C00D48C-3626-4939-AB02-3125AD79B478}
 		{1314C18A-B7DE-4489-A625-C978CDA5605F} = {65552297-33D2-4AE8-8E56-C9F19BD2669B}
+		{575CF619-CACD-4109-86F5-5C7F1C5F9E34} = {7CB9B90B-ADFB-4B9F-B213-6317F6B57C56}
+		{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0} = {575CF619-CACD-4109-86F5-5C7F1C5F9E34}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {205E35E8-C906-40DE-AC18-1C7D76A04B2E}
