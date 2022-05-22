@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\..\src\Lipar.Core.Application\Lipar.Core.Application.csproj" />
+    <ProjectReference Include="..\..\src\Market.Infrastructure.Data.Identity\Market.Infrastructure.Data.Identity.csproj" />
     <ProjectReference Include="..\Market.Core.Domain\Market.Core.Domain.csproj" />
   </ItemGroup>
 

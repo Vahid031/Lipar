@@ -9,7 +9,6 @@
         public ChangesInterceptionOptions EntityChangesInterception { get; set; }
         public MessageBusOptions MessageBus { get; set; }
         public MailOptions Mail { get; set; }
-        public JWTOptions JWT { get; set; }
 
     }
 }

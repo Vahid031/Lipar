@@ -7,6 +7,7 @@ using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Microsoft.EntityFrameworkCore;
 using Market.Infrastructure.Data.SqlServer.Commands.Common;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using Infrastructure.Identity;
 
 namespace Market.Presentation.Api
 {
@@ -28,6 +29,10 @@ namespace Market.Presentation.Api
 
             services.AddDbContext<MarketQueryDbContext>(
                 c => c.UseSqlServer(Configuration.GetConnectionString("QueryConnectionString")));
+
+
+
+            services.AddIdentityInfrastructure(Configuration);
 
         }
 

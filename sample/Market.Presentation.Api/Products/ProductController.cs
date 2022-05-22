@@ -1,4 +1,5 @@
 ﻿using Lipar.Presentation.Api.Controllers;
+using Market.Core.Application.Accounts.Commands;
 using Market.Core.Application.Products.Commands;
 using Market.Core.Application.Products.Queries;
 using Microsoft.AspNetCore.Mvc;

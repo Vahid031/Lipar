@@ -1,6 +1,6 @@
-﻿namespace Lipar.Infrastructure.Tools.Utilities.Configurations
+﻿namespace Market.Infrastructure.Data.Identity.Models
 {
-    public class JWTOptions
+    public class JWTSetting
     {
         public string Key { get; set; }
         public string Issuer { get; set; }
