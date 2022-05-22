@@ -13,9 +13,6 @@ namespace WebApi.Controllers
         [HttpPost("authentication")]
         public async Task<IActionResult> Authentication(AuthenticationCommand command)
         {
-            var s =User.Identity.IsAuthenticated;
-
-
             return await SendAsync(command);
         }
 
