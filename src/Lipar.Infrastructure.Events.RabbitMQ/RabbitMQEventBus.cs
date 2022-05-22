@@ -1,6 +1,6 @@
 ﻿using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Events;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using RabbitMQ.Client;
@@ -14,17 +14,17 @@ namespace Lipar.Infrastructure.Events.RabbitMQ
 {
     public class RabbitMQEventBus : IEventBus
     {
-        private readonly IJson _json;
+        private readonly IJsonService _jsonService;
         private readonly IInBoxEventRepository _inBoxEventRepository;
         private readonly IEventPublisher _eventPublisher;
         private readonly IConnection _connection;
         private readonly LiparOptions _liparOptions;
         private readonly Dictionary<string, string> _messageTypeMap;
 
-        public RabbitMQEventBus(LiparOptions liparOptions, IJson json, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
+        public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
         {
             _liparOptions = liparOptions;
-            _json = json;
+            _jsonService = jsonService;
             _inBoxEventRepository = inBoxEventRepository;
             _eventPublisher = eventPublisher;
             var connectionFactory = new ConnectionFactory
@@ -56,7 +56,7 @@ namespace Lipar.Infrastructure.Events.RabbitMQ
             Parcel parcel = new Parcel
             {
                 MessageId = Guid.NewGuid().ToString(),
-                MessageBody = _json.SerializeObject(input),
+                MessageBody = _jsonService.SerializeObject(input),
                 MessageName = messageName,
                 Route = $"{_liparOptions.ServiceId}.{messageName}",
                 Headers = new Dictionary<string, object>
@@ -118,7 +118,7 @@ namespace Lipar.Infrastructure.Events.RabbitMQ
                     break;
             }
 
-            return (IEvent)_json.DeserializeObject(data, type);
+            return (IEvent)_jsonService.DeserializeObject(data, type);
         }
     }
 }

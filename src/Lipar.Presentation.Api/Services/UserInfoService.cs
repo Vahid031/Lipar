@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Security.Claims;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Microsoft.AspNetCore.Http;
 
 namespace Lipar.Presentation.Api.Services
 {
-    public class UserInfo : IUserInfo
+    public class UserInfoService : IUserInfoService
     {
         private readonly HttpContext context;
-        public UserInfo(IHttpContextAccessor httpContextAccessor)
+        public UserInfoService(IHttpContextAccessor httpContextAccessor)
         {
             context = httpContextAccessor.HttpContext;
         }

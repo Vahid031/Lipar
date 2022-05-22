@@ -1,5 +1,5 @@
 ﻿using FluentValidation;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Logging;
 using System;
@@ -13,16 +13,16 @@ namespace Lipar.Presentation.Api.Middlewares
     public class ErrorHandlerMiddleware
     {
         private readonly RequestDelegate next;
-        private readonly IJson json;
+        private readonly IJsonService jsonService;
         private readonly ILogger<ErrorHandlerMiddleware> logger;
         private readonly ApiExceptionOptions options;
 
-        public ErrorHandlerMiddleware(RequestDelegate next, IJson json,
+        public ErrorHandlerMiddleware(RequestDelegate next, IJsonService jsonService,
             ILogger<ErrorHandlerMiddleware> logger,
             ApiExceptionOptions options)
         {
             this.next = next;
-            this.json = json;
+            this.jsonService = jsonService;
             this.logger = logger;
             this.options = options;
         }
@@ -45,7 +45,7 @@ namespace Lipar.Presentation.Api.Middlewares
                 var problem = HandleUnknownException(ex, context);
                 context.Response.StatusCode = (int)HttpStatusCode.InternalServerError;
                 context.Response.ContentType = "application/problem+json";
-                await context.Response.WriteAsync(json.SerializeObject(problem));
+                await context.Response.WriteAsync(jsonService.SerializeObject(problem));
             }
 
         }

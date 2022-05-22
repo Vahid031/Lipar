@@ -1,5 +1,5 @@
 ﻿using Lipar.Core.Contract.Events;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Products.Events;
 using System.Threading;
@@ -10,18 +10,18 @@ namespace Market.Core.Application.Products.Events
     public class ProductCreatedEventHandler : IEventHandler<ProductCreated>
     {
         private readonly IEmailService emailService;
-        private readonly IJson json;
+        private readonly IJsonService jsonService;
 
-        public ProductCreatedEventHandler(IEmailService emailService, IJson json)
+        public ProductCreatedEventHandler(IEmailService emailService, IJsonService jsonService)
         {
             this.emailService = emailService;
-            this.json = json;
+            this.jsonService = jsonService;
         }
         public async Task Handle(ProductCreated @event, CancellationToken cancellationToken)
         {
             await emailService.SendAsync(new EmailRequest
             {
-                Body = json.SerializeObject(@event),
+                Body = jsonService.SerializeObject(@event),
                 To = "Vahid031@yahoo.com",
                 Subject = "Test"
             });

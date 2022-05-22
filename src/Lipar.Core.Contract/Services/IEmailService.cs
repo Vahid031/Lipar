@@ -1,7 +1,7 @@
 ﻿using Lipar.Core.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.Contract.Utilities
+namespace Lipar.Core.Contract.Services
 {
     public interface IEmailService
     {

@@ -1,11 +1,11 @@
-﻿using Lipar.Core.Contract.Utilities;
+﻿using Lipar.Core.Contract.Services;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using System;
 
 namespace Lipar.Infrastructure.Tools.Utilities.Implementation
 {
-    public class NewtonSoftSerializer : IJson
+    public class NewtonSoftSerializer : IJsonService
     {
         public string SerializeObject<TInput>(TInput input) =>
            input == null ? string.Empty :

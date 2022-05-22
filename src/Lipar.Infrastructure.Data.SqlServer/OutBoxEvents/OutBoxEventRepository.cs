@@ -6,7 +6,7 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Domain.Events;
 using Lipar.Core.Domain.Entities;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using System;
 
 namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
@@ -14,16 +14,16 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
     public class OutBoxEventRepository : IOutBoxEventRepository
     {
         private readonly LiparOptions liparOptions;
-        private readonly IUserInfo userInfo;
-        private readonly IJson json;
-        private readonly IDateTime dateTime;
+        private readonly IUserInfoService userInfoService;
+        private readonly IJsonService jsonService;
+        private readonly IDateTimeService dateTimeService;
 
-        public OutBoxEventRepository(LiparOptions liparOptions, IUserInfo userInfo, IJson json, IDateTime dateTime)
+        public OutBoxEventRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
         {
             this.liparOptions = liparOptions;
-            this.userInfo = userInfo;
-            this.json = json;
-            this.dateTime = dateTime;
+            this.userInfoService = userInfoService;
+            this.jsonService = jsonService;
+            this.dateTimeService = dateTimeService;
         }
 
         public void AddOutboxEvetItems(List<AggregateRoot> changedAggregates)
@@ -37,14 +37,14 @@ namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents
                     connection.Execute(liparOptions.OutBoxEvent.InsertCommand, new Core.Domain.Events.OutBoxEvent
                     {
                         Id = Guid.NewGuid(),
-                        AccuredByUserId = userInfo.UserId.ToString(),
-                        AccuredOn = dateTime.DateTime,
+                        AccuredByUserId = userInfoService.UserId.ToString(),
+                        AccuredOn = dateTimeService.Now,
                         AggregateId = aggregate.Id.ToString(),
                         AggregateName = aggregate.GetType().Name,
                         AggregateTypeName = aggregate.GetType().FullName,
                         EventName = @event.GetType().Name,
                         EventTypeName = @event.GetType().FullName,
-                        EventPayload = json.SerializeObject(@event),
+                        EventPayload = jsonService.SerializeObject(@event),
                         IsProcessed = false
                     });
                 }

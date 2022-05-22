@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Lipar.Core.Contract.Utilities
+namespace Lipar.Core.Contract.Services
 {
-    public interface IJson
+    public interface IJsonService
     {
         string SerializeObject<TInput>(TInput input);
         TOutput DeserializeObject<TOutput>(string input);

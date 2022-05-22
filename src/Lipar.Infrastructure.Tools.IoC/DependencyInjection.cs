@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Reflection;
 using Lipar.Core.Application.Events;
 using Lipar.Core.Contract.DependentyInjection;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Events;
 using Lipar.Core.Contract.Common;
@@ -31,7 +31,7 @@ namespace Lipar.Infrastructure.Tools.IoC
             services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
             services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
 
-            services.AddWithTransientLifetime(assemblies, typeof(IJson), typeof(IDateTime), typeof(IUserInfo));
+            services.AddWithTransientLifetime(assemblies, typeof(IJsonService), typeof(IDateTimeService), typeof(IUserInfoService));
             services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
             services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));
             services.AddWithSingletonLifetime(assemblies, typeof(ISingletoneLifetime));

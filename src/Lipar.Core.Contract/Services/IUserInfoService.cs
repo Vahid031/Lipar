@@ -1,8 +1,8 @@
 ﻿using System;
 
-namespace Lipar.Core.Contract.Utilities
+namespace Lipar.Core.Contract.Services
 {
-    public interface IUserInfo
+    public interface IUserInfoService
     {
         Guid UserId { get; }
         string UserAgent { get; }

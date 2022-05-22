@@ -1,4 +1,4 @@
-﻿using Lipar.Core.Contract.Utilities;
+﻿using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Entities;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using MailKit.Net.Smtp;

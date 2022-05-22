@@ -1,27 +1,26 @@
 ﻿using Lipar.Core.Contract.Data;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using Dapper;
-using System.Linq;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
 {
     public class EntityChangeInterceptorRepository : IEntityChangesInterceptorRepository
     {
         private readonly LiparOptions liparOptions;
-        private readonly IUserInfo userInfo;
-        private readonly IDateTime dateTime;
-        private readonly IJson json;
+        private readonly IUserInfoService userInfoService;
+        private readonly IDateTimeService dateTimeService;
+        private readonly IJsonService jsonService;
 
-        public EntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfo userInfo, IDateTime dateTime, IJson json)
+        public EntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IDateTimeService dateTimeService, IJsonService jsonService)
         {
             this.liparOptions = liparOptions;
-            this.userInfo = userInfo;
-            this.dateTime = dateTime;
-            this.json = json;
+            this.userInfoService = userInfoService;
+            this.dateTimeService = dateTimeService;
+            this.jsonService = jsonService;
         }
         public void AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
         {
@@ -30,8 +29,8 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
 
             foreach (var entity in entities)
             {
-                entity.SetDateTime(dateTime.DateTime);
-                entity.SetUserId(userInfo.UserId);
+                entity.SetDateTime(dateTimeService.Now);
+                entity.SetUserId(userInfoService.UserId);
 
                 var details = new Dictionary<string, object>();
 
@@ -46,7 +45,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor
                     entity.EntityId,
                     entity.EntityType,
                     entity.UserId,
-                    Payload = json.SerializeObject(details)
+                    Payload = jsonService.SerializeObject(details)
                 });
 
             }

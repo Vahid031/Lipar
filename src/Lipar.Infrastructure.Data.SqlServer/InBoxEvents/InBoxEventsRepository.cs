@@ -1,6 +1,6 @@
 ﻿using Dapper;
 using Lipar.Core.Contract.Data;
-using Lipar.Core.Contract.Utilities;
+using Lipar.Core.Contract.Services;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Data.SqlClient;
 using System.Linq;
@@ -11,12 +11,12 @@ namespace Lipar.Infrastructure.Data.SqlServer.InBoxEvents
     public class InBoxEventsRepository : IInBoxEventRepository
     {
        private readonly string _connectionString;
-        private readonly IDateTime date;
+        private readonly IDateTimeService dateTimeService;
 
-        public InBoxEventsRepository(LiparOptions liparOptions, IDateTime date)
+        public InBoxEventsRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
         {
             _connectionString = liparOptions.OutBoxEvent.ConnectionString;
-            this.date = date;
+            this.dateTimeService = dateTimeService;
         }
 
         public bool AllowReceive(string messageId, string fromService)
@@ -39,7 +39,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.InBoxEvents
             {
                 OwnerService = fromService,
                 MessageId = messageId,
-                ReceivedDate = date.DateTime
+                ReceivedDate = dateTimeService.Now
             });
         }
     }
