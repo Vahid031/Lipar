@@ -1,7 +1,6 @@
 ﻿using FluentValidation;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Services;
-using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Market.Core.Domain.Accounts.Entities;
 using Market.Core.Domain.Accounts.Queries;
 using Market.Infrastructure.Data.Identity.Models;
@@ -95,7 +94,7 @@ namespace Market.Core.Application.Accounts.Commands
                     roleClaims.Add(new Claim("roles", roles[i]));
                 }
 
-                string ipAddress = GetIpAddress();
+                string ipAddress = GetHostIpAddress();
 
                 var claims = new[]
                 {
@@ -140,7 +139,7 @@ namespace Market.Core.Application.Accounts.Commands
                 return BitConverter.ToString(randomBytes).Replace("-", "");
             }
 
-            private string GetIpAddress()
+            private string GetHostIpAddress()
             {
                 var host = Dns.GetHostEntry(Dns.GetHostName());
                 foreach (var ip in host.AddressList)

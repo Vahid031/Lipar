@@ -2,14 +2,18 @@ using System;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using System.Diagnostics;
 using Microsoft.Extensions.Configuration;
+using System.Threading.Tasks;
+using Market.Infrastructure.Data.Identity.Seeds;
+using Microsoft.AspNetCore.Identity;
+using Market.Infrastructure.Data.Identity.Models;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Market.Presentation.Api
 {
     public class Program
     {
-        public static void Main(string[] args)
+        public static async Task Main(string[] args)
         {
             //Read Configuration from appSettings
             var config = new ConfigurationBuilder()
@@ -20,19 +24,36 @@ namespace Market.Presentation.Api
                 .ReadFrom.Configuration(config)
                 .CreateLogger();
 
-            try
+
+            var host = CreateHostBuilder(args).Build();
+
+            using (var scope = host.Services.CreateScope())
             {
-                Log.Information("Starting up");
-                CreateHostBuilder(args).Build().Run();
+                var services = scope.ServiceProvider;
+
+                try
+                {
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
+                    var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
+
+                    await DefaultRoles.SeedAsync(userManager, roleManager);
+                    await DefaultSuperAdmin.SeedAsync(userManager, roleManager);
+
+                    Log.Information("Finished Seeding Default Data");
+
+                    host.Run();
+                    Log.Information("Application Starting");
+                }
+                catch (Exception ex)
+                {
+                    Log.Fatal(ex, "Application start-up failed");
+                }
+                finally
+                {
+                    Log.CloseAndFlush();
+                }
             }
-            catch (Exception ex)
-            {
-                Log.Fatal(ex, "Application start-up failed");
-            }
-            finally
-            {
-                Log.CloseAndFlush();
-            }
+
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args)
