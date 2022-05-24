@@ -55,7 +55,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Events", "Events", "{575CF6
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Events.RabbitMQ", "src\Lipar.Infrastructure.Events.RabbitMQ\Lipar.Infrastructure.Events.RabbitMQ.csproj", "{A7CD8CC1-F568-4E52-8C3A-6DCBF9BDA6C0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Infrastructure.Data.Identity", "src\Market.Infrastructure.Data.Identity\Market.Infrastructure.Data.Identity.csproj", "{578D3A4C-B4F1-444D-B569-A38EA01A7E13}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Infrastructure.Data.Identity", "sample\Market.Infrastructure.Data.Identity\Market.Infrastructure.Data.Identity.csproj", "{578D3A4C-B4F1-444D-B569-A38EA01A7E13}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

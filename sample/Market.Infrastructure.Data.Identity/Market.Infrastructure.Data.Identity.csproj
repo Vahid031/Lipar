@@ -14,8 +14,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\sample\Market.Core.Domain\Market.Core.Domain.csproj" />
-    <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
+    <ProjectReference Include="..\Market.Core.Domain\Market.Core.Domain.csproj" />
+    <ProjectReference Include="..\..\src\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
   </ItemGroup>
 
 </Project>
