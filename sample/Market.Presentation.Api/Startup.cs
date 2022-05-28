@@ -35,6 +35,14 @@ namespace Market.Presentation.Api
 
             services.AddIdentityInfrastructure(Configuration);
 
+            services.AddCors(setupAction =>
+           setupAction.AddPolicy("MyPolicy",
+                             builder => builder
+                             .AllowAnyOrigin()
+                             .AllowAnyMethod()
+                             .AllowAnyHeader()
+                             ));
+
             services.AddSwaggerGen(c =>
             {
 
@@ -76,7 +84,7 @@ namespace Market.Presentation.Api
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LiparOptions liparOptions)
         {
-
+            app.UseCors("MyPolicy");
             app.UseAuthentication();
             app.UseAuthorization();
 
