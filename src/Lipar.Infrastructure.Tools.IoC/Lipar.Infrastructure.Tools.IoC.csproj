@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.1.2</Version>
+    <Version>5.1.3</Version>
     <AssemblyName>Lipar.Infrastructure.Tools.IoC</AssemblyName>
     <RootNamespace>Lipar.Infrastructure.Tools.IoC</RootNamespace>
   </PropertyGroup>
@@ -16,6 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\Lipar.Infrastructure.Tools.Localize.Parrot\Lipar.Infrastructure.Tools.Localize.Parrot.csproj" />
     <ProjectReference Include="..\Lipar.Core.Application\Lipar.Core.Application.csproj" />
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Events.RabbitMQ\Lipar.Infrastructure.Events.RabbitMQ.csproj" />

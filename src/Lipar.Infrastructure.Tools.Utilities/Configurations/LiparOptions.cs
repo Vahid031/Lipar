@@ -9,6 +9,7 @@
         public ChangesInterceptionOptions EntityChangesInterception { get; set; }
         public MessageBusOptions MessageBus { get; set; }
         public MailOptions Mail { get; set; }
+        public TranslationOptions Translation { get; set; }
 
     }
 }

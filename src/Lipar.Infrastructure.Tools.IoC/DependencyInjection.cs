@@ -11,6 +11,7 @@ using Lipar.Core.Contract.Events;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Application.Services;
 using Lipar.Infrastructure.Events.RabbitMQ;
+using Zamin.Infra.Tools.Localizer.Parrot;
 
 namespace Lipar.Infrastructure.Tools.IoC
 {
@@ -24,6 +25,7 @@ namespace Lipar.Infrastructure.Tools.IoC
             services.AddTransient<IEventPublisher, EventPublisher>();
             services.AddTransient<IEmailService, EmailService>();
             services.AddTransient<IEventBus, RabbitMQEventBus>();
+            services.AddTransient<ITranslator, ParrotTranslator>();
 
             services.AddValidatorsFromAssemblies(assemblies);
             services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));

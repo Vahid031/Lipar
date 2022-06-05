@@ -1,12 +1,18 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>5.1.2</Version>
+    <Version>5.1.3</Version>
     <AssemblyName>Lipar.Core.Application</AssemblyName>
     <RootNamespace>Lipar.Core.Application</RootNamespace>
   </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Extensions\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <None Remove="Extensions\**" />
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation" Version="10.1.0" />
@@ -22,10 +28,6 @@
     <ProjectReference Include="..\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Extensions\" />
   </ItemGroup>
 
 </Project>
