@@ -12,18 +12,27 @@ namespace Zamin.Infra.Tools.Localizer.Parrot
         private readonly IDbConnection _dbConnection;
         private readonly List<LocalizationRecord> _localizationRecords;
         private readonly LiparOptions _liparOptions;
-        private const string SelectCommand = "Select * from [{0}].[{1}]";
-        private const string InsertCommand = "INSERT INTO [{0}].[{1}]([Key],[Value],[Culture]) VALUES (@Key,@Value,@Culture) select SCOPE_IDENTITY()";
+        private readonly string SelectCommand = "Select * from [{0}].[{1}]";
+        private readonly string InsertCommand = "INSERT INTO [{0}].[{1}]([Key],[Value],[Culture]) VALUES (@Key,@Value,@Culture) select SCOPE_IDENTITY()";
+        private static ParrotDataWrapper _instance;
+        public static ParrotDataWrapper CreateFactory(LiparOptions liparOptions)
+        {
+            if (_instance is null)
+                _instance = new ParrotDataWrapper(liparOptions);
 
-
-        public ParrotDataWrapper(LiparOptions liparOptions)
+            return _instance;
+        }
+        private ParrotDataWrapper(LiparOptions liparOptions)
         {
             _liparOptions = liparOptions;
             _dbConnection = new SqlConnection(liparOptions.Translation.ConnectionString);
 
             if (_liparOptions.Translation.AutoCreateSqlTable)
                 CreateTableIfNeeded();
-            
+
+            SelectCommand = string.Format(SelectCommand, _liparOptions.Translation.SchemaName, _liparOptions.Translation.TableName);
+            InsertCommand = string.Format(InsertCommand, _liparOptions.Translation.SchemaName, _liparOptions.Translation.TableName);
+
             _localizationRecords = _dbConnection.Query<LocalizationRecord>(SelectCommand, commandType: CommandType.Text).ToList();
         }
 

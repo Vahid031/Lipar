@@ -1,5 +1,6 @@
 ﻿using FluentValidation;
 using Lipar.Core.Contract.Common;
+using Lipar.Core.Contract.Services;
 using Market.Core.Domain.Products.Entities;
 using Market.Core.Domain.Products.Repositories;
 using System;
@@ -33,11 +34,11 @@ namespace Market.Core.Application.Products.Commands
 
         public class CreateProductValidator : AbstractValidator<CreateProductCommand>
         {
-            public CreateProductValidator()
+            public CreateProductValidator(ITranslator translator)
             {
                 RuleFor(m => m.Name)
                     .NotEmpty()
-                    .MinimumLength(7);
+                    .MinimumLength(7).WithMessage(translator["must be {0} character", "7"]);
 
                 RuleFor(m => m.Barcode)
                     .Must(m => int.TryParse(m, out int s));

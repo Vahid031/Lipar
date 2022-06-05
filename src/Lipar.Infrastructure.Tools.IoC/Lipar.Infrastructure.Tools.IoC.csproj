@@ -16,7 +16,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\..\Lipar.Infrastructure.Tools.Localize.Parrot\Lipar.Infrastructure.Tools.Localize.Parrot.csproj" />
+    <ProjectReference Include="..\Lipar.Infrastructure.Tools.Localize.Parrot\Lipar.Infrastructure.Tools.Localize.Parrot.csproj" />
     <ProjectReference Include="..\Lipar.Core.Application\Lipar.Core.Application.csproj" />
     <ProjectReference Include="..\Lipar.Core.Domain\Lipar.Core.Domain.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Events.RabbitMQ\Lipar.Infrastructure.Events.RabbitMQ.csproj" />
