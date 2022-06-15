@@ -7,12 +7,12 @@ using System.Threading.Tasks;
 
 namespace Market.Core.Application.Products.Queries
 {
-    public class GetProductQuery : PageQuery, IProductDto, IRequest<PagedData<ProductDto>>
+    public class GetProductQuery : PageQuery, IGetProduct, IRequest<PagedData<GetProduct>>
     {
         public string Name { get; set; }
         public string Barcode { get; set; }
 
-        public class GetProductQueryHandler : IRequestHandler<GetProductQuery, PagedData<ProductDto>>
+        public class GetProductQueryHandler : IRequestHandler<GetProductQuery, PagedData<GetProduct>>
         {
             private readonly IProductQueryRepository repository;
 
@@ -21,7 +21,7 @@ namespace Market.Core.Application.Products.Queries
                 this.repository = repository;
             }
 
-            public async Task<PagedData<ProductDto>> Handle(GetProductQuery request, CancellationToken cancellationToken = default)
+            public async Task<PagedData<GetProduct>> Handle(GetProductQuery request, CancellationToken cancellationToken = default)
             {
                 return await repository.Select(request);
             }

@@ -8,6 +8,8 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Products.Configs
     {
         public void Configure(EntityTypeBuilder<Product> builder)
         {
+            builder.ToTable("Products");
+
             builder.Property(m => m.Name).HasMaxLength(50);
             builder.Property(m => m.Barcode).HasMaxLength(10);
         }

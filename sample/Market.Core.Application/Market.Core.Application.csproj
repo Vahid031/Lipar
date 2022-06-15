@@ -15,4 +15,9 @@
     <ProjectReference Include="..\Market.Core.Domain\Market.Core.Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Categories\Events\" />
+    <Folder Include="Categories\Queries\" />
+  </ItemGroup>
+
 </Project>

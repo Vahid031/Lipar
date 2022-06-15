@@ -16,10 +16,10 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Products
         {
         }
 
-        public Task<PagedData<ProductDto>> Select(IProductDto input)
+        public Task<PagedData<GetProduct>> Select(IGetProduct input)
         {
 
-            var query = db.Products.Select(m => new ProductDto
+            var query = db.Products.Select(m => new GetProduct
             {
                 Id = m.Id,
                 Name = m.Name,

@@ -1,14 +1,15 @@
 ﻿using Lipar.Core.Domain.Events;
+using System;
 
 namespace Market.Core.Domain.Products.Events
 {
     public class ProductDeleted : IEvent
     {
-        public string Id { get; }
+        public Guid Id { get; }
 
         private ProductDeleted() { }
 
-        public ProductDeleted(string id)
+        public ProductDeleted(Guid id)
         {
             Id = id;
         }

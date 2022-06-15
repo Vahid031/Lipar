@@ -19,6 +19,8 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             this.db = db;
         }
 
+
+        #region sync Func
         public void Delete(TEntity entity)
         {
             db.Set<TEntity>().Remove(entity);
@@ -51,6 +53,19 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             return query.SingleOrDefault(c => c.Id == id);
         }
 
+        public int Commit()
+        {
+            return db.SaveChanges();
+        }
+
+        public bool Exists(EntityId id)
+        {
+            return db.Set<TEntity>().Any(m => m.Id == id);
+        }
+        #endregion
+
+        #region Async Func
+
         public async Task InsertAsync(TEntity entity)
         {
             await db.Set<TEntity>().AddAsync(entity);
@@ -78,15 +93,16 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
             return await db.Set<TEntity>().AnyAsync(expression);
         }
 
-        public int Commit()
+        public async Task<bool> ExistsAsync(EntityId id)
         {
-            return db.SaveChanges();
+            return await db.Set<TEntity>().AnyAsync(m => m.Id == id);
         }
 
         public async Task<int> CommitAsync()
         {
             return await db.SaveChangesAsync();
         }
+        #endregion
     }
 }
 
