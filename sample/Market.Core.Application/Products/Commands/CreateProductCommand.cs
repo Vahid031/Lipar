@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Market.Core.Application.Products.Commands
 {
-    public class CreateProductCommand : IRequest
+    public partial class CreateProductCommand : IRequest
     {
         public string Name { get; set; }
         public string Barcode { get; set; }
@@ -34,14 +34,17 @@ namespace Market.Core.Application.Products.Commands
 
         public class CreateProductValidator : AbstractValidator<CreateProductCommand>
         {
-            public CreateProductValidator(ITranslator translator)
+            public CreateProductValidator(ITranslator translator, IProductCommandRepository repository)
             {
+                CascadeMode = CascadeMode.Stop;
+
                 RuleFor(m => m.Name)
-                    .NotEmpty()
+                    .NotEmpty().WithMessage(translator["not empty"])
                     .MinimumLength(7).WithMessage(translator["must be {0} character", "7"]);
 
                 RuleFor(m => m.Barcode)
-                    .Must(m => int.TryParse(m, out int s));
+                    .Must(m => int.TryParse(m, out int s)).WithMessage(translator["must be number"])
+                    .Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop))).WithMessage(translator["same barcode already exist"]);
             }
         }
     }

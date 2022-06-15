@@ -21,12 +21,12 @@ using System.Net.Sockets;
 
 namespace Market.Core.Application.Accounts.Commands
 {
-    public class AuthenticationCommand : IRequest<AuthenticationDto>
+    public class LoginCommand : IRequest<LoginDto>
     {
         public string UserName { get; set; }
         public string Password { get; set; }
 
-        public class AuthenticationCommandHandler : IRequestHandler<AuthenticationCommand, AuthenticationDto>
+        public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
         {
             private readonly UserManager<ApplicationUser> _userManager;
             private readonly SignInManager<ApplicationUser> _signInManager;
@@ -34,7 +34,7 @@ namespace Market.Core.Application.Accounts.Commands
             private readonly IDateTimeService _dateTimeService;
             private readonly IUserInfoService _userInfoService;
 
-            public AuthenticationCommandHandler(UserManager<ApplicationUser> userManager,
+            public LoginCommandHandler(UserManager<ApplicationUser> userManager,
                                                 SignInManager<ApplicationUser> signInManager,
                                                 IOptions<JWTSetting> options,
                                                 IDateTimeService dateTimeService,
@@ -47,7 +47,7 @@ namespace Market.Core.Application.Accounts.Commands
                 _userInfoService = userInfoService;
             }
 
-            public async Task<AuthenticationDto> Handle(AuthenticationCommand request, CancellationToken cancellationToken)
+            public async Task<LoginDto> Handle(LoginCommand request, CancellationToken cancellationToken)
             {
 
                 var user = await _userManager.FindByNameAsync(request.UserName);
@@ -68,7 +68,7 @@ namespace Market.Core.Application.Accounts.Commands
                 JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
                 var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
 
-                var response = new AuthenticationDto
+                var response = new LoginDto
                 {
                     Id = user.Id,
                     AccessToken = new JwtSecurityTokenHandler().WriteToken(jwtSecurityToken),
@@ -153,9 +153,9 @@ namespace Market.Core.Application.Accounts.Commands
             }
         }
 
-        public class AuthenticationValidator : AbstractValidator<AuthenticationCommand>
+        public class LoginValidator : AbstractValidator<LoginCommand>
         {
-            public AuthenticationValidator()
+            public LoginValidator()
             {
                 RuleFor(m => m.UserName)
                     .NotEmpty();

@@ -16,7 +16,7 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Products
         {
         }
 
-        public Task<PagedData<ProductDto>> Select(ProductVM input)
+        public Task<PagedData<ProductDto>> Select(IProductDto input)
         {
 
             var query = db.Products.Select(m => new ProductDto

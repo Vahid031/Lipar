@@ -18,6 +18,18 @@ namespace Market.Presentation.Api.Products
             return await SendAsync(command, HttpStatusCode.Created);
         }
 
+        [HttpPut("update")]
+        public async Task<IActionResult> Update(UpdateProductCommand command)
+        {
+            return await SendAsync(command, HttpStatusCode.OK);
+        }
+
+        [HttpDelete("delete")]
+        public async Task<IActionResult> Delete(DeleteProductCommand command)
+        {
+            return await SendAsync(command, HttpStatusCode.OK);
+        }
+
         [HttpGet("get")]
         public async Task<IActionResult> Get([FromQuery]GetProductQuery query)
         {

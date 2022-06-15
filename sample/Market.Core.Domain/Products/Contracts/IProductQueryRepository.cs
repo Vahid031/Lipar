@@ -7,6 +7,6 @@ namespace Market.Core.Domain.Products.Contracts
 {
     public interface IProductQueryRepository : IQueryRepository
     {
-        Task<PagedData<ProductDto>> Select(ProductVM input);
+        Task<PagedData<ProductDto>> Select(IProductDto input);
     }
 }

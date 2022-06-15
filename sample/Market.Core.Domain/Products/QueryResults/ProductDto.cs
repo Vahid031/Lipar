@@ -10,7 +10,7 @@ namespace Market.Core.Domain.Products.QueryResults
         public string Barcode { get; set; }
     }
 
-    public class ProductVM : PageQuery
+    public interface IProductDto : IPageQuery
     {
         public string Name { get; set; }
         public string Barcode { get; set; }

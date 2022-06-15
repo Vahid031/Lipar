@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace Market.Core.Domain.Accounts.Queries
 {
-    public class AuthenticationDto
+    public class LoginDto
     {
         public string Id { get; set; }
         public string UserName { get; set; }

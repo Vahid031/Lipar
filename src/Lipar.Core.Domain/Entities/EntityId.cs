@@ -28,5 +28,16 @@ namespace Lipar.Core.Domain.Entities
 
         public static explicit operator Guid(EntityId id) => id.Value;
         public static implicit operator EntityId(Guid value) => new() { Value = value };
+
+
+        public static bool operator ==(EntityId Id1, EntityId Id2) => Id1.Equals(Id2);
+        public static bool operator !=(EntityId Id1, EntityId Id2) => !Id1.Equals(Id2);
+
+        //public static bool operator ==(EntityId Id1, Guid Id2) => Id1.Equals(Id2);
+        //public static bool operator !=(EntityId Id1, Guid Id2) => !Id1.Equals(Id2);
+
+        //public static bool operator ==(Guid Id1, EntityId Id2) => Id1.Equals(Id2);
+        //public static bool operator !=(Guid Id1, EntityId Id2) => !Id1.Equals(Id2);
+
     }
 }

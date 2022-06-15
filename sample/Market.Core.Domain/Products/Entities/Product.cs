@@ -1,6 +1,5 @@
 ﻿using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Products.Events;
-using System;
 
 namespace Market.Core.Domain.Products.Entities
 {
@@ -18,6 +17,19 @@ namespace Market.Core.Domain.Products.Entities
             Barcode = barcode;
 
             Apply(new ProductCreated(Id.ToString(), Barcode, Name));
+        }
+
+        public void Update(string name, string barcode)
+        {
+            Name = name;
+            Barcode = barcode;
+
+            Apply(new ProductUpdated(Id.ToString(), Barcode, Name));
+        }
+
+        public void Delete(EntityId id)
+        {
+            Apply(new ProductDeleted(Id.ToString()));
         }
     }
 }

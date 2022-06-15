@@ -10,8 +10,8 @@ namespace WebApi.Controllers
     public class AccountController : BaseController
     {
 
-        [HttpPost("authentication")]
-        public async Task<IActionResult> Authentication(AuthenticationCommand command)
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginCommand command)
         {
             return await SendAsync(command);
         }

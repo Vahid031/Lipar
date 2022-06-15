@@ -7,7 +7,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
 {
     public static class LinqExtensions
     {
-        public static PagedData<T> Paging<T>(this IQueryable<T> query, PageQuery pageQuery)
+        public static PagedData<T> Paging<T>(this IQueryable<T> query, IPageQuery pageQuery)
         {
             var pagedData = query.PrepareObject(pageQuery);
 
@@ -20,7 +20,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
             return pagedData;
         }
 
-        public static async Task<PagedData<T>> PagingAsync<T>(this IQueryable<T> query, PageQuery pageQuery)
+        public static async Task<PagedData<T>> PagingAsync<T>(this IQueryable<T> query, IPageQuery pageQuery)
         {
             var pagedData = query.PrepareObject(pageQuery);
 
@@ -33,7 +33,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
             return pagedData;
         }
 
-        private static PagedData<T> PrepareObject<T>(this IQueryable<T> query, PageQuery pageQuery)
+        private static PagedData<T> PrepareObject<T>(this IQueryable<T> query, IPageQuery pageQuery)
         {
             var pagedData = new PagedData<T>();
 
