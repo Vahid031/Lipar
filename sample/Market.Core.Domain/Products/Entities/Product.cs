@@ -27,7 +27,7 @@ namespace Market.Core.Domain.Products.Entities
             Apply(new ProductUpdated(Id.ToString(), Barcode, Name));
         }
 
-        public void Delete(EntityId id)
+        public void Delete()
         {
             Apply(new ProductDeleted(Id.ToString()));
         }

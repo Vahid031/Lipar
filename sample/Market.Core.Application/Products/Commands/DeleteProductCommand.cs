@@ -24,6 +24,7 @@ namespace Market.Core.Application.Products.Commands
             public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken = default)
             {
                 var entity = await repository.GetAsync(request.Id);
+                entity.Delete();
 
                 repository.Delete(entity);
                 await repository.CommitAsync();
