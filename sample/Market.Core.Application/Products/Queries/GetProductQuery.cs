@@ -1,8 +1,8 @@
 ﻿using Lipar.Core.Application.Common;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Domain.Queries;
-using Market.Core.Domain.Products.Queries;
-using Market.Core.Domain.Products.Repositories;
+using Market.Core.Domain.Products.Contracts;
+using Market.Core.Domain.Products.QueryResults;
 using System.Threading;
 using System.Threading.Tasks;
 

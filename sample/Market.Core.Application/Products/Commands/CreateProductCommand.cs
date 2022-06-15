@@ -1,8 +1,8 @@
 ﻿using FluentValidation;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Services;
+using Market.Core.Domain.Products.Contracts;
 using Market.Core.Domain.Products.Entities;
-using Market.Core.Domain.Products.Repositories;
 using System;
 using System.Threading;
 using System.Threading.Tasks;

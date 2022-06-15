@@ -67,7 +67,7 @@ namespace Lipar.Infrastructure.Events.RabbitMQ
             Send(parcel);
         }
 
-        public void Send(Parcel parcel)
+        private void Send(Parcel parcel)
         {
             var channel = _connection.CreateModel();
             var basicProperties = channel.CreateBasicProperties();

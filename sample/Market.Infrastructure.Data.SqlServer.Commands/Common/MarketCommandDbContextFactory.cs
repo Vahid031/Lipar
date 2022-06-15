@@ -8,7 +8,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Common
         public MarketCommandDbContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<MarketCommandDbContext>();
-            builder.UseSqlServer("Server=.;Database=Market;user id=sa;password=V@hid031");
+            builder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Market;Trusted_Connection=True;");
             return new MarketCommandDbContext(builder.Options);
         }
     }

@@ -1,9 +1,9 @@
 ﻿using Lipar.Core.Domain.Queries;
 using System;
 
-namespace Market.Core.Domain.Products.Queries
+namespace Market.Core.Domain.Products.QueryResults
 {
-    public class ProductDto 
+    public class ProductDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

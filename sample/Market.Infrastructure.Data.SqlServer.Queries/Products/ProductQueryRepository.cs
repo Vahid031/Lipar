@@ -1,11 +1,11 @@
 ﻿using Lipar.Core.Domain.Queries;
 using Lipar.Infrastructure.Data.SqlServer.Queries;
 using Lipar.Infrastructure.Data.SqlServer.Extensions;
-using Market.Core.Domain.Products.Queries;
-using Market.Core.Domain.Products.Repositories;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
 using System.Linq;
 using System.Threading.Tasks;
+using Market.Core.Domain.Products.QueryResults;
+using Market.Core.Domain.Products.Contracts;
 
 namespace Market.Infrastructure.Data.SqlServerQuery.Products
 {
