@@ -40,8 +40,7 @@ namespace Market.Core.Application.Categories.Commands
                     .NotNull().WithMessage(m => translator["not empty"]);
 
                 RuleFor(c => c.ParentId)
-                    .NotEmpty().WithMessage(m => translator["not empty"])
-                    .Must((entity, prop, context) => repository.Exists(c => c.Id == prop)).WithMessage(m => translator["ParentId not found"]);
+                    .Must((entity, prop, context) => prop is null || repository.Exists(c => c.Id.Value == prop.Value)).WithMessage(m => translator["ParentId not found"]);
 
             }
         }

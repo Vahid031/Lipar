@@ -39,7 +39,7 @@ namespace Market.Core.Application.Categories.Commands
                     .NotEmpty().WithMessage(m => translator["not empty"])
                     .NotNull().WithMessage(m => translator["not empty"])
                     .Must((entity, prop, context) => repository.Exists(prop)).WithMessage(m => translator["not found"])
-                    .Must((entity, prop, context) => repository.Exists(m => m.ParentId == prop)).WithMessage(m => translator["entity has child, cannot delete it"]);
+                    .Must((entity, prop, context) => repository.Exists(m => m.ParentId != null && m.ParentId.Value == prop)).WithMessage(m => translator["entity has child, cannot delete it"]);
 
             }
         }

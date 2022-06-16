@@ -17,10 +17,10 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 entityType =>
                 {
                     modelBuilder.Entity(entityType.ClrType)
-                                .Property<EntityId>("Id")
-                                .HasConversion(c => c.Value, d => Lipar.Core.Domain.Entities.EntityId.FromGuid(d));
+                                .Property<EntityId>(Id)
+                                .HasConversion(c => c.Value, d => EntityId.FromGuid(d));
                     modelBuilder.Entity(entityType.ClrType)
-                                .HasKey("Id")
+                                .HasKey(Id)
                                 .IsClustered(false);
 
                     modelBuilder.Entity(entityType.ClrType)
@@ -51,7 +51,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
         }
 
 
-        public static readonly string EntityId = "Id";
+        public static readonly string Id = nameof(Id);
 
         public static readonly string CreatedDate = nameof(CreatedDate);
 

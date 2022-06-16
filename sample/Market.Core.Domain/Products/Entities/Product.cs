@@ -16,7 +16,7 @@ namespace Market.Core.Domain.Products.Entities
             Name = name;
             Barcode = barcode;
 
-            Apply(new ProductCreated(Id.Value, Barcode, Name));
+            Apply(new ProductCreated(Id.ToString(), Barcode, Name));
         }
 
         public void Update(string name, string barcode)
@@ -24,12 +24,12 @@ namespace Market.Core.Domain.Products.Entities
             Name = name;
             Barcode = barcode;
 
-            Apply(new ProductUpdated(Id.Value, Barcode, Name));
+            Apply(new ProductUpdated(Id.ToString(), Barcode, Name));
         }
 
         public void Delete()
         {
-            Apply(new ProductDeleted(Id.Value));
+            Apply(new ProductDeleted(Id.ToString()));
         }
     }
 }

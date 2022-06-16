@@ -6,6 +6,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Market.Core.Domain.Products.QueryResults;
 using Market.Core.Domain.Products.Contracts;
+using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Data.SqlServerQuery.Products
 {
@@ -36,5 +37,16 @@ namespace Market.Infrastructure.Data.SqlServerQuery.Products
 
             return query.PagingAsync(input);
         }
+
+        public async Task<GetByIdProduct> Select(IGetByIdProduct input) =>
+            await db.Products
+            .Where(m => m.Id == input.Id)
+            .Select(m => new GetByIdProduct
+            {
+                Barcode = m.Barcode,
+                Name = m.Name,
+                Id = m.Id
+            })
+            .FirstOrDefaultAsync();
     }
 }

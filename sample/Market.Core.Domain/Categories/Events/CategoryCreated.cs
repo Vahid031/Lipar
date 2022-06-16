@@ -5,13 +5,13 @@ namespace Market.Core.Domain.Categories.Events
 {
     public class CategoryCreated : IEvent
     {
-        public Guid Id { get; }
+        public string Id { get; }
         public string Name { get; }
         public Guid? ParentId { get; }
 
         private CategoryCreated() { }
 
-        public CategoryCreated(Guid id, string name, Guid? parentId)
+        public CategoryCreated(string id, string name, Guid? parentId)
         {
             Id = id;
             Name = name;

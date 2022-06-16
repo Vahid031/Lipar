@@ -16,7 +16,7 @@ namespace Market.Core.Domain.Categories.Entities
             Name = name;
             ParentId = parentId;
 
-            Apply(new CategoryCreated(Id.Value, Name, ParentId?.Value));
+            Apply(new CategoryCreated(Id.ToString(), Name, ParentId?.Value));
         }
 
         public void Update(string name, EntityId parentId)
@@ -24,12 +24,12 @@ namespace Market.Core.Domain.Categories.Entities
             Name = name;
             ParentId = parentId;
 
-            Apply(new CategoryUpdated(Id.Value, Name, ParentId?.Value));
+            Apply(new CategoryUpdated(Id.ToString(), Name, ParentId?.Value));
         }
 
         public void Delete()
         {
-            Apply(new CategoryDeleted(Id.Value));
+            Apply(new CategoryDeleted(Id.ToString()));
         }
     }
 }

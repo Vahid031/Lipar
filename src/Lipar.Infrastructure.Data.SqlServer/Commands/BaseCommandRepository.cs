@@ -38,6 +38,8 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public bool Exists(Expression<Func<TEntity, bool>> expression)
         {
+            var ss = db.Set<TEntity>().Where(expression).ToQueryString();
+
             return db.Set<TEntity>().Any(expression);
         }
 

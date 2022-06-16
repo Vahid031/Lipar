@@ -10,9 +10,9 @@ namespace Market.Core.Application.Products.Commands
 {
     public class UpdateProductCommand : IRequest
     {
-        public Guid Id { get; set; }
-        public string Name { get; set; }
-        public string Barcode { get; set; }
+        public Guid Id { get; init; }
+        public string Name { get; init; }
+        public string Barcode { get; init; }
 
         public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
         {
@@ -41,7 +41,7 @@ namespace Market.Core.Application.Products.Commands
 
                 RuleFor(m => m.Id)
                     .NotEmpty().WithMessage(translator["not empty"])
-                    .Must((entity, prop, context) => repository.Exists(x => prop == x.Id)).WithMessage(translator["not found"]);
+                    .Must((entity, prop, context) => repository.Exists(x => prop == x.Id.Value)).WithMessage(translator["not found"]);
 
                 RuleFor(m => m.Name)
                     .NotEmpty().WithMessage(translator["not empty"])
@@ -49,7 +49,7 @@ namespace Market.Core.Application.Products.Commands
 
                 RuleFor(m => m.Barcode)
                     .Must(m => int.TryParse(m, out int s)).WithMessage(translator["must be number"])
-                    .Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop) && entity.Id != x.Id)).WithMessage(translator["same barcode already exist"]);
+                    .Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop) && entity.Id != x.Id.Value)).WithMessage(translator["same barcode already exist"]);
             }
         }
     }

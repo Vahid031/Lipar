@@ -71,7 +71,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
                 ModelBuilderExtensions.CreatedDate,
                 ModelBuilderExtensions.ModifedBy,
                 ModelBuilderExtensions.ModifedDate,
-                ModelBuilderExtensions.EntityId,
+                ModelBuilderExtensions.Id,
             };
 
             foreach (EntityEntry entry in entries)
@@ -83,7 +83,7 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
             var log = new EntityChangesInterception(
                 Guid.NewGuid(),
                 entry.Entity.GetType().Name,
-                ((EntityId)entry.Property(ModelBuilderExtensions.EntityId).CurrentValue).Value,
+                ((EntityId)entry.Property(ModelBuilderExtensions.Id).CurrentValue).Value.Value,
                 entry.State.ToString());
 
             foreach (var item in entry.Properties.Where(m => auditProperties.All(p => p != m.Metadata.Name)))

@@ -12,7 +12,7 @@ namespace Market.Core.Domain.Products.QueryResults
 
     public interface IGetProduct : IPageQuery
     {
-        public string Name { get; set; }
-        public string Barcode { get; set; }
+        public string Name { get; init; }
+        public string Barcode { get; init; }
     }
 }

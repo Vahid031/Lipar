@@ -13,6 +13,6 @@ namespace Market.Core.Domain.Categories.QueryResults
 
     public interface IGetCategory : IPageQuery
     {
-        public string Name { get; set; }
+        public string Name { get; init; }
     }
 }

@@ -11,6 +11,8 @@ namespace Lipar.Core.Domain.Entities
     {
         public bool Equals(TValueObject other)
         {
+            if(other == null)
+                return false;
             return this == other;
         }
         public override bool Equals(object obj)

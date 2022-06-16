@@ -11,8 +11,8 @@ namespace Market.Core.Application.Products.Commands
 {
     public partial class CreateProductCommand : IRequest
     {
-        public string Name { get; set; }
-        public string Barcode { get; set; }
+        public string Name { get; init; }
+        public string Barcode { get; init; }
 
         public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand>
         {

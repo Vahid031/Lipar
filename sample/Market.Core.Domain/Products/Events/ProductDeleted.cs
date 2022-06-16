@@ -5,11 +5,11 @@ namespace Market.Core.Domain.Products.Events
 {
     public class ProductDeleted : IEvent
     {
-        public Guid Id { get; }
+        public string Id { get; }
 
         private ProductDeleted() { }
 
-        public ProductDeleted(Guid id)
+        public ProductDeleted(string id)
         {
             Id = id;
         }

@@ -5,7 +5,7 @@ namespace Lipar.Core.Domain.Entities
 {
     public class EntityId : ValueObject<EntityId>
     {
-        public Guid Value { get; private set; }
+        public Guid? Value { get; private set; }
 
         private EntityId() { }
         public EntityId(string id)
@@ -17,27 +17,17 @@ namespace Lipar.Core.Domain.Entities
         }
 
         public static EntityId FromString(string id) => new(id);
-        public static EntityId FromGuid(Guid id) => new() { Value = id };
+        public static EntityId FromGuid(Guid? id) =>  new() { Value = id.Value } ;
         public override string ToString() => Value.ToString();
 
         public override int ObjectGetHashCode() => Value.GetHashCode();
-        public override bool ObjectIsEqual(EntityId otherObject) => Value.Equals(otherObject.Value);
+        public override bool ObjectIsEqual(EntityId otherObject) => Value.Equals(otherObject?.Value);
+
 
         public static explicit operator string(EntityId id) => id.Value.ToString();
-        public static implicit operator EntityId(string value) => new (value);
+        public static implicit operator EntityId(string value) => new(value);
 
-        public static explicit operator Guid(EntityId id) => id.Value;
-        public static implicit operator EntityId(Guid value) => new() { Value = value };
-
-
-        public static bool operator ==(EntityId Id1, EntityId Id2) => Id1.Equals(Id2);
-        public static bool operator !=(EntityId Id1, EntityId Id2) => !Id1.Equals(Id2);
-
-        //public static bool operator ==(EntityId Id1, Guid Id2) => Id1.Equals(Id2);
-        //public static bool operator !=(EntityId Id1, Guid Id2) => !Id1.Equals(Id2);
-
-        //public static bool operator ==(Guid Id1, EntityId Id2) => Id1.Equals(Id2);
-        //public static bool operator !=(Guid Id1, EntityId Id2) => !Id1.Equals(Id2);
-
+        public static explicit operator Guid?(EntityId id) => id?.Value;
+        public static implicit operator EntityId(Guid? value) => value.HasValue ? new() { Value = value.Value } : null;
     }
 }

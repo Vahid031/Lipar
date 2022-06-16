@@ -9,8 +9,8 @@ namespace Market.Core.Application.Products.Queries
 {
     public class GetProductQuery : PageQuery, IGetProduct, IRequest<PagedData<GetProduct>>
     {
-        public string Name { get; set; }
-        public string Barcode { get; set; }
+        public string Name { get; init; }
+        public string Barcode { get; init; }
 
         public class GetProductQueryHandler : IRequestHandler<GetProductQuery, PagedData<GetProduct>>
         {
@@ -27,5 +27,4 @@ namespace Market.Core.Application.Products.Queries
             }
         }
     }
-
 }

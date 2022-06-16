@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Services;
+using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Products.Contracts;
 using System;
 using System.Threading;
@@ -39,7 +40,7 @@ namespace Market.Core.Application.Products.Commands
 
                 RuleFor(m => m.Id)
                     .NotEmpty().WithMessage(translator["not empty"])
-                    .Must((entity, prop, context) => repository.Exists(x => prop == x.Id)).WithMessage(translator["not found"]);
+                    .Must((entity, prop, context) => repository.Exists(x => prop == x.Id.Value)).WithMessage(translator["not found"]);
             }
         }
 
