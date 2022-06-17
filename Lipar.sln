@@ -59,7 +59,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Market.Infrastructure.Data.
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Tools.Localize.Parrot", "src\Lipar.Infrastructure.Tools.Localize.Parrot\Lipar.Infrastructure.Tools.Localize.Parrot.csproj", "{2028E36D-A662-4CCB-B51B-F39D3E92C487}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Events.Kafka", "src\Lipar.Infrastructure.Events.Kafka\Lipar.Infrastructure.Events.Kafka.csproj", "{F81E7A67-157E-48EA-B516-5D429CD2E340}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Events.Kafka", "src\Lipar.Infrastructure.Events.Kafka\Lipar.Infrastructure.Events.Kafka.csproj", "{F81E7A67-157E-48EA-B516-5D429CD2E340}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Infrastructure.Data.Mongo", "src\Lipar.Infrastructure.Data.Mongo\Lipar.Infrastructure.Data.Mongo.csproj", "{DEEEBFA9-F4CF-4896-B565-D339133000FE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -131,6 +133,10 @@ Global
 		{F81E7A67-157E-48EA-B516-5D429CD2E340}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F81E7A67-157E-48EA-B516-5D429CD2E340}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F81E7A67-157E-48EA-B516-5D429CD2E340}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DEEEBFA9-F4CF-4896-B565-D339133000FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DEEEBFA9-F4CF-4896-B565-D339133000FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DEEEBFA9-F4CF-4896-B565-D339133000FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DEEEBFA9-F4CF-4896-B565-D339133000FE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -162,6 +168,7 @@ Global
 		{578D3A4C-B4F1-444D-B569-A38EA01A7E13} = {72CE32A1-34E9-4CFD-8601-519FDD33D264}
 		{2028E36D-A662-4CCB-B51B-F39D3E92C487} = {16DB0E26-E59E-4D88-B842-8DEA1845794B}
 		{F81E7A67-157E-48EA-B516-5D429CD2E340} = {575CF619-CACD-4109-86F5-5C7F1C5F9E34}
+		{DEEEBFA9-F4CF-4896-B565-D339133000FE} = {56B67CEE-71CA-491E-8518-78DF48360CE9}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {205E35E8-C906-40DE-AC18-1C7D76A04B2E}

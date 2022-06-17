@@ -1,0 +1,23 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net5.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="InBoxEvents\" />
+    <Folder Include="Extensions\" />
+    <Folder Include="EntityChangeInterceptions\" />
+    <Folder Include="OutBoxEvents\" />
+    <Folder Include="Queries\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MongoDB.Driver" Version="2.16.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
+  </ItemGroup>
+
+</Project>
