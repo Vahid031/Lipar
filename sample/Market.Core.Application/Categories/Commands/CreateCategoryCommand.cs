@@ -1,6 +1,7 @@
 ﻿using FluentValidation;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Services;
+using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Categories.Contracts;
 using Market.Core.Domain.Categories.Entities;
 using System;
@@ -40,7 +41,7 @@ namespace Market.Core.Application.Categories.Commands
                     .NotNull().WithMessage(m => translator["not empty"]);
 
                 RuleFor(c => c.ParentId)
-                    .Must((entity, prop, context) => prop is null || repository.Exists(c => c.Id.Value == prop.Value)).WithMessage(m => translator["ParentId not found"]);
+                    .Must((entity, prop, context) => prop is null || repository.Exists(c => c.Id == EntityId.FromGuid(prop))).WithMessage(m => translator["ParentId not found"]);
 
             }
         }

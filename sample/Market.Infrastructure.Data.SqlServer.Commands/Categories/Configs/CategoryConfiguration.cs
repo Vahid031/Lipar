@@ -1,4 +1,5 @@
-﻿using Market.Core.Domain.Categories.Entities;
+﻿using Lipar.Core.Domain.Entities;
+using Market.Core.Domain.Categories.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
@@ -12,7 +13,7 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Categories.Configs
 
             builder.Property(m => m.Name).HasMaxLength(50);
             builder.Property(m => m.ParentId)
-                .HasConversion(d => d.Value, c => c);
+                .HasConversion(c => c.Value, d => EntityId.FromGuid(d));
 
             builder.HasMany<Category>()
                 .WithOne()
