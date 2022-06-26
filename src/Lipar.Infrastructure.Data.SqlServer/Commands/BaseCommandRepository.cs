@@ -8,43 +8,45 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands
 {
-    public class BaseCommandRepository<TEntity, TDbContext> : ICommandRepository<TEntity>, IUnitOfWork
+    public abstract class BaseCommandRepository<TEntity, TDbContext> : ICommandRepository<TEntity>, IUnitOfWork
         where TEntity : AggregateRoot
         where TDbContext : BaseCommandDbContext
     {
-        protected readonly TDbContext db;
+        protected readonly TDbContext _db;
+        protected readonly DbSet<TEntity> _collection;
 
         public BaseCommandRepository(TDbContext db)
         {
-            this.db = db;
+            _db = db;
+            _collection = _db.Set<TEntity>();
         }
 
 
         #region sync Func
         public void Delete(TEntity entity)
         {
-            db.Set<TEntity>().Remove(entity);
+            _collection.Remove(entity);
         }
 
         public TEntity Get(EntityId id)
         {
-            return db.Set<TEntity>().SingleOrDefault(c => c.Id == id);
+            return _collection.SingleOrDefault(c => c.Id == id);
         }
 
         public void Insert(TEntity entity)
         {
-            db.Set<TEntity>().Add(entity);
+            _collection.Add(entity);
         }
 
         public bool Exists(Expression<Func<TEntity, bool>> expression)
         {
-            return db.Set<TEntity>().Any(expression);
+            return _collection.Any(expression);
         }
 
         public TEntity GetGraph(EntityId id)
         {
-            var graphPath = db.GetIncludePaths(typeof(TEntity));
-            IQueryable<TEntity> query = db.Set<TEntity>().AsQueryable();
+            var graphPath = _db.GetIncludePaths(typeof(TEntity));
+            IQueryable<TEntity> query = _collection.AsQueryable();
             var temp = graphPath.ToList();
             foreach (var item in graphPath)
             {
@@ -55,12 +57,12 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public int Commit()
         {
-            return db.SaveChanges();
+            return _db.SaveChanges();
         }
 
         public bool Exists(EntityId id)
         {
-            return db.Set<TEntity>().Any(m => m.Id == id);
+            return _collection.Any(m => m.Id == id);
         }
         #endregion
 
@@ -68,18 +70,18 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public async Task InsertAsync(TEntity entity)
         {
-            await db.Set<TEntity>().AddAsync(entity);
+            await _collection.AddAsync(entity);
         }
 
         public async Task<TEntity> GetAsync(EntityId id)
         {
-            return await db.Set<TEntity>().SingleOrDefaultAsync(c => c.Id == id);
+            return await _collection.SingleOrDefaultAsync(c => c.Id == id);
         }
 
         public async Task<TEntity> GetGraphAsync(EntityId id)
         {
-            var graphPath = db.GetIncludePaths(typeof(TEntity));
-            IQueryable<TEntity> query = db.Set<TEntity>().AsQueryable();
+            var graphPath = _db.GetIncludePaths(typeof(TEntity));
+            IQueryable<TEntity> query = _collection.AsQueryable();
             var temp = graphPath.ToList();
             foreach (var item in graphPath)
             {
@@ -90,17 +92,17 @@ namespace Lipar.Infrastructure.Data.SqlServer.Commands
 
         public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
         {
-            return await db.Set<TEntity>().AnyAsync(expression);
+            return await _collection.AnyAsync(expression);
         }
 
         public async Task<bool> ExistsAsync(EntityId id)
         {
-            return await db.Set<TEntity>().AnyAsync(m => m.Id == id);
+            return await _collection.AnyAsync(m => m.Id == id);
         }
 
         public async Task<int> CommitAsync()
         {
-            return await db.SaveChangesAsync();
+            return await _db.SaveChangesAsync();
         }
         #endregion
     }

@@ -26,7 +26,7 @@ namespace Lipar.Presentation.Api.Extensions
 
             services.AddApplication(assembies);
 
-            services.AddHostedService<PoolingPublisherHostedService>();
+            //services.AddHostedService<PoolingPublisherHostedService>();
 
             services.AddControllers(
                 options =>

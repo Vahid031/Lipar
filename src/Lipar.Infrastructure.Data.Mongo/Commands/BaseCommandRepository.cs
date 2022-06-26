@@ -4,105 +4,97 @@ using System.Linq.Expressions;
 using System.Threading.Tasks;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Domain.Entities;
+using MongoDB.Driver;
 
 namespace Lipar.Infrastructure.Data.Mongo.Commands
 {
-    public class BaseCommandRepository<TEntity, TDbContext> : ICommandRepository<TEntity>, IUnitOfWork
+    public abstract class BaseCommandRepository<TEntity, TDbContext> : ICommandRepository<TEntity>
         where TEntity : AggregateRoot
         where TDbContext : BaseCommandDbContext
     {
-        protected IMongoCollection<TEntity> _collection;
-        private IMongoBaseContext _context;
+        private readonly TDbContext _db;
+        private readonly IMongoCollection<TEntity> _collection;
 
-        public BaseCommandRepository(TDbContext db)
+        protected BaseCommandRepository(TDbContext db)
         {
-            this.db = db;
-        }
-
-
-        #region sync Func
-        public void Delete(TEntity entity)
-        {
-            _collection.FindOneAndDelete(e => e.Id == entity.Id);
-        }
-
-        public TEntity Get(EntityId id)
-        {
-            return db.Set<TEntity>().SingleOrDefault(c => c.Id == id);
-        }
-
-        public void Insert(TEntity entity)
-        {
-            db.Set<TEntity>().Add(entity);
-        }
-
-        public bool Exists(Expression<Func<TEntity, bool>> expression)
-        {
-            return db.Set<TEntity>().Any(expression);
-        }
-
-        public TEntity GetGraph(EntityId id)
-        {
-            var graphPath = db.GetIncludePaths(typeof(TEntity));
-            IQueryable<TEntity> query = db.Set<TEntity>().AsQueryable();
-            var temp = graphPath.ToList();
-            foreach (var item in graphPath)
-            {
-                query = query.Include(item);
-            }
-            return query.SingleOrDefault(c => c.Id == id);
+            _db = db;
+            _collection = db.GetCollection<TEntity>(typeof(TEntity).Name);
         }
 
         public int Commit()
         {
-            return db.SaveChanges();
-        }
-
-        public bool Exists(EntityId id)
-        {
-            return db.Set<TEntity>().Any(m => m.Id == id);
-        }
-        #endregion
-
-        #region Async Func
-
-        public async Task InsertAsync(TEntity entity)
-        {
-            await db.Set<TEntity>().AddAsync(entity);
-        }
-
-        public async Task<TEntity> GetAsync(EntityId id)
-        {
-            return await db.Set<TEntity>().SingleOrDefaultAsync(c => c.Id == id);
-        }
-
-        public async Task<TEntity> GetGraphAsync(EntityId id)
-        {
-            var graphPath = db.GetIncludePaths(typeof(TEntity));
-            IQueryable<TEntity> query = db.Set<TEntity>().AsQueryable();
-            var temp = graphPath.ToList();
-            foreach (var item in graphPath)
-            {
-                query = query.Include(item);
-            }
-            return await query.SingleOrDefaultAsync(c => c.Id == id);
-        }
-
-        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
-        {
-            return await db.Set<TEntity>().AnyAsync(expression);
-        }
-
-        public async Task<bool> ExistsAsync(EntityId id)
-        {
-            return await db.Set<TEntity>().AnyAsync(m => m.Id == id);
+            return _db.SaveChanges();
         }
 
         public async Task<int> CommitAsync()
         {
-            return await db.SaveChangesAsync();
+            return await _db.SaveChangesAsync();
         }
-        #endregion
+
+        public void Delete(TEntity entity)
+        {
+            _db.AddCommand(() => _collection.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", entity.Id)));
+        }
+
+        public bool Exists(Expression<Func<TEntity, bool>> expression)
+        {
+            var query = _collection.Find(Builders<TEntity>.Filter.Where(expression));
+            return query.Any();
+        }
+
+        public bool Exists(EntityId id)
+        {
+            var query = _collection.Find(Builders<TEntity>.Filter.Eq("_id", id));
+            return query.Any();
+        }
+
+        public async Task<bool> ExistsAsync(Expression<Func<TEntity, bool>> expression)
+        {
+            var query = await _collection.FindAsync(Builders<TEntity>.Filter.Where(expression));
+            return query.Any();
+        }
+
+        public async Task<bool> ExistsAsync(EntityId id)
+        {
+            var query = await _collection.FindAsync(Builders<TEntity>.Filter.Eq("_id", id));
+            return query.Any();
+        }
+
+        public TEntity Get(EntityId id)
+        {
+            var data = _collection.Find(Builders<TEntity>.Filter.Eq("_id", id));
+            return data.SingleOrDefault();
+        }
+
+        public async Task<TEntity> GetAsync(EntityId id)
+        {
+            var data = await _collection.FindAsync(Builders<TEntity>.Filter.Eq("_id", id));
+            return data.SingleOrDefault();
+        }
+
+        public TEntity GetGraph(EntityId id)
+        {
+            var data = _collection.Find(Builders<TEntity>.Filter.Eq("_id", id));
+            return data.SingleOrDefault();
+        }
+
+        public async Task<TEntity> GetGraphAsync(EntityId id)
+        {
+            var data = await _collection.FindAsync(Builders<TEntity>.Filter.Eq("_id", id));
+            return data.SingleOrDefault();
+        }
+
+        public void Insert(TEntity entity)
+        {
+            _db.AddCommand(() => _collection.InsertOneAsync(entity));
+        }
+
+        public Task InsertAsync(TEntity entity)
+        {
+            _db.AddCommand(async () => await _collection.InsertOneAsync(entity));
+
+            return Task.CompletedTask;
+        }
     }
 }
 

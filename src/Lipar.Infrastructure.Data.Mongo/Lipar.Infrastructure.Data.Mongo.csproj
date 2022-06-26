@@ -5,19 +5,25 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="InBoxEvents\" />
-    <Folder Include="Extensions\" />
-    <Folder Include="EntityChangeInterceptions\" />
-    <Folder Include="OutBoxEvents\" />
-    <Folder Include="Queries\" />
+    <Compile Remove="Extensions\**" />
+    <Compile Remove="InBoxEvents\**" />
+    <Compile Remove="OutBoxEvents\**" />
+    <EmbeddedResource Remove="Extensions\**" />
+    <EmbeddedResource Remove="InBoxEvents\**" />
+    <EmbeddedResource Remove="OutBoxEvents\**" />
+    <None Remove="Extensions\**" />
+    <None Remove="InBoxEvents\**" />
+    <None Remove="OutBoxEvents\**" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="MongoDB.Driver" Version="2.16.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
+    <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
   </ItemGroup>
 
 </Project>

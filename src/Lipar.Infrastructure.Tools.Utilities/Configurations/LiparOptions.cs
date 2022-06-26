@@ -10,6 +10,7 @@
         public MessageBusOptions MessageBus { get; set; }
         public MailOptions Mail { get; set; }
         public TranslationOptions Translation { get; set; }
+        public MongoDbOptions MongoDb { get; set; }
 
     }
 }

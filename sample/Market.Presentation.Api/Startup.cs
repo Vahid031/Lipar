@@ -5,12 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Lipar.Presentation.Api.Extensions;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Microsoft.EntityFrameworkCore;
-using Market.Infrastructure.Data.SqlServer.Commands.Common;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Infrastructure.Identity;
 using System;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Market.Infrastructure.Data.Mongo.Commands.Common;
 
 namespace Market.Presentation.Api
 {
@@ -27,8 +27,10 @@ namespace Market.Presentation.Api
         {
             services.AddLiparServices(Configuration, nameof(Lipar), nameof(Market));
 
-            services.AddDbContext<MarketCommandDbContext>(
-                c => c.UseSqlServer(Configuration.GetConnectionString("CommandConnectionString")));
+            //services.AddDbContext<MarketCommandDbContext>(
+            //    c => c.UseSqlServer(Configuration.GetConnectionString("CommandConnectionString")));
+
+            services.AddScoped<MarketCommandDbContext>();
 
             services.AddDbContext<MarketQueryDbContext>(
                 c => c.UseSqlServer(Configuration.GetConnectionString("QueryConnectionString")));

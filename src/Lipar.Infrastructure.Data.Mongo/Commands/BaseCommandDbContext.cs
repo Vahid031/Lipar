@@ -1,68 +1,67 @@
-﻿using System.Threading.Tasks;
-using System.Collections.Generic;
+﻿using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Linq;
-using Lipar.Core.Contract.Data;
+using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.Mongo.Commands
 {
-    public abstract class BaseCommandDbContext 
+    public abstract class BaseCommandDbContext
     {
+        private IMongoDatabase Database { get; }
+        private IClientSessionHandle Session { get; set; }
+        private MongoClient MongoClient { get; set; }
+        private readonly List<Func<Task>> _commands = new();
 
-        #region Ctreator and Configuration
-        //public BaseCommandDbContext(DbContextOptions options) : base(options)
-        //{
+        private BaseCommandDbContext() { }
 
-        //}
-
-        protected BaseCommandDbContext()
+        protected BaseCommandDbContext(LiparOptions liparOptions)
         {
+            MongoClient = new MongoClient(liparOptions.MongoDb.Connection);
+            Database = MongoClient.GetDatabase(liparOptions.MongoDb.DatabaseName);
         }
 
-        //protected override void OnModelCreating(ModelBuilder modelBuilder)
-        //{
-        //    modelBuilder.AddEntityId();
-        //    modelBuilder.AddAuditableProperties();
+        public int SaveChanges()
+        {
+            using (Session = MongoClient.StartSession())
+            {
+                Session.StartTransaction();
 
-        //    base.OnModelCreating(modelBuilder);
-        //}
+                var commandTasks = _commands.Select(c => c());
 
-        #endregion
+                Task.WhenAll(commandTasks);
 
-        #region Commit Process
+                Session.CommitTransaction();
+            }
 
-        //public async Task<int> SaveChangesAsync()
-        //{
-        //    ChangeTracker.DetectChanges();
-        //    ChangeTracker.AutoDetectChangesEnabled = false;
+            return _commands.Count;
+        }
 
-        //    ChangeTracker.SetShadowProperties();
-        //    AddEntityChangesInterceptors();
-        //    AddOutboxEvetItems();
+        public async Task<int> SaveChangesAsync()
+        {
+            using (Session = await MongoClient.StartSessionAsync())
+            {
+                Session.StartTransaction();
 
-        //    var rowAffect = await base.SaveChangesAsync();
+                var commandTasks = _commands.Select(c => c());
 
-        //    ChangeTracker.AutoDetectChangesEnabled = true;
+                await Task.WhenAll(commandTasks);
 
-        //    return rowAffect;
-        //}
+                await Session.CommitTransactionAsync();
+            }
 
-        //private void AddEntityChangesInterceptors()
-        //{
-        //    var entityChangesInterceptors = ChangeTracker.GetEntityChangesInterceptor();
-        //    var repository = this.GetService<IEntityChangesInterceptorRepository>();
+            return _commands.Count;
+        }
 
-        //    repository.AddEntityChanges(entityChangesInterceptors);
-        //}
+        public void AddCommand(Func<Task> func) => _commands.Add(func);
 
-        //private void AddOutboxEvetItems()
-        //{
-        //    var changedAggregates = ChangeTracker.GetAggregatesWithEvent();
-        //    var repository = this.GetService<IOutBoxEventRepository>();
+        public IMongoCollection<T> GetCollection<T>(string name) => Database.GetCollection<T>(name);
 
-        //    repository.AddOutboxEvetItems(changedAggregates);
-        //}
-
-        #endregion
+        public void Dispose()
+        {
+            Session?.Dispose();
+            GC.SuppressFinalize(this);
+        }
     }
 }
