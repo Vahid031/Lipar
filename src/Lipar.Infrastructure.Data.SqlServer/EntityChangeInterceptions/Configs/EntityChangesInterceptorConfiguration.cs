@@ -22,10 +22,6 @@ namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor.Configs
 
             builder.Ignore(m => m.Details);
 
-            //builder.HasMany(b => b.EntityChangesInterceptorDetails)
-            //    .WithOne()
-            //    .HasForeignKey("EntityChangesInterceptorId");
-
             builder.HasIndex(m => m.Date)
                 .IsUnique()
                 .IsClustered(true);

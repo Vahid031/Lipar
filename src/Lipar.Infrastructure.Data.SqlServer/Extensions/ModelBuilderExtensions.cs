@@ -10,10 +10,11 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
     {
         public static void AddEntityId(this ModelBuilder modelBuilder)
         {
-            Parallel.ForEach(
-                modelBuilder.Model
-                .GetEntityTypes()
-                .Where(e => typeof(Entity).IsAssignableFrom(e.ClrType)),
+            modelBuilder.Model
+               .GetEntityTypes()
+               .Where(e => typeof(Entity).IsAssignableFrom(e.ClrType))
+               .ToList()
+               .ForEach(               
                 entityType =>
                 {
                     modelBuilder.Entity(entityType.ClrType)
@@ -35,11 +36,12 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
 
         public static void AddAuditableProperties(this ModelBuilder modelBuilder)
         {
-            Parallel.ForEach(
-                modelBuilder.Model
-                .GetEntityTypes()
-                .Where(e => typeof(IAuditable).IsAssignableFrom(e.ClrType)),
-                entityType =>
+           modelBuilder.Model
+              .GetEntityTypes()
+              .Where(e => typeof(IAuditable).IsAssignableFrom(e.ClrType))
+              .ToList()
+              .ForEach(
+               entityType =>
                 {
                     modelBuilder.Entity(entityType.ClrType)
                                 .Property<Guid?>(CreatedBy);
@@ -51,14 +53,14 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
         }
 
 
-        public static readonly string Id = nameof(Id);
+        public const string Id = nameof(Id);
 
-        public static readonly string CreatedDate = nameof(CreatedDate);
+        public const string CreatedDate = nameof(CreatedDate);
 
-        public static readonly string ModifedDate = nameof(ModifedDate);
+        public const string ModifedDate = nameof(ModifedDate);
 
-        public static readonly string CreatedBy = nameof(CreatedBy);
+        public const string CreatedBy = nameof(CreatedBy);
 
-        public static readonly string ModifedBy = nameof(ModifedBy);
+        public const string ModifedBy = nameof(ModifedBy);
     }
 }

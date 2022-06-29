@@ -17,25 +17,26 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions
             var userId = Guid.NewGuid();
 
             // add Entity shadow properties
-            Parallel.ForEach(
-                changeTracker.Entries<Entity>()
-                              .Where(e => e.State == EntityState.Added),
-                entity =>
+            changeTracker
+                .Entries<Entity>()
+                .Where(e => e.State == EntityState.Added).ToList()
+                .ForEach(entity =>
                 {
                     entity.Property<DateTime>(ModelBuilderExtensions.CreatedDate).CurrentValue = DateTime.UtcNow;
                 });
 
 
             // add IAuditable shadow properties
-            Parallel.ForEach(
-                changeTracker.Entries<IAuditable>(),
-                entity =>
+            changeTracker
+                .Entries<IAuditable>()
+                .ToList()
+                .ForEach(entity =>
                 {
                     switch (entity.State)
                     {
                         case EntityState.Deleted:
-                            /// when configuration for soft delete were develope, complete this place
-                            break;
+                                        /// when configuration for soft delete were develope, complete this place
+                                        break;
                         case EntityState.Modified:
                             entity.Property<Guid?>(ModelBuilderExtensions.ModifedBy).CurrentValue = userId;
                             entity.Property<DateTime?>(ModelBuilderExtensions.ModifedDate).CurrentValue = DateTime.UtcNow;
