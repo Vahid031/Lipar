@@ -63,7 +63,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Events
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Lipar.Infrastructure.Data.Mongo", "src\Lipar.Infrastructure.Data.Mongo\Lipar.Infrastructure.Data.Mongo.csproj", "{DEEEBFA9-F4CF-4896-B565-D339133000FE}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Infrastructure.Data.Mongo.Commands", "sample\Market.Infrastructure.Data.Mongo.Commands\Market.Infrastructure.Data.Mongo.Commands.csproj", "{07715F2D-2671-4852-9F15-349F2282DD1E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Market.Infrastructure.Data.Mongo.Commands", "sample\Market.Infrastructure.Data.Mongo.Commands\Market.Infrastructure.Data.Mongo.Commands.csproj", "{07715F2D-2671-4852-9F15-349F2282DD1E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Lipar.Presentation.Api.IntegrationTest", "tests\Lipar.Presentation.Api.IntegrationTest\Lipar.Presentation.Api.IntegrationTest.csproj", "{A3E248E9-7668-4A62-97F3-2FFD316F1D66}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -143,6 +145,10 @@ Global
 		{07715F2D-2671-4852-9F15-349F2282DD1E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{07715F2D-2671-4852-9F15-349F2282DD1E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{07715F2D-2671-4852-9F15-349F2282DD1E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3E248E9-7668-4A62-97F3-2FFD316F1D66}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3E248E9-7668-4A62-97F3-2FFD316F1D66}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3E248E9-7668-4A62-97F3-2FFD316F1D66}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3E248E9-7668-4A62-97F3-2FFD316F1D66}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -176,6 +182,7 @@ Global
 		{F81E7A67-157E-48EA-B516-5D429CD2E340} = {575CF619-CACD-4109-86F5-5C7F1C5F9E34}
 		{DEEEBFA9-F4CF-4896-B565-D339133000FE} = {56B67CEE-71CA-491E-8518-78DF48360CE9}
 		{07715F2D-2671-4852-9F15-349F2282DD1E} = {72CE32A1-34E9-4CFD-8601-519FDD33D264}
+		{A3E248E9-7668-4A62-97F3-2FFD316F1D66} = {3F409B32-DB79-41E2-ADF2-AA4D0F041489}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {205E35E8-C906-40DE-AC18-1C7D76A04B2E}

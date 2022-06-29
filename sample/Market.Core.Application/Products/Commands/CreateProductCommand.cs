@@ -44,7 +44,8 @@ namespace Market.Core.Application.Products.Commands
 
                 RuleFor(m => m.Barcode)
                     .Must(m => int.TryParse(m, out int s)).WithMessage(translator["must be number"])
-                    .Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop))).WithMessage(translator["same barcode already exist"]);
+                    //.Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop))).WithMessage(translator["same barcode already exist"])
+                    ;
             }
         }
     }

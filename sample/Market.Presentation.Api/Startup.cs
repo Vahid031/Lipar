@@ -6,11 +6,15 @@ using Lipar.Presentation.Api.Extensions;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Microsoft.EntityFrameworkCore;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
-using Infrastructure.Identity;
 using System;
 using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Market.Infrastructure.Data.Mongo.Commands.Common;
+using Market.Infrastructure.Data.Identity.Contexts;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Market.Infrastructure.Data.Identity.Models;
+using Microsoft.AspNetCore.Identity;
+using Market.Infrastructure.Data.SqlServer.Commands.Common;
 
 namespace Market.Presentation.Api
 {
@@ -27,15 +31,70 @@ namespace Market.Presentation.Api
         {
             services.AddLiparServices(Configuration, nameof(Lipar), nameof(Market));
 
-            //services.AddDbContext<MarketCommandDbContext>(
-            //    c => c.UseSqlServer(Configuration.GetConnectionString("CommandConnectionString")));
+            services.AddDbContext<MarketCommandDbContext>(
+                c => c.UseSqlServer(Configuration.GetConnectionString("CommandConnectionString")));
 
-            services.AddScoped<MarketCommandDbContext>();
+            //services.AddScoped<MarketCommandDbContext>();
 
             services.AddDbContext<MarketQueryDbContext>(
                 c => c.UseSqlServer(Configuration.GetConnectionString("QueryConnectionString")));
 
-            services.AddIdentityInfrastructure(Configuration);
+            services.AddDbContext<IdentityContext>(options =>
+                    options.UseSqlServer(
+                        Configuration.GetConnectionString("IdentityConnectionString"),
+                        b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
+
+            services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+
+
+            services.Configure<JWTSetting>(Configuration.GetSection("JWTSetting"));
+
+            services.AddAuthentication(o =>
+            {
+                o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }
+            )
+                .AddJwtBearer(options =>
+                {
+                    //options.RequireHttpsMetadata = false;
+                    //options.SaveToken = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["JWTSetting:Issuer"],
+                        ValidAudience = Configuration["JWTSetting:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSetting:Key"]))
+                    };
+                    //options.Events = new JwtBearerEvents()
+                    //{
+                    //    OnAuthenticationFailed = c =>
+                    //    {
+                    //        c.NoResult();
+                    //        c.Response.StatusCode = 500;
+                    //        c.Response.ContentType = "text/plain";
+                    //        return c.Response.WriteAsync(c.Exception.ToString());
+                    //    },
+                    //    OnChallenge = context =>
+                    //    {
+                    //        context.HandleResponse();
+                    //        context.Response.StatusCode = 401;
+                    //        context.Response.ContentType = "application/json";
+                    //        var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
+                    //        return context.Response.WriteAsync(result);
+                    //    },
+                    //    OnForbidden = context =>
+                    //    {
+                    //        context.Response.StatusCode = 403;
+                    //        context.Response.ContentType = "application/json";
+                    //        var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
+                    //        return context.Response.WriteAsync(result);
+                    //    },
+                    //};
+                });
 
             services.AddCors(setupAction =>
            setupAction.AddPolicy("MyPolicy",
