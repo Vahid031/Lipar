@@ -1,7 +1,7 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
     <Version>5.1.3</Version>
     <AssemblyName>Lipar.Infrastructure.Events.RabbitMQ</AssemblyName>

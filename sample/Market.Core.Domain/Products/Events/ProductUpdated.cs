@@ -1,21 +1,20 @@
-﻿using Lipar.Core.Domain.Events;
+using Lipar.Core.Domain.Events;
 using System;
 
-namespace Market.Core.Domain.Products.Events
+namespace Market.Core.Domain.Products.Events;
+
+public class ProductUpdated : IEvent
 {
-    public class ProductUpdated : IEvent
+    public string Id { get; }
+    public string Name { get; }
+    public string Barcode { get; }
+
+    private ProductUpdated() { }
+
+    public ProductUpdated(string id, string name, string barcode)
     {
-        public string Id { get; }
-        public string Name { get; }
-        public string Barcode { get; }
-
-        private ProductUpdated() { }
-
-        public ProductUpdated(string id, string name, string barcode)
-        {
-            Id = id;
-            Name = name;
-            Barcode = barcode;
-        }
+        Id = id;
+        Name = name;
+        Barcode = barcode;
     }
 }

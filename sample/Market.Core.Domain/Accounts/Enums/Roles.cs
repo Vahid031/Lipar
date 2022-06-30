@@ -1,10 +1,11 @@
-﻿namespace Market.Core.Domain.Accounts.Enums
+namespace Market.Core.Domain.Accounts.Enums;
+
+public enum Roles
 {
-    public enum Roles
-    {
-        SuperAdmin,
-        Admin,
-        Moderator,
-        Basic
-    }
+    SuperAdmin,
+    Admin,
+    Moderator,
+    Basic
 }
+
+

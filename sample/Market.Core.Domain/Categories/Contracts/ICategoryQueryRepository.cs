@@ -1,8 +1,7 @@
-﻿using Lipar.Core.Contract.Data;
+using Lipar.Core.Contract.Data;
 
-namespace Market.Core.Domain.Categories.Contracts
+namespace Market.Core.Domain.Categories.Contracts;
+
+public interface ICategoryQueryRepository : IQueryRepository
 {
-    public interface ICategoryQueryRepository : IQueryRepository
-    {
-    }
 }

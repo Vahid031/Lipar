@@ -1,17 +1,16 @@
-﻿using Lipar.Core.Domain.Events;
+using Lipar.Core.Domain.Events;
 using System;
 
-namespace Market.Core.Domain.Categories.Events
+namespace Market.Core.Domain.Categories.Events;
+
+public class CategoryDeleted : IEvent
 {
-    public class CategoryDeleted : IEvent
+    public string Id { get; }
+
+    private CategoryDeleted() { }
+
+    public CategoryDeleted(string id)
     {
-        public string Id { get; }
-
-        private CategoryDeleted() { }
-
-        public CategoryDeleted(string id)
-        {
-            Id = id;
-        }
+        Id = id;
     }
 }

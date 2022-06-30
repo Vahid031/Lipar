@@ -1,8 +1,9 @@
-﻿using Market.Core.Domain.Categories.Contracts;
+using Market.Core.Domain.Categories.Contracts;
 
-namespace Market.Infrastructure.Data.SqlServer.Queries.Categories
+namespace Market.Infrastructure.Data.SqlServer.Queries.Categories;
+
+public class CategoryQueryRepository : ICategoryQueryRepository
 {
-    public class CategoryQueryRepository : ICategoryQueryRepository
-    {
-    }
 }
+
+

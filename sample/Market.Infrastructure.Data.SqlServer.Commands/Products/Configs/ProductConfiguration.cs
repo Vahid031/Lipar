@@ -1,9 +1,9 @@
-﻿using Market.Core.Domain.Products.Entities;
+using Market.Core.Domain.Products.Entities;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Metadata.Builders;
 
-namespace Market.Infrastructure.Data.SqlServer.Commands.Products.Configs
-{
+namespace Market.Infrastructure.Data.SqlServer.Commands.Products.Configs;
+
     public class ProductConfiguration : IEntityTypeConfiguration<Product>
     {
         public void Configure(EntityTypeBuilder<Product> builder)
@@ -14,4 +14,3 @@ namespace Market.Infrastructure.Data.SqlServer.Commands.Products.Configs
             builder.Property(m => m.Barcode).HasMaxLength(10);
         }
     }
-}
