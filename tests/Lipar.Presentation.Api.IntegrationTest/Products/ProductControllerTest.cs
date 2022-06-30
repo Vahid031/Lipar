@@ -13,14 +13,14 @@ namespace Lipar.Presentation.Api.IntegrationTest.Products
         }
 
         [Fact]
-        public async Task Tesssssst()
+        public void Tesssssst()
         {
             //Arrange
-            using var client = factory.CreateClient();
+            //using var client = factory.CreateClient();
 
 
             //Act
-            using var response = await client.GetAsync(ProductApiRoutes.Get);
+            //using var response = await client.GetAsync(ProductApiRoutes.Get);
 
 
             //Assert
