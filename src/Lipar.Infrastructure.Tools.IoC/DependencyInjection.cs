@@ -1,4 +1,4 @@
-﻿using FluentValidation;
+using FluentValidation;
 using Lipar.Core.Application.Common;
 using Microsoft.Extensions.DependencyInjection;
 using System.Collections.Generic;
@@ -13,31 +13,32 @@ using Lipar.Core.Application.Services;
 using Lipar.Infrastructure.Events.RabbitMQ;
 using Zamin.Infra.Tools.Localizer.Parrot;
 
-namespace Lipar.Infrastructure.Tools.IoC
+namespace Lipar.Infrastructure.Tools.IoC;
+
+public static partial class DependencyInjection
 {
-    public static partial class DependencyInjection
+    public static void AddApplication(this IServiceCollection services,
+    IEnumerable<Assembly> assemblies)
     {
-        public static void AddApplication(this IServiceCollection services,
-            IEnumerable<Assembly> assemblies)
-        {
-            services.AddTransient<ServiceFactory>(p => p.GetService);
-            services.AddTransient<IMediator, Mediator>();
-            services.AddTransient<IEventPublisher, EventPublisher>();
-            services.AddTransient<IEmailService, EmailService>();
-            services.AddTransient<IEventBus, RabbitMQEventBus>();
-            services.AddTransient<ITranslator, ParrotTranslator>();
-
-            services.AddValidatorsFromAssemblies(assemblies);
-            services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
-            services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository), typeof(IInBoxEventRepository), typeof(IEntityChangesInterceptorRepository));
-            services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
-            services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
-
-            services.AddWithTransientLifetime(assemblies, typeof(IJsonService), typeof(IDateTimeService), typeof(IUserInfoService));
-            services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
-            services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));
-            services.AddWithSingletonLifetime(assemblies, typeof(ISingletoneLifetime));
-        }
+        services.AddTransient<ServiceFactory>(p => p.GetService);
+        services.AddTransient<IMediator, Mediator>();
+        services.AddTransient<IEventPublisher, EventPublisher>();
+        services.AddTransient<IEmailService, EmailService>();
+        services.AddTransient<IEventBus, RabbitMQEventBus>();
+        services.AddTransient<ITranslator, ParrotTranslator>();
+        
+        services.AddValidatorsFromAssemblies(assemblies);
+        services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
+        services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository), typeof(IInBoxEventRepository), typeof(IEntityChangesInterceptorRepository));
+        services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
+        services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
+        
+        services.AddWithTransientLifetime(assemblies, typeof(IJsonService), typeof(IDateTimeService), typeof(IUserInfoService));
+        services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
+        services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));
+        services.AddWithSingletonLifetime(assemblies, typeof(ISingletoneLifetime));
     }
-      
 }
+
+
+

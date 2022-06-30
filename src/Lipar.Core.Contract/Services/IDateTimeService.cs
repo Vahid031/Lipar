@@ -1,9 +1,10 @@
-﻿using System;
+using System;
 
-namespace Lipar.Core.Contract.Services
+namespace Lipar.Core.Contract.Services;
+
+public interface IDateTimeService
 {
-    public interface IDateTimeService
-    {
-        DateTime Now { get; }
-    }
+DateTime Now { get; }
 }
+
+

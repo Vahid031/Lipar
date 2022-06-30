@@ -1,10 +1,11 @@
-﻿using Lipar.Core.Domain.Events;
+using Lipar.Core.Domain.Events;
 using System.Collections.Generic;
 
-namespace Lipar.Core.Contract.Data
+namespace Lipar.Core.Contract.Data;
+
+public interface IEntityChangesInterceptorRepository
 {
-    public interface IEntityChangesInterceptorRepository
-    {
-        void AddEntityChanges(IEnumerable<EntityChangesInterception> entities);
-    }
+    void AddEntityChanges(IEnumerable<EntityChangesInterception> entities);
 }
+
+

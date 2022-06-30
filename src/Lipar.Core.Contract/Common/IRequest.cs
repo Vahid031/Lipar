@@ -1,10 +1,11 @@
-﻿namespace Lipar.Core.Contract.Common
-{
-    public interface IRequest
-    {
-    }
+namespace Lipar.Core.Contract.Common;
 
-    public interface IRequest<TResponse>
-    {
-    }
+public interface IRequest
+{
 }
+
+public interface IRequest<TResponse>
+{
+}
+
+

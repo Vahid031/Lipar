@@ -1,7 +1,8 @@
-﻿namespace Lipar.Core.Contract.DependentyInjection
-{
-    public interface IScopeLifetime
-    {
+namespace Lipar.Core.Contract.DependentyInjection;
 
-    }
+public interface IScopeLifetime
+{
+    
 }
+
+

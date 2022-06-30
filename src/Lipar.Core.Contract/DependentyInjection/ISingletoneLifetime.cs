@@ -1,6 +1,7 @@
-﻿namespace Lipar.Core.Contract.DependentyInjection
+namespace Lipar.Core.Contract.DependentyInjection;
+
+public interface ISingletoneLifetime
 {
-    public interface ISingletoneLifetime
-    {
-    }
 }
+
+

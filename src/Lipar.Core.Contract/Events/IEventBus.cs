@@ -1,7 +1,8 @@
-﻿namespace Lipar.Core.Contract.Events
+namespace Lipar.Core.Contract.Events;
+
+public interface IEventBus
 {
-    public interface IEventBus
-    {
-        void Publish<T>(T input);
-        void Subscribe(string serviceId, string eventName);    }
-}
+    void Publish<T>(T input);
+void Subscribe(string serviceId, string eventName);    }
+
+

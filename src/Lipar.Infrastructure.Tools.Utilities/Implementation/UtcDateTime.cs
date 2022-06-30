@@ -1,10 +1,11 @@
-﻿using Lipar.Core.Contract.Services;
+using Lipar.Core.Contract.Services;
 using System;
 
-namespace Lipar.Infrastructure.Tools.Utilities.Implementation
+namespace Lipar.Infrastructure.Tools.Utilities.Implementation;
+
+public class UtcDateTimeService : IDateTimeService
 {
-    public class UtcDateTimeService : IDateTimeService
-    {
-        public DateTime Now => DateTime.UtcNow;
-    }
+    public DateTime Now => DateTime.UtcNow;
 }
+
+

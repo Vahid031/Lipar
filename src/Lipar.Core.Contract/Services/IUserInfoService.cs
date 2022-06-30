@@ -1,14 +1,15 @@
-﻿using System;
+using System;
 
-namespace Lipar.Core.Contract.Services
+namespace Lipar.Core.Contract.Services;
+
+public interface IUserInfoService
 {
-    public interface IUserInfoService
-    {
-        Guid UserId { get; }
-        string UserAgent { get; }
-        string UserName { get; }
-        string IpAddress { get; }
-        string FirstName { get; }
-        string LastName { get; }
-    }
+Guid UserId { get; }
+string UserAgent { get; }
+string UserName { get; }
+string IpAddress { get; }
+string FirstName { get; }
+string LastName { get; }
 }
+
+

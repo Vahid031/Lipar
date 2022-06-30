@@ -1,11 +1,12 @@
-﻿using System;
+using System;
 
-namespace Lipar.Core.Contract.Services
+namespace Lipar.Core.Contract.Services;
+
+public interface IJsonService
 {
-    public interface IJsonService
-    {
-        string SerializeObject<TInput>(TInput input);
-        TOutput DeserializeObject<TOutput>(string input);
-        object DeserializeObject(string input, Type type);
-    }
+    string SerializeObject<TInput>(TInput input);
+    TOutput DeserializeObject<TOutput>(string input);
+    object DeserializeObject(string input, Type type);
 }
+
+

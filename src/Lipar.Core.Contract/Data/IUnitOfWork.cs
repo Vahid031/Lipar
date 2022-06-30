@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+using System.Threading.Tasks;
 
-namespace Lipar.Core.Contract.Data
+namespace Lipar.Core.Contract.Data;
+
+public interface IUnitOfWork
 {
-    public interface IUnitOfWork
-    {
-        int Commit();
-        Task<int> CommitAsync();
-    }
+    int Commit();
+    Task<int> CommitAsync();
 }
+
+

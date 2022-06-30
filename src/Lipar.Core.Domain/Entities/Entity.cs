@@ -1,8 +1,9 @@
-﻿namespace Lipar.Core.Domain.Entities
+namespace Lipar.Core.Domain.Entities;
+
+public abstract class Entity
 {
-    public abstract class Entity
-    {
-        public EntityId Id { get; protected set; }
-        protected Entity() { }
-    }
+public EntityId Id { get; protected set; }
+protected Entity() { }
 }
+
+

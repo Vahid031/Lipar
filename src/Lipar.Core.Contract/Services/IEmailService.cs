@@ -1,10 +1,11 @@
-﻿using Lipar.Core.Domain.Entities;
+using Lipar.Core.Domain.Entities;
 using System.Threading.Tasks;
 
-namespace Lipar.Core.Contract.Services
+namespace Lipar.Core.Contract.Services;
+
+public interface IEmailService
 {
-    public interface IEmailService
-    {
-        Task SendAsync(EmailRequest request);
-    }
+    Task SendAsync(EmailRequest request);
 }
+
+

@@ -1,6 +1,7 @@
-﻿namespace Lipar.Core.Domain.Entities
+namespace Lipar.Core.Domain.Entities;
+
+public interface IAuditable
 {
-    public interface IAuditable
-    {
-    }
 }
+
+

@@ -1,6 +1,7 @@
-﻿namespace Lipar.Core.Contract.Data
+namespace Lipar.Core.Contract.Data;
+
+public interface IQueryRepository
 {
-    public interface IQueryRepository
-    {
-    }
 }
+
+

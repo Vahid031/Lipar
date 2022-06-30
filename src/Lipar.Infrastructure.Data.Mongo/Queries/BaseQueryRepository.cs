@@ -1,15 +1,16 @@
-﻿using Lipar.Core.Contract.Data;
+using Lipar.Core.Contract.Data;
 
-namespace Lipar.Infrastructure.Data.Mongo.Queries
+namespace Lipar.Infrastructure.Data.Mongo.Queries;
+
+public abstract class BaseQueryRepository<TDbContext> : IQueryRepository
+where TDbContext : BaseQueryDbContext
 {
-    public abstract class BaseQueryRepository<TDbContext> : IQueryRepository
-        where TDbContext : BaseQueryDbContext
+    protected readonly TDbContext _db;
+    
+    public BaseQueryRepository(TDbContext db)
     {
-        protected readonly TDbContext _db;
-
-        public BaseQueryRepository(TDbContext db)
-        {
-            _db = db;
-        }
+        _db = db;
     }
 }
+
+

@@ -1,8 +1,9 @@
-﻿namespace Lipar.Infrastructure.Tools.Utilities.Configurations
+namespace Lipar.Infrastructure.Tools.Utilities.Configurations;
+
+public class MessageBusOptions
 {
-    public class MessageBusOptions
-    {
-        public RabbitMQOptions RabbitMQ { get; set; }
-        public EventOptions[] Events { get; set; }
-    }
+public RabbitMQOptions RabbitMQ { get; set; }
+public EventOptions[] Events { get; set; }
 }
+
+
