@@ -6,7 +6,7 @@ using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using Dapper;
 
-namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor;
+namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 
 public class SqlServerEntityChangeInterceptorRepository : IEntityChangesInterceptorRepository
 {
@@ -18,7 +18,7 @@ public class SqlServerEntityChangeInterceptorRepository : IEntityChangesIntercep
 
     public SqlServerEntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
     {
-        this.sqlServer = liparOptions.EntityChangesInterception.SqlServer;
+        sqlServer = liparOptions.EntityChangesInterception.SqlServer;
         this.userInfoService = userInfoService;
         this.jsonService = jsonService;
         this.dateTimeService = dateTimeService;
@@ -51,7 +51,7 @@ public class SqlServerEntityChangeInterceptorRepository : IEntityChangesIntercep
                 $" CREATE UNIQUE CLUSTERED INDEX [IX_{sqlServer.TableName}_Date] ON [{sqlServer.TableName}] ([Date])" +
                 $" End";
 
-        
+
         using var connection = new SqlConnection(sqlServer.ConnectionString);
         connection.Execute(createTableQuery);
     }
@@ -61,17 +61,17 @@ public class SqlServerEntityChangeInterceptorRepository : IEntityChangesIntercep
     public void AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
-        
+
         foreach (var entity in entities)
         {
             entity.SetDateTime(dateTimeService.Now);
             entity.SetUserId(userInfoService.UserId);
-            
+
             var details = new Dictionary<string, object>();
-            
+
             foreach (var detail in entity.Details)
-            details.Add(detail.Key, detail.Value);
-            
+                details.Add(detail.Key, detail.Value);
+
             connection.Execute(InsertCommand, new
             {
                 entity.Id,
@@ -82,7 +82,7 @@ public class SqlServerEntityChangeInterceptorRepository : IEntityChangesIntercep
                 entity.UserId,
                 Payload = jsonService.SerializeObject(details)
             });
-            
+
         }
     }
 }

@@ -25,9 +25,9 @@ public static class ServiceCollectionExtensions
         var assembies = GetAssemblies(assemblyNames);
         
         services.AddApplication(assembies);
-        
-        //services.AddHostedService<PoolingPublisherHostedService>();
-        
+
+        services.AddHostedService<PoolingPublisherHostedService>();
+
         services.AddControllers(
         options =>
         {

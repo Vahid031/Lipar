@@ -20,7 +20,7 @@ public class PoolingPublisherHostedService : IHostedService
     private readonly IEventPublisher _eventPublisher;
     private readonly IJsonService _jsonService;
     private Timer _timer;
-    
+
     public PoolingPublisherHostedService(LiparOptions liparOptions,
     IOutBoxEventRepository outBoxEventRepository,
     IEventBus eventBus,
@@ -33,7 +33,7 @@ public class PoolingPublisherHostedService : IHostedService
         _eventPublisher = eventPublisher;
         _jsonService = jsonService;
     }
-    
+
     public async Task StartAsync(CancellationToken cancellationToken)
     {
         await SubscribeEvents();
@@ -44,59 +44,45 @@ public class PoolingPublisherHostedService : IHostedService
         if (_liparOptions?.MessageBus?.Events?.Any() == true)
         {
             // All events will publish exept current service
-            foreach (var @event in _liparOptions.MessageBus.Events.Where(m => m.ServiceId.Equals(_liparOptions.ServiceId)).ToList())
+            foreach (var @event in _liparOptions.MessageBus.Events
+                .Where(m => m.ServiceId.Equals(_liparOptions.ServiceId))
+                .ToList())
             {
                 _eventBus.Subscribe(@event.ServiceId, @event.EventName);
             }
         }
         return Task.CompletedTask;
     }
-    
+
     private void SendOutBoxItems(object state)
     {
         _timer.Change(Timeout.Infinite, 0);
-        
+
         var outboxItems = _outBoxEventRepository.GetOutBoxEventItemsForPublish(_liparOptions.PoolingPublisher.SendOutBoxCount);
-        
+
         foreach (var item in outboxItems)
         {
             // Raize event inside the application
             IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
             _eventPublisher.Raise(@event);
-            
+
             // Sending on Message Broker
             _eventBus.Publish(@event);
-            
-            //_eventBus.Send(new Parcel
-            //{
-                //    CorrelationId = item.AggregateId,
-                //    MessageBody = item.EventPayload,
-                //    MessageId = item.Id.ToString(),
-                //    MessageName = item.EventName,
-                //    Headers = new Dictionary<string, object>
-                //    {
-                    //        ["AccuredByUserId"] = item.AccuredByUserId,
-                    //        ["AccuredOn"] = item.AccuredOn.ToString(),
-                    //        ["AggregateName"] = item.AggregateName,
-                    //        ["AggregateTypeName"] = item.AggregateTypeName,
-                    //        ["EventTypeName"] = item.EventTypeName,
-                //    }
-            //});
-            
+
             item.IsProcessed = true;
         }
-        
+
         // Done
         _outBoxEventRepository.MarkAsRead(outboxItems);
         _timer.Change(0, _liparOptions.PoolingPublisher.SendOutBoxInterval);
-        
+
     }
-    
+
     public Task StopAsync(CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
-    
+
     private IEvent GetEvent(string typeName, string data)
     {
         Type type = Type.GetType(typeName);
@@ -104,12 +90,12 @@ public class PoolingPublisherHostedService : IHostedService
         {
             type = asm.GetType(typeName);
             if (type != null)
-            break;
+                break;
         }
-        
+
         return (IEvent)_jsonService.DeserializeObject(data, type);
     }
-    
+
 }
 
 

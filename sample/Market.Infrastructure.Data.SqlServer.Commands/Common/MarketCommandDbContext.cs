@@ -1,6 +1,4 @@
 using Lipar.Infrastructure.Data.SqlServer.Commands;
-using Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor.Configs;
-using Lipar.Infrastructure.Data.SqlServer.OutBoxEvents.Configs;
 using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Common;
@@ -15,10 +13,6 @@ public class MarketCommandDbContext : BaseCommandDbContext
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
-
-        modelBuilder.ApplyConfiguration(new OutBoxEventConfiguration());
-        modelBuilder.ApplyConfiguration(new InBoxEventConfiguration());
-        modelBuilder.ApplyConfiguration(new EntityChangesInterceptionConfiguration());
 
         base.OnModelCreating(modelBuilder);
     }

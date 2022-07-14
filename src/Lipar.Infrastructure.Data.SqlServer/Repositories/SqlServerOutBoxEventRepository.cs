@@ -9,7 +9,7 @@ using Lipar.Core.Domain.Entities;
 using Lipar.Core.Contract.Services;
 using System;
 
-namespace Lipar.Infrastructure.Data.SqlServer.OutBoxEvents;
+namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 
 public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
 {
@@ -21,10 +21,9 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
     private readonly string UpdateCommand;
     private readonly string InsertCommand;
 
-
     public SqlServerOutBoxEventRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
     {
-        this.sqlServer = liparOptions.OutBoxEvent.SqlServer;
+        sqlServer = liparOptions.OutBoxEvent.SqlServer;
         this.userInfoService = userInfoService;
         this.jsonService = jsonService;
         this.dateTimeService = dateTimeService;

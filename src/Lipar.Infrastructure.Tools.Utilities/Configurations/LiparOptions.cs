@@ -5,6 +5,7 @@ public class LiparOptions
 public string ServiceId { get; set; }
 public SwaggerOptions Swagger { get; set; }
 public OutBoxEventOptions OutBoxEvent { get; set; }
+public InBoxEventOptions InBoxEvent { get; set; }
 public PoolingPublisherOptions PoolingPublisher { get; set; }
 public ChangesInterceptionOptions EntityChangesInterception { get; set; }
 public MessageBusOptions MessageBus { get; set; }

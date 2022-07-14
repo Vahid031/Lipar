@@ -6,3 +6,9 @@ public class OutBoxEventOptions
 }
 
 
+public class InBoxEventOptions
+{
+    public SqlServerOptions SqlServer { get; set; }
+}
+
+
