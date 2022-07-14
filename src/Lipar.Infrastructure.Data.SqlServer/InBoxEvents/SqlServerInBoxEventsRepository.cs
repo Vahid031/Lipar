@@ -8,14 +8,14 @@ using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.InBoxEvents;
 
-public class InBoxEventsRepository : IInBoxEventRepository
+public class SqlServerInBoxEventsRepository : IInBoxEventRepository
 {
     private readonly string _connectionString;
     private readonly IDateTimeService dateTimeService;
     
-    public InBoxEventsRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
+    public SqlServerInBoxEventsRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
     {
-        _connectionString = liparOptions.OutBoxEvent.ConnectionString;
+        _connectionString = liparOptions.OutBoxEvent.SqlServer.ConnectionString;
         this.dateTimeService = dateTimeService;
     }
     

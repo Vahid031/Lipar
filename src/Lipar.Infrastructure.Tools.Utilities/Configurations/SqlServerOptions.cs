@@ -1,6 +1,6 @@
-namespace Lipar.Infrastructure.Tools.Utilities.Configurations;
+﻿namespace Lipar.Infrastructure.Tools.Utilities.Configurations;
 
-public class TranslationOptions
+public class SqlServerOptions
 {
     public string ConnectionString { get; init; }
     public string TableName { get; init; }
