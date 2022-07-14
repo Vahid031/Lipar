@@ -8,24 +8,59 @@ using Dapper;
 
 namespace Lipar.Infrastructure.Data.SqlServer.EntityChangeInterceptor;
 
-public class EntityChangeInterceptorRepository : IEntityChangesInterceptorRepository
+public class SqlServerEntityChangeInterceptorRepository : IEntityChangesInterceptorRepository
 {
-    private readonly LiparOptions liparOptions;
+    private readonly SqlServerOptions sqlServer;
     private readonly IUserInfoService userInfoService;
     private readonly IDateTimeService dateTimeService;
     private readonly IJsonService jsonService;
-    
-    public EntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IDateTimeService dateTimeService, IJsonService jsonService)
+    private readonly string InsertCommand;
+
+    public SqlServerEntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
     {
-        this.liparOptions = liparOptions;
+        this.sqlServer = liparOptions.EntityChangesInterception.SqlServer;
         this.userInfoService = userInfoService;
-        this.dateTimeService = dateTimeService;
         this.jsonService = jsonService;
+        this.dateTimeService = dateTimeService;
+
+        InsertCommand = string.Format("INSERT INTO {0}.{1}(Id, Date, State, EntityId, EntityType, UserId, Payload) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId, @Payload)",
+         sqlServer.SchemaName,
+         sqlServer.TableName
+        );
+
+        if (sqlServer.AutoCreateSqlTable)
+            CreateTableIfNeeded();
     }
+
+    private void CreateTableIfNeeded()
+    {
+        string createTableQuery =
+                $" IF (NOT EXISTS (SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE " +
+                $" TABLE_SCHEMA = '{sqlServer.SchemaName}' AND  TABLE_NAME = '{sqlServer.TableName}' ))" +
+                $" Begin" +
+                $" CREATE TABLE {sqlServer.SchemaName}.{sqlServer.TableName}(" +
+                $" [Id][uniqueidentifier] NOT NULL," +
+                $" [EntityType] nvarchar(50) NULL," +
+                $" [EntityId] uniqueidentifier NOT NULL," +
+                $" [State] nvarchar(10) NULL," +
+                $" [Date] datetime2 NOT NULL," +
+                $" [UserId] uniqueidentifier NOT NULL," +
+                $" [Payload] nvarchar(max) NULL," +
+                $" CONSTRAINT[PK_{sqlServer.TableName}] PRIMARY KEY NONCLUSTERED([Id]))" +
+
+                $" CREATE UNIQUE CLUSTERED INDEX [IX_{sqlServer.TableName}_Date] ON [{sqlServer.TableName}] ([Date])" +
+                $" End";
+
+        
+        using var connection = new SqlConnection(sqlServer.ConnectionString);
+        connection.Execute(createTableQuery);
+    }
+
+
+
     public void AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
     {
-        using var connection = new SqlConnection(liparOptions.EntityChangesInterception.ConnectionString);
-        var insertCommand = "Insert Into _EntityChangesInterceptions(Id, Date, State, EntityId, EntityType, UserId, Payload) Values(@Id, @Date, @State, @EntityId, @EntityType, @UserId, @Payload)";
+        using var connection = new SqlConnection(sqlServer.ConnectionString);
         
         foreach (var entity in entities)
         {
@@ -37,7 +72,7 @@ public class EntityChangeInterceptorRepository : IEntityChangesInterceptorReposi
             foreach (var detail in entity.Details)
             details.Add(detail.Key, detail.Value);
             
-            connection.Execute(insertCommand, new
+            connection.Execute(InsertCommand, new
             {
                 entity.Id,
                 entity.Date,

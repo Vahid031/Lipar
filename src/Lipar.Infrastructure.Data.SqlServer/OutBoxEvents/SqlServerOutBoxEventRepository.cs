@@ -52,25 +52,26 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
 
     private void CreateTableIfNeeded()
     {
-        string createTableQuery = 
-                $"IF (NOT EXISTS (SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE " +
-                $"TABLE_SCHEMA = '{sqlServer.SchemaName}' AND  TABLE_NAME = '{sqlServer.TableName}' )) Begin " +
-                $"CREATE TABLE {sqlServer.SchemaName}.{sqlServer.TableName}(" +
-                $"[Id][uniqueidentifier] NOT NULL," +
-                $"[AccuredByUserId] [nvarchar](40) NULL," +
-                $"[AccuredOn] [datetime2](7) NOT NULL," +
+        string createTableQuery =
+                $" IF (NOT EXISTS (SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE " +
+                $" TABLE_SCHEMA = '{sqlServer.SchemaName}' AND  TABLE_NAME = '{sqlServer.TableName}' ))" +
+                $" Begin" +
+                $" CREATE TABLE {sqlServer.SchemaName}.{sqlServer.TableName}(" +
+                $" [Id][uniqueidentifier] NOT NULL," +
+                $" [AccuredByUserId] [nvarchar](40) NULL," +
+                $" [AccuredOn] [datetime2](7) NOT NULL," +
+                $" [AggregateName] [nvarchar](200) NULL," +
+                $" [AggregateTypeName] [nvarchar](500) NULL," +
+                $" [AggregateId] [nvarchar](40) NULL," +
+                $" [EventName] [nvarchar](100) NULL," +
+                $" [EventTypeName] [nvarchar](500) NULL," +
+                $" [EventPayload] [nvarchar](max)NULL," +
+                $" [IsProcessed] [bit] NOT NULL," +
+                $" CONSTRAINT[PK_{sqlServer.TableName}] PRIMARY KEY NONCLUSTERED([Id]))" +
 
-                $"[AggregateName] [nvarchar](200) NULL," +
-                $"[AggregateTypeName] [nvarchar](500) NULL," +
-                $"[AggregateId] [nvarchar](40) NULL," +
-                $"[EventName] [nvarchar](100) NULL," +
-                $"[EventTypeName] [nvarchar](500) NULL," +
-                $"[EventPayload] [nvarchar](max)NULL," +
-                $"[IsProcessed] [bit] NOT NULL," +
-                $"CONSTRAINT[PK_{sqlServer.TableName}] PRIMARY KEY NONCLUSTERED" +
-                $"([Id] ASC)WITH(PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, IGNORE_DUP_KEY = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON, OPTIMIZE_FOR_SEQUENTIAL_KEY = OFF) ON[PRIMARY]" +
-                $") ON[PRIMARY] TEXTIMAGE_ON[PRIMARY]" +
+                $" CREATE UNIQUE CLUSTERED INDEX [IX_{sqlServer.TableName}_AccuredOn] ON [{sqlServer.TableName}] ([AccuredOn])" +
                 $" End";
+
 
         using var connection = new SqlConnection(sqlServer.ConnectionString);
         connection.Execute(createTableQuery);
