@@ -67,7 +67,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{E7A2BF93-6
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Presentation", "Presentation", "{9628AA16-87B2-4F8F-9925-DE14BD6077E7}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Presentation.Api.IntegrationTest", "sample\Market.Presentation.Api.IntegrationTest\Market.Presentation.Api.IntegrationTest.csproj", "{B173721B-84C3-4455-8131-F73B9BD10062}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Presentation.Api.IntegrationTest", "test\Market.Presentation.Api.IntegrationTest\Market.Presentation.Api.IntegrationTest.csproj", "{B173721B-84C3-4455-8131-F73B9BD10062}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

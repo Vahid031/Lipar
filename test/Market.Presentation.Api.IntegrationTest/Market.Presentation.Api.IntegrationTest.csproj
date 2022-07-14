@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Market.Presentation.Api\Market.Presentation.Api.csproj" />
+    <ProjectReference Include="..\..\sample\Market.Presentation.Api\Market.Presentation.Api.csproj" />
   </ItemGroup>
 
 </Project>
