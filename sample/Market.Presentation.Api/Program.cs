@@ -18,10 +18,8 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 
 var builder = WebApplication.CreateBuilder(args);
 
-
 builder.Configuration.AddJsonFile("appsettings.json", optional: true);
-//builder.Configuration.AddJsonFile("appsettings.Serilog.json", optional: true);
-builder.Configuration.AddJsonFile("appsettings.Lipar.json", optional: true);
+builder.Configuration.AddJsonFile($"appsettings.{Environment.GetEnvironmentVariable("ASPNETCORE_ENVIRONMENT")}.json", optional: true);
 
 
 builder.Services.AddLiparServices(builder.Configuration, nameof(Lipar), nameof(Market));
@@ -134,8 +132,6 @@ builder.Services.AddSwaggerGen(c =>
     securityRequirement.Add(securitySchema, Array.Empty<string>());
     c.AddSecurityRequirement(securityRequirement);
 });
-
-
 
 
 
