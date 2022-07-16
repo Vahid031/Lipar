@@ -1,33 +1,17 @@
 ﻿using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Microsoft.Extensions.Hosting;
 using Market.Infrastructure.Data.SqlServer.Commands.Common;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Market.Infrastructure.Data.Identity.Contexts;
+using Lipar.Core.Contract.Data;
+using Market.Presentation.Api.IntegrationTest.TestRepositories;
+using Lipar.Core.Contract.Events;
+using Lipar.Core.Contract.Services;
 
 namespace Market.Presentation.Api.IntegrationTest;
 
-public class ApplicationFactory : WebApplicationFactory<Startup>
+internal class ApplicationFactory : WebApplicationFactory<Program>
 {
-    protected override IHostBuilder CreateHostBuilder()
-    {
-        var host = Host.CreateDefaultBuilder()
-                .ConfigureWebHost(builder =>
-                {
-                    builder.UseStartup<Startup>();
-
-                })
-                .ConfigureAppConfiguration((context, conf) =>
-                {
-                    conf.AddJsonFile("appsettings.json", optional: true)
-                          .AddJsonFile("appsettings.Serilog.json", optional: true)
-                          .AddJsonFile("appsettings.Lipar.json", optional: true);
-                });
-
-        return host;
-    }
-
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {
         builder.ConfigureServices(services =>
@@ -36,8 +20,15 @@ public class ApplicationFactory : WebApplicationFactory<Startup>
                     .InMemoryDBContext<MarketCommandDbContext>("TestDb")
                     .InMemoryDBContext<IdentityContext>("TestDb");
 
+
+            services.AlterService<IOutBoxEventRepository, TestOutBoxEventRepository>();
+            services.AlterService<IInBoxEventRepository, TestInBoxEventRepository>();
+            services.AlterService<IEntityChangesInterceptorRepository, TestEntityChangesInterceptorRepository>();
+            services.AlterService<IEventBus, TestEventBus>();
+            services.AlterService<ITranslator, TestTranslator>();
+
         });
 
 
-    }   
+    }
 }

@@ -8,6 +8,7 @@ using Lipar.Core.Domain.Events;
 using Lipar.Core.Domain.Entities;
 using Lipar.Core.Contract.Services;
 using System;
+using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 
@@ -76,7 +77,7 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         connection.Execute(createTableQuery);
     }
 
-    public void AddOutboxEvetItems(List<AggregateRoot> changedAggregates)
+    public async Task AddOutboxEvetItems(List<AggregateRoot> changedAggregates)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
 
@@ -84,7 +85,7 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         {
             foreach (var @event in aggregate.GetChanges())
             {
-                connection.Execute(InsertCommand, new OutBoxEvent
+                await connection.ExecuteAsync(InsertCommand, new OutBoxEvent
                 {
                     Id = Guid.NewGuid(),
                     AccuredByUserId = userInfoService.UserId.ToString(),
@@ -101,22 +102,22 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         }
     }
 
-    public List<OutBoxEvent> GetOutBoxEventItemsForPublish(int maxCount)
+    public async Task<List<OutBoxEvent>> GetOutBoxEventItemsForPublish(int maxCount)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
         string query = string.Format(SelectCommand, maxCount);
 
-        return connection.Query<OutBoxEvent>(query).ToList();
+        return (await connection.QueryAsync<OutBoxEvent>(query)).ToList();
     }
 
-    public void MarkAsRead(List<OutBoxEvent> outBoxEventItems)
+    public async Task MarkAsRead(List<OutBoxEvent> outBoxEventItems)
     {
         string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'").ToList());
         if (!string.IsNullOrWhiteSpace(idForMark))
         {
             using var connection = new SqlConnection(sqlServer.ConnectionString);
             string query = string.Format(UpdateCommand, idForMark);
-            connection.Execute(query);
+            await connection.ExecuteAsync(query);
         }
     }
 

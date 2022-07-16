@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 
-public class SqlServerInBoxEventsRepository : IInBoxEventRepository
+public class SqlServerInBoxEventRepository : IInBoxEventRepository
 {
     private readonly SqlServerOptions sqlServer;
     private readonly IDateTimeService dateTimeService;
@@ -17,7 +17,7 @@ public class SqlServerInBoxEventsRepository : IInBoxEventRepository
     private readonly string InsertCommand;
 
 
-    public SqlServerInBoxEventsRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
+    public SqlServerInBoxEventRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
     {
         sqlServer = liparOptions.InBoxEvent.SqlServer;
         this.dateTimeService = dateTimeService;

@@ -15,6 +15,8 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Microsoft.OpenApi.Models;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using System.Linq;
+using Lipar.Core.Contract.Data;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -132,7 +134,6 @@ builder.Services.AddSwaggerGen(c =>
     securityRequirement.Add(securitySchema, Array.Empty<string>());
     c.AddSecurityRequirement(securityRequirement);
 });
-
 
 
 var app = builder.Build();
