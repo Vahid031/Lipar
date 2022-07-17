@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>6.0.2</Version>
+    <Version>6.0.3</Version>
     <AssemblyName>Lipar.Infrastructure.Events.Kafka</AssemblyName>
     <RootNamespace>Lipar.Infrastructure.Events.Kafka</RootNamespace>
   </PropertyGroup>

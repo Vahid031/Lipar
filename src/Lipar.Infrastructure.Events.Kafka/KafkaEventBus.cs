@@ -67,7 +67,7 @@ public class KafkaEventBus : IEventBus
             while (true)
             {
                 var consumeResult = consumer.Consume();
-            Console.WriteLine($"Received message at {consumeResult.TopicPartitionOffset}: {consumeResult.Value.MessageName}");
+            Console.WriteLine($"Received message at {consumeResult.TopicPartitionOffset}: {consumeResult.Message.Value.MessageName}");
                 consumer.Commit();
             }
         }

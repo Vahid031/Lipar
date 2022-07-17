@@ -132,7 +132,7 @@ public string Password { get; set; }
         
         private string RandomTokenString()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            using var rngCryptoServiceProvider = RandomNumberGenerator.Create();
             var randomBytes = new byte[40];
             rngCryptoServiceProvider.GetBytes(randomBytes);
             // convert random bytes to hex string

@@ -36,7 +36,7 @@ public Guid Id { get; init; }
     {
         public DeleteProductValidator(ITranslator translator, IProductCommandRepository repository)
         {
-            CascadeMode = CascadeMode.Stop;
+            RuleLevelCascadeMode = CascadeMode.Stop;
             
             RuleFor(m => m.Id)
             .NotEmpty().WithMessage(translator["not empty"])
