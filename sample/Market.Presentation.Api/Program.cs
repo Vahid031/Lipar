@@ -147,6 +147,7 @@ app.UseAuthorization();
 app.AddLiparConfiguration(env, liparOptions);
 
 app.Run();
+public partial class Program { }
 
 //if (env.IsDevelopment())
 //{

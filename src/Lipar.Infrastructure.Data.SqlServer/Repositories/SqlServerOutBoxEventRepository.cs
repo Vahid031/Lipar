@@ -5,9 +5,6 @@ using System.Linq;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Domain.Events;
-using Lipar.Core.Domain.Entities;
-using Lipar.Core.Contract.Services;
-using System;
 using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
@@ -15,19 +12,13 @@ namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
 {
     private readonly SqlServerOptions sqlServer;
-    private readonly IUserInfoService userInfoService;
-    private readonly IJsonService jsonService;
-    private readonly IDateTimeService dateTimeService;
     private readonly string SelectCommand;
     private readonly string UpdateCommand;
     private readonly string InsertCommand;
 
-    public SqlServerOutBoxEventRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
+    public SqlServerOutBoxEventRepository(LiparOptions liparOptions)
     {
         sqlServer = liparOptions.OutBoxEvent.SqlServer;
-        this.userInfoService = userInfoService;
-        this.jsonService = jsonService;
-        this.dateTimeService = dateTimeService;
 
         SelectCommand = string.Format("Select top {2} * from {0}.{1} where IsProcessed = 0",
             sqlServer.SchemaName,
@@ -77,28 +68,13 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         connection.Execute(createTableQuery);
     }
 
-    public async Task AddOutboxEvetItems(List<AggregateRoot> changedAggregates)
+    public async Task AddOutboxEvetItems(List<OutBoxEvent> outBoxEvents)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
 
-        foreach (var aggregate in changedAggregates)
+        foreach (var outBoxEvent in outBoxEvents)
         {
-            foreach (var @event in aggregate.GetChanges())
-            {
-                await connection.ExecuteAsync(InsertCommand, new OutBoxEvent
-                {
-                    Id = Guid.NewGuid(),
-                    AccuredByUserId = userInfoService.UserId.ToString(),
-                    AccuredOn = dateTimeService.Now,
-                    AggregateId = aggregate.Id.ToString(),
-                    AggregateName = aggregate.GetType().Name,
-                    AggregateTypeName = aggregate.GetType().FullName,
-                    EventName = @event.GetType().Name,
-                    EventTypeName = @event.GetType().FullName,
-                    EventPayload = jsonService.SerializeObject(@event),
-                    IsProcessed = false
-                });
-            }
+            await connection.ExecuteAsync(InsertCommand, outBoxEvent);
         }
     }
 
@@ -110,9 +86,9 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         return (await connection.QueryAsync<OutBoxEvent>(query)).ToList();
     }
 
-    public async Task MarkAsRead(List<OutBoxEvent> outBoxEventItems)
+    public async Task MarkAsRead(List<OutBoxEvent> outBoxEvents)
     {
-        string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'").ToList());
+        string idForMark = string.Join(',', outBoxEvents.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'").ToList());
         if (!string.IsNullOrWhiteSpace(idForMark))
         {
             using var connection = new SqlConnection(sqlServer.ConnectionString);
@@ -120,7 +96,6 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
             await connection.ExecuteAsync(query);
         }
     }
-
 }
 
 

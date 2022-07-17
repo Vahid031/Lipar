@@ -8,8 +8,8 @@ namespace Lipar.Core.Contract.Data;
 public interface IOutBoxEventRepository
 {
     Task<List<OutBoxEvent>> GetOutBoxEventItemsForPublish(int maxCount);
-    Task MarkAsRead(List<OutBoxEvent> outBoxEventItems);
-    Task AddOutboxEvetItems(List<AggregateRoot> outBoxEventItems);
+    Task MarkAsRead(List<OutBoxEvent> outBoxEvents);
+    Task AddOutboxEvetItems(List<OutBoxEvent> outBoxEvents);
 }
 
 

@@ -10,7 +10,7 @@ using Lipar.Core.Contract.Services;
 
 namespace Market.Presentation.Api.IntegrationTest;
 
-internal class ApplicationFactory : WebApplicationFactory<Program>
+public class ApplicationFactory : WebApplicationFactory<Program>
 {
     protected override void ConfigureWebHost(IWebHostBuilder builder)
     {

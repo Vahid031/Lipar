@@ -7,18 +7,18 @@ namespace Market.Presentation.Api.IntegrationTest.Products
 {
     public class ProductController : IClassFixture<ApplicationFactory>
     {
-        private readonly ApplicationFactory factory;
+        private readonly ApplicationFactory _factory;
 
-        public ProductController()
+        public ProductController(ApplicationFactory factory)
         {
-            factory = new ApplicationFactory();
+            _factory = factory;
         }
 
         [Fact]
         public async Task Get_Product_List_Must_Be_Done()
         {
             //Arrange
-            using var client = factory.CreateClient();
+            using var client = _factory.CreateClient();
 
             //Act
             using var response = await client.GetAsync("api/Product/get");
@@ -39,7 +39,7 @@ namespace Market.Presentation.Api.IntegrationTest.Products
         public async Task Create_Product_Must_Be_Done(string barcode, string name)
         {
             //Arrange
-            using var client = factory.CreateClient();
+            using var client = _factory.CreateClient();
 
             //Act
             using var response = await client.PostAsync("api/Product/create", new CreateProductCommand

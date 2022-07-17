@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
+using Lipar.Core.Domain.Events;
+using Lipar.Core.Contract.Services;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 
@@ -63,8 +65,32 @@ public abstract class BaseCommandDbContext : DbContext
     {
         var changedAggregates = ChangeTracker.GetAggregatesWithEvent();
         var repository = this.GetService<IOutBoxEventRepository>();
+        var dateTimeService = this.GetService<IDateTimeService>();
+        var userInfoService = this.GetService<IUserInfoService>();
+        var jsonService = this.GetService<IJsonService>();
 
-        await repository.AddOutboxEvetItems(changedAggregates);
+        List<OutBoxEvent> outBoxEvents = new();
+
+        changedAggregates.ForEach(aggregate =>
+        {
+            outBoxEvents.AddRange(
+                aggregate.GetChanges().Select(@event => new OutBoxEvent
+                {
+                    Id = Guid.NewGuid(),
+                    AccuredByUserId = userInfoService.UserId.ToString(),
+                    AccuredOn = dateTimeService.Now,
+                    AggregateId = aggregate.Id.ToString(),
+                    AggregateName = aggregate.GetType().Name,
+                    AggregateTypeName = aggregate.GetType().FullName,
+                    EventName = @event.GetType().Name,
+                    EventTypeName = @event.GetType().FullName,
+                    EventPayload = jsonService.SerializeObject(@event),
+                    IsProcessed = false
+                })
+            );
+        });
+
+        await repository.AddOutboxEvetItems(outBoxEvents);
     }
 
     #endregion
