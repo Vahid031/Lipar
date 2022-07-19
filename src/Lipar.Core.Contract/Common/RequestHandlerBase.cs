@@ -13,10 +13,10 @@ public abstract class RequestHandlerBase
     protected static THandler GetHandler<THandler>(ServiceFactory factory)
     {
         THandler handler = factory.GetInstance<THandler>();
-        
+
         if (handler is null)
-    throw new InvalidOperationException($"Handler was not found for request of type {typeof(THandler)}. Register your handlers with the container. See the samples in GitHub for examples.");
-        
+            throw new InvalidOperationException($"Handler was not found for request of type {typeof(THandler)}. Register your handlers with the container. See the samples in GitHub for examples.");
+
         return handler;
     }
 }

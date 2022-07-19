@@ -9,18 +9,18 @@ namespace Market.Core.Application.Products.Queries;
 
 public class GetProductQuery : PageQuery, IGetProduct, IRequest<PagedData<GetProduct>>
 {
-public string Name { get; init; }
-public string Barcode { get; init; }
-    
+    public string Name { get; init; }
+    public string Barcode { get; init; }
+
     public class GetProductQueryHandler : IRequestHandler<GetProductQuery, PagedData<GetProduct>>
     {
         private readonly IProductQueryRepository repository;
-        
+
         public GetProductQueryHandler(IProductQueryRepository repository)
         {
             this.repository = repository;
         }
-        
+
         public async Task<PagedData<GetProduct>> Handle(GetProductQuery request, CancellationToken cancellationToken = default)
         {
             return await repository.Select(request);

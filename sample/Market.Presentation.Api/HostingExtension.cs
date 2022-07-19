@@ -48,9 +48,9 @@ public static class HostingExtension
         )
         .AddJwtBearer(options =>
         {
-    //options.RequireHttpsMetadata = false;
-    //options.SaveToken = false;
-    options.TokenValidationParameters = new TokenValidationParameters
+            //options.RequireHttpsMetadata = false;
+            //options.SaveToken = false;
+            options.TokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
@@ -60,32 +60,32 @@ public static class HostingExtension
                 ValidAudience = builder.Configuration["JWTSetting:Audience"],
                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSetting:Key"]))
             };
-    //options.Events = new JwtBearerEvents()
-    //{
-    //    OnAuthenticationFailed = c =>
-    //    {
-    //        c.NoResult();
-    //        c.Response.StatusCode = 500;
-    //        c.Response.ContentType = "text/plain";
-    //        return c.Response.WriteAsync(c.Exception.ToString());
-    //    },
-    //    OnChallenge = context =>
-    //    {
-    //        context.HandleResponse();
-    //        context.Response.StatusCode = 401;
-    //        context.Response.ContentType = "application/json";
-    //        var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
-    //        return context.Response.WriteAsync(result);
-    //    },
-    //    OnForbidden = context =>
-    //    {
-    //        context.Response.StatusCode = 403;
-    //        context.Response.ContentType = "application/json";
-    //        var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
-    //        return context.Response.WriteAsync(result);
-    //    },
-    //};
-});
+            //options.Events = new JwtBearerEvents()
+            //{
+            //    OnAuthenticationFailed = c =>
+            //    {
+            //        c.NoResult();
+            //        c.Response.StatusCode = 500;
+            //        c.Response.ContentType = "text/plain";
+            //        return c.Response.WriteAsync(c.Exception.ToString());
+            //    },
+            //    OnChallenge = context =>
+            //    {
+            //        context.HandleResponse();
+            //        context.Response.StatusCode = 401;
+            //        context.Response.ContentType = "application/json";
+            //        var result = JsonConvert.SerializeObject(new Response<string>("You are not Authorized"));
+            //        return context.Response.WriteAsync(result);
+            //    },
+            //    OnForbidden = context =>
+            //    {
+            //        context.Response.StatusCode = 403;
+            //        context.Response.ContentType = "application/json";
+            //        var result = JsonConvert.SerializeObject(new Response<string>("You are not authorized to access this resource"));
+            //        return context.Response.WriteAsync(result);
+            //    },
+            //};
+        });
 
         builder.Services.AddCors(setupAction =>
         setupAction.AddPolicy("MyPolicy",

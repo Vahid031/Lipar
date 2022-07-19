@@ -6,7 +6,7 @@ public abstract class BaseQueryRepository<TDbContext> : IQueryRepository
 where TDbContext : BaseQueryDbContext
 {
     protected readonly TDbContext _db;
-    
+
     public BaseQueryRepository(TDbContext db)
     {
         _db = db;

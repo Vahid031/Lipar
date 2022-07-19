@@ -13,12 +13,12 @@ public interface IRequestDispacher
 public class RequestDispacher : IRequestDispacher
 {
     private readonly IMediator mediator;
-    
+
     public RequestDispacher(IMediator mediator)
     {
         this.mediator = mediator;
     }
-    
+
     public async Task<ApplicationResult> Send<TRequest>(TRequest request, CancellationToken cancellationToken = default) where TRequest : IRequest
     {
         ApplicationResult result = new ApplicationResult();
@@ -30,7 +30,7 @@ public class RequestDispacher : IRequestDispacher
         catch (ValidationException ex)
         {
             foreach (var error in ex.Errors)
-            result.AddMessage(error.ErrorMessage);
+                result.AddMessage(error.ErrorMessage);
             result.Status = ApplicationStatus.ValidationError;
         }
         catch (Exception ex)
@@ -53,17 +53,17 @@ public enum ApplicationStatus
 
 public class ApplicationResult<T>
 {
-public ApplicationStatus Status { get; set; }
-public List<string> Massage { get; set; }
-public T Data { get; set; }
-    
+    public ApplicationStatus Status { get; set; }
+    public List<string> Massage { get; set; }
+    public T Data { get; set; }
+
 }
 public class ApplicationResult
 {
     protected readonly List<string> _messages = new List<string>();
     public IEnumerable<string> Messages => _messages;
-public ApplicationStatus Status { get; set; }
-    
+    public ApplicationStatus Status { get; set; }
+
     public void AddMessage(string error) => _messages.Add(error);
     public void ClearMessages() => _messages.Clear();
 }

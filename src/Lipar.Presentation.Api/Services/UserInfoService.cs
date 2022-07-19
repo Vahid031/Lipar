@@ -12,7 +12,7 @@ public class UserInfoService : IUserInfoService
     {
         context = httpContextAccessor.HttpContext;
     }
-    
+
     public Guid UserId
     {
         get
@@ -21,15 +21,15 @@ public class UserInfoService : IUserInfoService
             return userId;
         }
     }
-    
+
     public string UserAgent => context.Request.Headers["User-Agent"];
-    
+
     public string IpAddress => context.Connection.RemoteIpAddress.ToString();
-    
+
     public string FirstName => context.User?.GetClaim(ClaimTypes.GivenName);
-    
+
     public string LastName => context.User?.GetClaim(ClaimTypes.Surname);
-    
+
     public string UserName => context.User?.GetClaim(ClaimTypes.Name);
 }
 

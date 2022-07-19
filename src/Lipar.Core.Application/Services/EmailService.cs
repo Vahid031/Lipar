@@ -10,16 +10,16 @@ namespace Lipar.Core.Application.Services;
 
 public class EmailService : IEmailService
 {
-public MailOptions _mailOptions { get; }
-    
+    public MailOptions _mailOptions { get; }
+
     public EmailService(LiparOptions liparOptions)
     {
         _mailOptions = liparOptions.Mail;
     }
-    
+
     public async Task SendAsync(EmailRequest request)
     {
-        
+
         var email = new MimeMessage();
         email.Sender = new MailboxAddress(_mailOptions.DisplayName, request.From ?? _mailOptions.EmailFrom);
         email.To.Add(MailboxAddress.Parse(request.To));

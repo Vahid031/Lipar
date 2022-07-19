@@ -16,28 +16,28 @@ IProductQueryRepository
     public ProductQueryRepository(MarketQueryDbContext db) : base(db)
     {
     }
-    
+
     public Task<PagedData<GetProduct>> Select(IGetProduct input)
     {
-        
+
         var query = db.Products.Select(m => new GetProduct
         {
             Id = m.Id,
             Name = m.Name,
             Barcode = m.Barcode,
         });
-        
+
         if (!string.IsNullOrEmpty(input.Name))
-        query = query.Where(m => m.Name.Contains(input.Name));
-        
-        
+            query = query.Where(m => m.Name.Contains(input.Name));
+
+
         if (!string.IsNullOrEmpty(input.Barcode))
-        query = query.Where(m => m.Barcode.Contains(input.Barcode));
-        
-        
+            query = query.Where(m => m.Barcode.Contains(input.Barcode));
+
+
         return query.PagingAsync(input);
     }
-    
+
     public async Task<GetByIdProduct> Select(IGetByIdProduct input) =>
     await db.Products
     .Where(m => m.Id == input.Id)

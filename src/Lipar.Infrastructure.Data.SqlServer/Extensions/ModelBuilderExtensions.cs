@@ -23,7 +23,7 @@ public static class ModelBuilderExtensions
             modelBuilder.Entity(entityType.ClrType)
             .HasKey(Id)
             .IsClustered(false);
-            
+
             modelBuilder.Entity(entityType.ClrType)
             .Property<DateTime>(CreatedDate)
             .IsRequired();
@@ -33,7 +33,7 @@ public static class ModelBuilderExtensions
             .IsClustered(true);
         });
     }
-    
+
     public static void AddAuditableProperties(this ModelBuilder modelBuilder)
     {
         modelBuilder.Model
@@ -51,16 +51,16 @@ public static class ModelBuilderExtensions
             .Property<Guid?>(ModifedBy);
         });
     }
-    
-    
+
+
     public const string Id = nameof(Id);
-    
+
     public const string CreatedDate = nameof(CreatedDate);
-    
+
     public const string ModifedDate = nameof(ModifedDate);
-    
+
     public const string CreatedBy = nameof(CreatedBy);
-    
+
     public const string ModifedBy = nameof(ModifedBy);
 }
 

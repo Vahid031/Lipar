@@ -27,13 +27,13 @@ where TRequest : IRequest<TResponse>
     ServiceFactory serviceFactory)
     {
         Task<TResponse> Handler() => GetHandler<IRequestHandler<TRequest, TResponse>>(serviceFactory).Handle((TRequest)request, cancellationToken);
-        
+
         return serviceFactory
         .GetInstances<IPipelineBehavior<TRequest, TResponse>>()
         .Reverse()
         .Aggregate((RequestHandlerDelegate<TResponse>)Handler, (next, pipeline) => () => pipeline.Handle((TRequest)request, cancellationToken, next))();
     }
-    
+
 }
 
 public class RequestHandlerWrapperImpl : RequestHandlerWrapper
@@ -42,7 +42,7 @@ public class RequestHandlerWrapperImpl : RequestHandlerWrapper
     ServiceFactory serviceFactory)
     {
         Task Handler() => GetHandler<IRequestHandler<TRequest>>(serviceFactory).Handle(request, cancellationToken);
-        
+
         return serviceFactory
         .GetInstances<IPipelineBehavior<TRequest>>()
         .Reverse()

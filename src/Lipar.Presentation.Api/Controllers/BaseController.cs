@@ -13,16 +13,16 @@ namespace Lipar.Presentation.Api.Controllers;
 public abstract class BaseController : ControllerBase
 {
     private IMediator _mediator;
-    
+
     protected IMediator mediator => _mediator ??= HttpContext.RequestServices.GetService<IMediator>();
-    
+
     protected async Task<IActionResult> SendAsync<TResponse>(IRequest<TResponse> command,
     HttpStatusCode statusCode = HttpStatusCode.OK) where TResponse : notnull
     {
         var result = await mediator.Send(command);
         return StatusCode(200, result);
     }
-    
+
     public async Task<IActionResult> SendAsync<TRequest>(TRequest command,
     HttpStatusCode statusCode = HttpStatusCode.OK) where TRequest : IRequest
     {

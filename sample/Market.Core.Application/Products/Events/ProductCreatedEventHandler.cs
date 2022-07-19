@@ -11,7 +11,7 @@ public class ProductCreatedEventHandler : IEventHandler<ProductCreated>
 {
     private readonly IEmailService emailService;
     private readonly IJsonService jsonService;
-    
+
     public ProductCreatedEventHandler(IEmailService emailService, IJsonService jsonService)
     {
         this.emailService = emailService;

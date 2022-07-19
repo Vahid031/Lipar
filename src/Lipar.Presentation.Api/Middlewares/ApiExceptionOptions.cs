@@ -6,8 +6,8 @@ namespace Lipar.Presentation.Api.Middlewares;
 
 public class ApiExceptionOptions
 {
-public Action<HttpContext, Exception, ApiProblemDetails> AddResponseDetails { get; set; }
-public Func<Exception, LogLevel> DetermineLogLevel { get; set; }
+    public Action<HttpContext, Exception, ApiProblemDetails> AddResponseDetails { get; set; }
+    public Func<Exception, LogLevel> DetermineLogLevel { get; set; }
 }
 
 

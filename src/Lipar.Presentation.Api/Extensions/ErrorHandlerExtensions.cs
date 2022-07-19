@@ -10,13 +10,13 @@ public static class ErrorHandlerMiddlewareExtensions
         var options = new ApiExceptionOptions();
         return builder.UseMiddleware<ErrorHandlerMiddleware>(options);
     }
-    
+
     public static IApplicationBuilder UseApiExceptionHandler(this IApplicationBuilder builder,
     Action<ApiExceptionOptions> configureOptions)
     {
         var options = new ApiExceptionOptions();
         configureOptions(options);
-        
+
         return builder.UseMiddleware<ErrorHandlerMiddleware>(options);
     }
 }

@@ -25,7 +25,7 @@ where TEvent : IEvent
         var handlers = serviceFactory
         .GetInstances<IEventHandler<TEvent>>()
         .Select(x => new Func<IEvent, CancellationToken, Task>((theEvent, theToken) => x.Handle((TEvent)theEvent, theToken)));
-        
+
         return publish(handlers, Event, cancellationToken);
     }
 }
