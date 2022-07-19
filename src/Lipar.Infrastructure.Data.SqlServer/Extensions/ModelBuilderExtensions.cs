@@ -1,8 +1,8 @@
 using Lipar.Core.Domain.Entities;
+using Lipar.Infrastructure.Data.SqlServer.ValueConverters;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Linq;
-using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Extensions;
 
@@ -19,7 +19,7 @@ public static class ModelBuilderExtensions
         {
             modelBuilder.Entity(entityType.ClrType)
             .Property<EntityId>(Id)
-            .HasConversion(c => c.Value, d => EntityId.FromGuid(d));
+            .HasConversion<EntityIdConverter>();
             modelBuilder.Entity(entityType.ClrType)
             .HasKey(Id)
             .IsClustered(false);
