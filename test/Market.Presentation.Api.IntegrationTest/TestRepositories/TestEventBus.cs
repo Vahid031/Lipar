@@ -2,7 +2,7 @@
 using Lipar.Core.Domain.Events;
 
 namespace Market.Presentation.Api.IntegrationTest.TestRepositories;
-internal class TestEventBus : IMessageBus
+internal class TestEventBus : IEventBus
 {
     public void Publish<TEvent>(TEvent input) where TEvent : IEvent
     {

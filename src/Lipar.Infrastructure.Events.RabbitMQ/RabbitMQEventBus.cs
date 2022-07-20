@@ -50,13 +50,13 @@ public class RabbitMQEventBus : IEventBus
         }
     }
 
-    public void Publish<T>(T input)
+    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
-        string messageName = input.GetType().Name;
+        string messageName = @event.GetType().Name;
         Parcel parcel = new Parcel
         {
             MessageId = Guid.NewGuid().ToString(),
-            MessageBody = _jsonService.SerializeObject(input),
+            MessageBody = _jsonService.SerializeObject(@event),
             MessageName = messageName,
             Route = $"{_liparOptions.ServiceId}.{messageName}",
             Headers = new Dictionary<string, object>

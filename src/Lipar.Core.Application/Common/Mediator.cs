@@ -59,7 +59,7 @@ public class Mediator : IMediator
 
     public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
     {
-        await _outBoxEventRepository.AddOutboxEvetItems(
+        await _outBoxEventRepository.AddOutboxEvent(
             new OutBoxEvent
             {
                 Id = Guid.NewGuid(),

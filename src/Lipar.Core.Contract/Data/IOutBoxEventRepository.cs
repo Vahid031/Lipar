@@ -9,7 +9,7 @@ public interface IOutBoxEventRepository
 {
     Task<List<OutBoxEvent>> GetOutBoxEventItemsForPublish(int maxCount);
     Task MarkAsRead(List<OutBoxEvent> outBoxEvents);
-    Task AddOutboxEvetItems(OutBoxEvent outBoxEvent);
+    Task AddOutboxEvent(OutBoxEvent outBoxEvent);
 }
 
 

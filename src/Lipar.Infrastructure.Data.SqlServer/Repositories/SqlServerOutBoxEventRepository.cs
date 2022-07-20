@@ -65,7 +65,7 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         connection.Execute(createTableQuery);
     }
 
-    public async Task AddOutboxEvetItems(OutBoxEvent outBoxEvent)
+    public async Task AddOutboxEvent(OutBoxEvent outBoxEvent)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
 

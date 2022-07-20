@@ -11,9 +11,9 @@ internal class TestOutBoxEventRepository : IOutBoxEventRepository
 {
     private List<OutBoxEvent> _outBoxEvents = new();
 
-    public Task AddOutboxEvetItems(List<OutBoxEvent> outBoxEvents)
+    public Task AddOutboxEvent(OutBoxEvent outBoxEvent)
     {
-        _outBoxEvents.AddRange(outBoxEvents);
+        _outBoxEvents.Add(outBoxEvent);
         return Task.CompletedTask;
     }
 
