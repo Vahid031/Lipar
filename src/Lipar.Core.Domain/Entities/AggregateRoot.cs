@@ -22,9 +22,9 @@ public abstract class AggregateRoot : Entity
         _events.Add(@event);
     }
 
-    public IEnumerable<IEvent> GetChanges() => _events.AsEnumerable();
+    public IEnumerable<IEvent> GetEvents() => _events.AsEnumerable();
 
-    public void ClearChanges() => _events.Clear();
+    public void ClearEvents() => _events.Clear();
 }
 
 

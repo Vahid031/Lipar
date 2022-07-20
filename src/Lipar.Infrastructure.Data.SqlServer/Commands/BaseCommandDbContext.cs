@@ -7,8 +7,7 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
-using Lipar.Core.Domain.Events;
-using Lipar.Core.Contract.Services;
+using Lipar.Core.Contract.Common;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 
@@ -44,7 +43,7 @@ public abstract class BaseCommandDbContext : DbContext
 
         ChangeTracker.SetShadowProperties();
         await AddEntityChangesInterceptors();
-        await AddOutboxEvetItems();
+        await PublishEvents();
 
         var rowAffect = await base.SaveChangesAsync();
 
@@ -61,36 +60,15 @@ public abstract class BaseCommandDbContext : DbContext
         await repository.AddEntityChanges(entityChangesInterceptors);
     }
 
-    private async Task AddOutboxEvetItems()
+    private async Task PublishEvents()
     {
-        var changedAggregates = ChangeTracker.GetAggregatesWithEvent();
-        var repository = this.GetService<IOutBoxEventRepository>();
-        var dateTimeService = this.GetService<IDateTimeService>();
-        var userInfoService = this.GetService<IUserInfoService>();
-        var jsonService = this.GetService<IJsonService>();
+        var mediator = this.GetService<IMediator>();
 
-        List<OutBoxEvent> outBoxEvents = new();
 
-        changedAggregates.ForEach(aggregate =>
-        {
-            outBoxEvents.AddRange(
-                aggregate.GetChanges().Select(@event => new OutBoxEvent
-                {
-                    Id = Guid.NewGuid(),
-                    AccuredByUserId = userInfoService.UserId.ToString(),
-                    AccuredOn = dateTimeService.Now,
-                    //AggregateId = aggregate.Id.ToString(),
-                    //AggregateName = aggregate.GetType().Name,
-                    //AggregateTypeName = aggregate.GetType().FullName,
-                    EventName = @event.GetType().Name,
-                    EventTypeName = @event.GetType().FullName,
-                    EventPayload = jsonService.SerializeObject(@event),
-                    IsProcessed = false
-                })
-            );
-        });
+        foreach (var aggregate in ChangeTracker.GetAggregatesWithEvent())
+            foreach (var @event in aggregate.GetEvents())
+                await mediator.Publish(@event);
 
-        await repository.AddOutboxEvetItems(outBoxEvents);
     }
 
     #endregion

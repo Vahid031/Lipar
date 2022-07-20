@@ -59,7 +59,7 @@ public static class ChangeTrackerExtensions
     changeTracker.Entries<AggregateRoot>()
     .Where(x => x.State != EntityState.Detached)
     .Select(c => c.Entity)
-    .Where(c => c.GetChanges().Any())
+    .Where(c => c.GetEvents().Any())
     .ToList();
 
     public static IEnumerable<EntityChangesInterception> GetEntityChangesInterceptor(this ChangeTracker changeTracker)
