@@ -13,16 +13,16 @@ public class GetByIdProductQuery : IGetByIdProduct, IRequest<GetByIdProduct>
 
     public class GetByIdProductQueryHandler : IRequestHandler<GetByIdProductQuery, GetByIdProduct>
     {
-        private readonly IProductQueryRepository repository;
+        private readonly IProductQueryRepository _repository;
 
         public GetByIdProductQueryHandler(IProductQueryRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<GetByIdProduct> Handle(GetByIdProductQuery request, CancellationToken cancellationToken = default)
         {
-            return await repository.Select(request);
+            return await _repository.Select(request);
         }
     }
 }

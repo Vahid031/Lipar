@@ -16,20 +16,20 @@ public class UpdateProductCommand : IRequest
 
     public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand>
     {
-        private readonly IProductCommandRepository repository;
+        private readonly IProductCommandRepository _repository;
 
         public UpdateProductCommandHandler(IProductCommandRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task Handle(UpdateProductCommand request, CancellationToken cancellationToken = default)
         {
-            var entity = await repository.GetAsync(request.Id);
+            var entity = await _repository.GetAsync(request.Id);
 
             entity.Update(request.Name, request.Barcode);
 
-            await repository.CommitAsync();
+            await _repository.CommitAsync();
         }
     }
 

@@ -32,7 +32,7 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
             "{0}"
         );
 
-        InsertCommand = string.Format("INSERT INTO {0}.{1}(Id, AccuredByUserId, AccuredOn, AggregateName, AggregateTypeName, AggregateId, EventName, EventTypeName, EventPayload, IsProcessed) VALUES(@Id, @AccuredByUserId, @AccuredOn, @AggregateName, @AggregateTypeName, @AggregateId, @EventName, @EventTypeName, @EventPayload, @IsProcessed)",
+        InsertCommand = string.Format("INSERT INTO {0}.{1}(Id, AccuredByUserId, AccuredOn, EventName, EventTypeName, EventPayload, IsProcessed) VALUES(@Id, @AccuredByUserId, @AccuredOn, @EventName, @EventTypeName, @EventPayload, @IsProcessed)",
          sqlServer.SchemaName,
          sqlServer.TableName
         );
@@ -51,9 +51,6 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
                 $" [Id][uniqueidentifier] NOT NULL," +
                 $" [AccuredByUserId] [nvarchar](40) NULL," +
                 $" [AccuredOn] [datetime2](7) NOT NULL," +
-                $" [AggregateName] [nvarchar](200) NULL," +
-                $" [AggregateTypeName] [nvarchar](500) NULL," +
-                $" [AggregateId] [nvarchar](40) NULL," +
                 $" [EventName] [nvarchar](100) NULL," +
                 $" [EventTypeName] [nvarchar](500) NULL," +
                 $" [EventPayload] [nvarchar](max)NULL," +

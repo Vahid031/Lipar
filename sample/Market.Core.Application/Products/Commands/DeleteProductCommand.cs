@@ -1,7 +1,6 @@
 using FluentValidation;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Services;
-using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Products.Contracts;
 using System;
 using System.Threading;
@@ -15,20 +14,20 @@ public class DeleteProductCommand : IRequest
 
     public class DeleteProductCommandHandler : IRequestHandler<DeleteProductCommand>
     {
-        private readonly IProductCommandRepository repository;
+        private readonly IProductCommandRepository _repository;
 
         public DeleteProductCommandHandler(IProductCommandRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task Handle(DeleteProductCommand request, CancellationToken cancellationToken = default)
         {
-            var entity = await repository.GetAsync(request.Id);
+            var entity = await _repository.GetAsync(request.Id);
             entity.Delete();
 
-            repository.Delete(entity);
-            await repository.CommitAsync();
+            _repository.Delete(entity);
+            await _repository.CommitAsync();
         }
     }
 

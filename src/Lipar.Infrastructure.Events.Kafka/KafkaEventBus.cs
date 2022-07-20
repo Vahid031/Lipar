@@ -19,7 +19,7 @@ public class KafkaEventBus : IEventBus
         _liparOptions = liparOptions;
     }
 
-    public void Publish<T>(T input)
+    public void Publish<TEvent>(TEvent input) where TEvent : IEvent
     {
         string messageName = input.GetType().Name;
         Parcel parcel = new Parcel

@@ -1,4 +1,4 @@
-using Lipar.Core.Contract.Common;
+﻿using Lipar.Core.Contract.Common;
 using Lipar.Core.Domain.Queries;
 using Market.Core.Domain.Products.Contracts;
 using Market.Core.Domain.Products.QueryResults;
@@ -14,16 +14,16 @@ public class GetProductQuery : PageQuery, IGetProduct, IRequest<PagedData<GetPro
 
     public class GetProductQueryHandler : IRequestHandler<GetProductQuery, PagedData<GetProduct>>
     {
-        private readonly IProductQueryRepository repository;
+        private readonly IProductQueryRepository _repository;
 
         public GetProductQueryHandler(IProductQueryRepository repository)
         {
-            this.repository = repository;
+            _repository = repository;
         }
 
         public async Task<PagedData<GetProduct>> Handle(GetProductQuery request, CancellationToken cancellationToken = default)
         {
-            return await repository.Select(request);
+            return await _repository.Select(request);
         }
     }
 }
