@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>6.0.3</Version>
+    <Version>6.0.4</Version>
     <AssemblyName>Lipar.Infrastructure.Tools.Utilities</AssemblyName>
     <RootNamespace>Lipar.Infrastructure.Tools.Utilities</RootNamespace>
   </PropertyGroup>
