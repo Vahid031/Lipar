@@ -65,14 +65,11 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         connection.Execute(createTableQuery);
     }
 
-    public async Task AddOutboxEvetItems(List<OutBoxEvent> outBoxEvents)
+    public async Task AddOutboxEvetItems(OutBoxEvent outBoxEvent)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
 
-        foreach (var outBoxEvent in outBoxEvents)
-        {
-            await connection.ExecuteAsync(InsertCommand, outBoxEvent);
-        }
+        await connection.ExecuteAsync(InsertCommand, outBoxEvent);
     }
 
     public async Task<List<OutBoxEvent>> GetOutBoxEventItemsForPublish(int maxCount)

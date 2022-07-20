@@ -59,19 +59,17 @@ public class Mediator : IMediator
 
     public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
     {
-        await _outBoxEventRepository.AddOutboxEvetItems(new List<OutBoxEvent>
-        {
+        await _outBoxEventRepository.AddOutboxEvetItems(
             new OutBoxEvent
             {
                 Id = Guid.NewGuid(),
                 AccuredByUserId = _userInfoService.UserId.ToString(),
                 AccuredOn = _dateTimeService.Now,
                 EventName = @event.GetType().Name,
-                EventPayload = _jsonService.SerializeObject(@event) ,
+                EventPayload = _jsonService.SerializeObject(@event),
                 EventTypeName = @event.GetType().FullName,
                 IsProcessed = false
-            }
-        });
+            });
     }
 }
 
