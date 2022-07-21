@@ -10,29 +10,33 @@ using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Events;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Application.Services;
-using Lipar.Infrastructure.Events.RabbitMQ;
-using Zamin.Infra.Tools.Localizer.Parrot;
+using Lipar.Infrastructure.Tools.Utilities.Configurations;
 
 namespace Lipar.Infrastructure.Tools.IoC;
 
 public static partial class DependencyInjection
 {
     public static void AddApplication(this IServiceCollection services,
-    IEnumerable<Assembly> assemblies)
+    IEnumerable<Assembly> assemblies,
+    LiparOptions liparOptions)
     {
         services.AddTransient<ServiceFactory>(p => p.GetService);
         services.AddTransient<IMediator, Mediator>();
         services.AddTransient<IEventPublisher, EventPublisher>();
         services.AddTransient<IEmailService, EmailService>();
-        services.AddTransient<IEventBus, RabbitMQEventBus>();
-        services.AddTransient<ITranslator, ParrotTranslator>();
-        
+
+        services.AddWithTransientLifetime(assemblies, liparOptions.MessageBus.TypeName, typeof(IEventBus));
+        services.AddWithTransientLifetime(assemblies, liparOptions.Translation.TypeName, typeof(ITranslator));
+        services.AddWithTransientLifetime(assemblies, liparOptions.OutBoxEvent.TypeName, typeof(IOutBoxEventRepository));
+        services.AddWithTransientLifetime(assemblies, liparOptions.InBoxEvent.TypeName, typeof(IInBoxEventRepository));
+        services.AddWithTransientLifetime(assemblies, liparOptions.EntityChangesInterception.TypeName, typeof(IEntityChangesInterceptorRepository));
+
         services.AddValidatorsFromAssemblies(assemblies);
         services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
-        services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>), typeof(IOutBoxEventRepository), typeof(IInBoxEventRepository), typeof(IEntityChangesInterceptorRepository));
+        services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>));
         services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
-        services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository), typeof(IUnitOfWork));
-        
+        services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository));
+
         services.AddWithTransientLifetime(assemblies, typeof(IJsonService), typeof(IDateTimeService), typeof(IUserInfoService));
         services.AddWithTransientLifetime(assemblies, typeof(ITransientLifetime));
         services.AddWithScopedLifetime(assemblies, typeof(IScopeLifetime));

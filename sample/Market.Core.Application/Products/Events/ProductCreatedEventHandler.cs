@@ -9,19 +9,19 @@ namespace Market.Core.Application.Products.Events;
 
 public class ProductCreatedEventHandler : IEventHandler<ProductCreated>
 {
-    private readonly IEmailService emailService;
-    private readonly IJsonService jsonService;
-    
+    private readonly IEmailService _emailService;
+    private readonly IJsonService _jsonService;
+
     public ProductCreatedEventHandler(IEmailService emailService, IJsonService jsonService)
     {
-        this.emailService = emailService;
-        this.jsonService = jsonService;
+        _emailService = emailService;
+        _jsonService = jsonService;
     }
     public async Task Handle(ProductCreated @event, CancellationToken cancellationToken)
     {
-        await emailService.SendAsync(new EmailRequest
+        await _emailService.SendAsync(new EmailRequest
         {
-            Body = jsonService.SerializeObject(@event),
+            Body = _jsonService.SerializeObject(@event),
             To = "Vahid031@yahoo.com",
             Subject = "Test"
         });

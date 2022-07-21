@@ -16,7 +16,7 @@ public class ErrorHandlerMiddleware
     private readonly IJsonService jsonService;
     private readonly ILogger<ErrorHandlerMiddleware> logger;
     private readonly ApiExceptionOptions options;
-    
+
     public ErrorHandlerMiddleware(RequestDelegate next, IJsonService jsonService,
     ILogger<ErrorHandlerMiddleware> logger,
     ApiExceptionOptions options)
@@ -26,7 +26,7 @@ public class ErrorHandlerMiddleware
         this.logger = logger;
         this.options = options;
     }
-    
+
     public async Task Invoke(HttpContext context)
     {
         try
@@ -35,10 +35,10 @@ public class ErrorHandlerMiddleware
         }
         //catch (ValidationException ex)
         //{
-            //    var problem = HandleValidationException(ex, context) ;
-            //    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
-            //    context.Response.ContentType = "application/problem+json";
-            //    await context.Response.WriteAsync(json.SerializeObject(problem));
+        //    var problem = HandleValidationException(ex, context) ;
+        //    context.Response.StatusCode = (int)HttpStatusCode.BadRequest;
+        //    context.Response.ContentType = "application/problem+json";
+        //    await context.Response.WriteAsync(json.SerializeObject(problem));
         //}
         catch (Exception ex)
         {
@@ -47,9 +47,9 @@ public class ErrorHandlerMiddleware
             context.Response.ContentType = "application/problem+json";
             await context.Response.WriteAsync(jsonService.SerializeObject(problem));
         }
-        
+
     }
-    
+
     private ApiProblemDetails HandleValidationException(ValidationException ex, HttpContext context)
     {
         var errors = new Dictionary<string, string[]>();
@@ -64,10 +64,10 @@ public class ErrorHandlerMiddleware
             }
             else
             {
-            errors.Add(error.PropertyName, new string[] { error.ErrorMessage });
+                errors.Add(error.PropertyName, new string[] { error.ErrorMessage });
             }
         }
-        
+
         return new ApiProblemDetails
         {
             TraceId = Activity.Current?.Id ?? context.TraceIdentifier,
@@ -78,7 +78,7 @@ public class ErrorHandlerMiddleware
             //Errors = errors
         };
     }
-    
+
     private ApiProblemDetails HandleUnknownException(Exception ex, HttpContext context)
     {
         var problem = new ApiProblemDetails
@@ -89,24 +89,24 @@ public class ErrorHandlerMiddleware
             Details = context.Request.PathBase,
             Instance = context.Request.Path
         };
-        
+
         options.AddResponseDetails?.Invoke(context, ex, problem);
-        
+
         var innerExMessage = GetInnerExceptionMessage(ex);
-        
+
         var level = options.DetermineLogLevel?.Invoke(ex) ?? LogLevel.Error;
-        
-    logger.Log(level, ex, "BADNESS!!! " + innerExMessage + " -- {ErrorId}.", problem.TraceId);
-        
-        
+
+        logger.Log(level, ex, "BADNESS!!! " + innerExMessage + " -- {ErrorId}.", problem.TraceId);
+
+
         return problem;
     }
-    
+
     private string GetInnerExceptionMessage(Exception exception)
     {
         if (exception.InnerException != null)
-        return GetInnerExceptionMessage(exception.InnerException);
-        
+            return GetInnerExceptionMessage(exception.InnerException);
+
         return exception.Message;
     }
 }

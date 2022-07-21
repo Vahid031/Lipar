@@ -23,9 +23,9 @@ namespace Market.Core.Application.Accounts.Commands;
 
 public class LoginCommand : IRequest<LoginDto>
 {
-public string UserName { get; set; }
-public string Password { get; set; }
-    
+    public string UserName { get; set; }
+    public string Password { get; set; }
+
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
     {
         private readonly UserManager<ApplicationUser> _userManager;
@@ -33,7 +33,7 @@ public string Password { get; set; }
         private readonly JWTSetting _JWTSetting;
         private readonly IDateTimeService _dateTimeService;
         private readonly IUserInfoService _userInfoService;
-        
+
         public LoginCommandHandler(UserManager<ApplicationUser> userManager,
         SignInManager<ApplicationUser> signInManager,
         IOptions<JWTSetting> options,
@@ -46,28 +46,28 @@ public string Password { get; set; }
             _dateTimeService = dateTimeService;
             _userInfoService = userInfoService;
         }
-        
+
         public async Task<LoginDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-            
+
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {
-            throw new ApplicationException($"No Accounts Registered with {request.UserName}.");
+                throw new ApplicationException($"No Accounts Registered with {request.UserName}.");
             }
             var result = await _signInManager.CheckPasswordSignInAsync(user, request.Password, lockoutOnFailure: false);
             if (!result.Succeeded)
             {
-            throw new ApplicationException($"Invalid Credentials for '{request.UserName}'.");
+                throw new ApplicationException($"Invalid Credentials for '{request.UserName}'.");
             }
             if (!user.EmailConfirmed)
             {
-            throw new ApplicationException($"Account Not Confirmed for '{request.UserName}'.");
+                throw new ApplicationException($"Account Not Confirmed for '{request.UserName}'.");
             }
-            
+
             JwtSecurityToken jwtSecurityToken = await GenerateJWToken(user);
             var rolesList = await _userManager.GetRolesAsync(user).ConfigureAwait(false);
-            
+
             var response = new LoginDto
             {
                 Id = user.Id,
@@ -77,25 +77,25 @@ public string Password { get; set; }
                 Roles = rolesList.ToList(),
                 IsVerified = user.EmailConfirmed,
                 RefreshToken = GenerateRefreshToken(_userInfoService.IpAddress).Token,
-                
+
             };
             return response;
         }
-        
+
         private async Task<JwtSecurityToken> GenerateJWToken(ApplicationUser user)
         {
             var userClaims = await _userManager.GetClaimsAsync(user);
             var roles = await _userManager.GetRolesAsync(user);
-            
+
             var roleClaims = new List<Claim>();
-            
+
             for (int i = 0; i < roles.Count; i++)
             {
                 roleClaims.Add(new Claim("roles", roles[i]));
             }
-            
+
             string ipAddress = GetHostIpAddress();
-            
+
             var claims = new[]
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
@@ -106,10 +106,10 @@ public string Password { get; set; }
             }
             .Union(userClaims)
             .Union(roleClaims);
-            
+
             var symmetricSecurityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_JWTSetting.Key));
             var signingCredentials = new SigningCredentials(symmetricSecurityKey, SecurityAlgorithms.HmacSha256);
-            
+
             var jwtSecurityToken = new JwtSecurityToken(
             issuer: _JWTSetting.Issuer,
             audience: _JWTSetting.Audience,
@@ -118,7 +118,7 @@ public string Password { get; set; }
             signingCredentials: signingCredentials);
             return jwtSecurityToken;
         }
-        
+
         private RefreshToken GenerateRefreshToken(string ipAddress)
         {
             return new RefreshToken
@@ -129,16 +129,16 @@ public string Password { get; set; }
                 CreatedByIp = ipAddress
             };
         }
-        
+
         private string RandomTokenString()
         {
-            using var rngCryptoServiceProvider = new RNGCryptoServiceProvider();
+            using var rngCryptoServiceProvider = RandomNumberGenerator.Create();
             var randomBytes = new byte[40];
             rngCryptoServiceProvider.GetBytes(randomBytes);
             // convert random bytes to hex string
             return BitConverter.ToString(randomBytes).Replace("-", "");
         }
-        
+
         private string GetHostIpAddress()
         {
             var host = Dns.GetHostEntry(Dns.GetHostName());
@@ -152,14 +152,14 @@ public string Password { get; set; }
             return string.Empty;
         }
     }
-    
+
     public class LoginValidator : AbstractValidator<LoginCommand>
     {
         public LoginValidator()
         {
             RuleFor(m => m.UserName)
             .NotEmpty();
-            
+
             RuleFor(m => m.Password)
             .NotEmpty();
         }

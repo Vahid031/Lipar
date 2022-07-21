@@ -11,46 +11,45 @@ public class ParrotDataWrapper
 {
     private readonly IDbConnection _dbConnection;
     private readonly List<LocalizationRecord> _localizationRecords;
-    private readonly LiparOptions _liparOptions;
-private readonly string SelectCommand = "Select * from [{0}].[{1}]";
-private readonly string InsertCommand = "INSERT INTO [{0}].[{1}]([Key],[Value],[Culture]) VALUES (@Key,@Value,@Culture) select SCOPE_IDENTITY()";
+    private readonly SqlServerOptions sqlServer;
+    private readonly string SelectCommand = "Select * from [{0}].[{1}]";
+    private readonly string InsertCommand = "INSERT INTO [{0}].[{1}]([Key],[Value],[Culture]) VALUES (@Key,@Value,@Culture) select SCOPE_IDENTITY()";
     private static ParrotDataWrapper _instance;
     public static ParrotDataWrapper CreateFactory(LiparOptions liparOptions)
     {
         if (_instance is null)
-        _instance = new ParrotDataWrapper(liparOptions);
-        
+            _instance = new ParrotDataWrapper(liparOptions);
+
         return _instance;
     }
     private ParrotDataWrapper(LiparOptions liparOptions)
     {
-        _liparOptions = liparOptions;
-        _dbConnection = new SqlConnection(liparOptions.Translation.ConnectionString);
-        
-        if (_liparOptions.Translation.AutoCreateSqlTable)
-        CreateTableIfNeeded();
-        
-        SelectCommand = string.Format(SelectCommand, _liparOptions.Translation.SchemaName, _liparOptions.Translation.TableName);
-        InsertCommand = string.Format(InsertCommand, _liparOptions.Translation.SchemaName, _liparOptions.Translation.TableName);
-        
+        sqlServer = liparOptions.Translation.SqlServer;
+        _dbConnection = new SqlConnection(sqlServer.ConnectionString);
+
+        if (sqlServer.AutoCreateSqlTable)
+            CreateTableIfNeeded();
+
+        SelectCommand = string.Format(SelectCommand, sqlServer.SchemaName, sqlServer.TableName);
+        InsertCommand = string.Format(InsertCommand, sqlServer.SchemaName, sqlServer.TableName);
+
         _localizationRecords = _dbConnection.Query<LocalizationRecord>(SelectCommand, commandType: CommandType.Text).ToList();
     }
-    
+
     private void CreateTableIfNeeded()
     {
-        string table = _liparOptions.Translation.TableName;
-        string schema = _liparOptions.Translation.SchemaName;
         string createTable = $"IF (NOT EXISTS (SELECT *  FROM INFORMATION_SCHEMA.TABLES WHERE " +
-    $"TABLE_SCHEMA = '{schema}' AND  TABLE_NAME = '{table}' )) Begin " +
-    $"CREATE TABLE [{schema}].[{table}]( " +
+        $"TABLE_SCHEMA = '{sqlServer.SchemaName}' AND  TABLE_NAME = '{ sqlServer.TableName}' )) Begin " +
+        $"CREATE TABLE [{sqlServer.SchemaName}].[{ sqlServer.TableName}]( " +
         $"[Id] [int] IDENTITY(1,1) NOT NULL Primary Key," +
         $"[Key] [nvarchar](255) NOT NULL," +
         $"[Value] [nvarchar](500) NOT NULL," +
         $"[Culture] [nvarchar](5) NULL)" +
         $" End";
+
         _dbConnection.Execute(createTable);
     }
-    
+
     public string Get(string key, string culture)
     {
         var record = _localizationRecords.FirstOrDefault(c => c.Key == key && c.Culture == culture);
@@ -62,18 +61,18 @@ private readonly string InsertCommand = "INSERT INTO [{0}].[{1}]([Key],[Value],[
                 Culture = culture,
                 Value = key
             };
-            
+
             var parameters = new DynamicParameters();
             parameters.Add("@Key", key);
             parameters.Add("@Culture", culture);
             parameters.Add("@Value", key);
-            
+
             record.Id = _dbConnection.Query<int>(InsertCommand, param: parameters, commandType: CommandType.Text).FirstOrDefault();
             _localizationRecords.Add(record);
         }
         return record.Value;
     }
-    
+
 }
 
 

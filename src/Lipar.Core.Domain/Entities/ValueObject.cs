@@ -11,15 +11,15 @@ where TValueObject : ValueObject<TValueObject>
 {
     public bool Equals(TValueObject other)
     {
-        if(other == null)
-        return false;
+        if (other == null)
+            return false;
         return this == other;
     }
     public override bool Equals(object obj)
     {
         var otherObject = obj as TValueObject;
         if (otherObject == null)
-        return false;
+            return false;
         return ObjectIsEqual(otherObject);
     }
     public override int GetHashCode()
@@ -31,16 +31,16 @@ where TValueObject : ValueObject<TValueObject>
     public static bool operator ==(ValueObject<TValueObject> right, ValueObject<TValueObject> left)
     {
         if (right is null && left is null)
-        return true;
+            return true;
         if (right is null || left is null)
-        return false;
+            return false;
         return right.Equals(left);
     }
     public static bool operator !=(ValueObject<TValueObject> right, ValueObject<TValueObject> left)
     {
         return !(right == left);
     }
-    
+
 }
 
 

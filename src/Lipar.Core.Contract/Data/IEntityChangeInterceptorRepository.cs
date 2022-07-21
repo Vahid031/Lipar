@@ -1,11 +1,12 @@
 using Lipar.Core.Domain.Events;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Lipar.Core.Contract.Data;
 
 public interface IEntityChangesInterceptorRepository
 {
-    void AddEntityChanges(IEnumerable<EntityChangesInterception> entities);
+    Task AddEntityChanges(IEnumerable<EntityChangesInterception> entities);
 }
 
 

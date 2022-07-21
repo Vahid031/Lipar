@@ -15,15 +15,15 @@ public static class ConfigurationExtensions
             c.SwaggerEndpoint(liparOptions.Swagger.Url, liparOptions.Swagger.Name);
             //c.RoutePrefix = "";
         });
-        
+
         app.UseApiExceptionHandler();
-        
+
         app.UseHttpsRedirection();
-        
+
         app.UseRouting();
-        
+
         app.UseAuthorization();
-        
+
         app.UseEndpoints(endpoints =>
         {
             endpoints.MapControllers();

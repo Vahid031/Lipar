@@ -15,7 +15,7 @@ public static class ChangeTrackerExtensions
     public static void SetShadowProperties(this ChangeTracker changeTracker)
     {
         var userId = Guid.NewGuid();
-        
+
         // add Entity shadow properties
         changeTracker
         .Entries<Entity>()
@@ -24,8 +24,8 @@ public static class ChangeTrackerExtensions
         {
             entity.Property<DateTime>(ModelBuilderExtensions.CreatedDate).CurrentValue = DateTime.UtcNow;
         });
-        
-        
+
+
         // add IAuditable shadow properties
         changeTracker
         .Entries<IAuditable>()
@@ -35,37 +35,37 @@ public static class ChangeTrackerExtensions
             switch (entity.State)
             {
                 case EntityState.Deleted:
-                /// when configuration for soft delete were develope, complete this place
-                break;
+                    /// when configuration for soft delete were develope, complete this place
+                    break;
                 case EntityState.Modified:
-                entity.Property<Guid?>(ModelBuilderExtensions.ModifedBy).CurrentValue = userId;
-                entity.Property<DateTime?>(ModelBuilderExtensions.ModifedDate).CurrentValue = DateTime.UtcNow;
-                break;
+                    entity.Property<Guid?>(ModelBuilderExtensions.ModifedBy).CurrentValue = userId;
+                    entity.Property<DateTime?>(ModelBuilderExtensions.ModifedDate).CurrentValue = DateTime.UtcNow;
+                    break;
                 case EntityState.Added:
-                entity.Property<Guid?>(ModelBuilderExtensions.CreatedBy).CurrentValue = userId;
-                break;
+                    entity.Property<Guid?>(ModelBuilderExtensions.CreatedBy).CurrentValue = userId;
+                    break;
                 default:
-                break;
+                    break;
             }
         });
     }
-    
+
     public static List<EntityEntry<Entity>> GetTrackingAggrigates(this ChangeTracker changeTracker) =>
     changeTracker.Entries<Entity>()
     .Where(m => m.State == EntityState.Added || m.State == EntityState.Modified)
     .ToList();
-    
+
     public static List<AggregateRoot> GetAggregatesWithEvent(this ChangeTracker changeTracker) =>
     changeTracker.Entries<AggregateRoot>()
     .Where(x => x.State != EntityState.Detached)
     .Select(c => c.Entity)
-    .Where(c => c.GetChanges().Any())
+    .Where(c => c.GetEvents().Any())
     .ToList();
-    
+
     public static IEnumerable<EntityChangesInterception> GetEntityChangesInterceptor(this ChangeTracker changeTracker)
     {
         IEnumerable<EntityEntry<Entity>> entries = changeTracker.GetTrackingAggrigates();
-        
+
         var auditProperties = new List<string>
         {
             ModelBuilderExtensions.CreatedBy,
@@ -74,11 +74,11 @@ public static class ChangeTrackerExtensions
             ModelBuilderExtensions.ModifedDate,
             ModelBuilderExtensions.Id,
         };
-        
+
         foreach (EntityEntry entry in entries)
-        yield return ApplyAuditLog(entry, auditProperties);
+            yield return ApplyAuditLog(entry, auditProperties);
     }
-    
+
     private static EntityChangesInterception ApplyAuditLog(EntityEntry entry, List<string> auditProperties)
     {
         var log = new EntityChangesInterception(
@@ -86,7 +86,7 @@ public static class ChangeTrackerExtensions
         entry.Entity.GetType().Name,
         ((EntityId)entry.Property(ModelBuilderExtensions.Id).CurrentValue).Value,
         entry.State.ToString());
-        
+
         foreach (var item in entry.Properties.Where(m => auditProperties.All(p => p != m.Metadata.Name)))
         {
             if (entry.State == EntityState.Added || item.IsModified)
@@ -96,7 +96,7 @@ public static class ChangeTrackerExtensions
         }
         return log;
     }
-    
+
 }
 
 

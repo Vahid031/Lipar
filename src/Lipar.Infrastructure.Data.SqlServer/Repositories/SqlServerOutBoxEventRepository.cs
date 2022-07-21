@@ -5,28 +5,20 @@ using System.Linq;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Domain.Events;
-using Lipar.Core.Domain.Entities;
-using Lipar.Core.Contract.Services;
-using System;
+using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 
 public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
 {
     private readonly SqlServerOptions sqlServer;
-    private readonly IUserInfoService userInfoService;
-    private readonly IJsonService jsonService;
-    private readonly IDateTimeService dateTimeService;
     private readonly string SelectCommand;
     private readonly string UpdateCommand;
     private readonly string InsertCommand;
 
-    public SqlServerOutBoxEventRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
+    public SqlServerOutBoxEventRepository(LiparOptions liparOptions)
     {
         sqlServer = liparOptions.OutBoxEvent.SqlServer;
-        this.userInfoService = userInfoService;
-        this.jsonService = jsonService;
-        this.dateTimeService = dateTimeService;
 
         SelectCommand = string.Format("Select top {2} * from {0}.{1} where IsProcessed = 0",
             sqlServer.SchemaName,
@@ -40,7 +32,7 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
             "{0}"
         );
 
-        InsertCommand = string.Format("INSERT INTO {0}.{1}(Id, AccuredByUserId, AccuredOn, AggregateName, AggregateTypeName, AggregateId, EventName, EventTypeName, EventPayload, IsProcessed) VALUES(@Id, @AccuredByUserId, @AccuredOn, @AggregateName, @AggregateTypeName, @AggregateId, @EventName, @EventTypeName, @EventPayload, @IsProcessed)",
+        InsertCommand = string.Format("INSERT INTO {0}.{1}(Id, AccuredByUserId, AccuredOn, EventName, EventTypeName, EventPayload, IsProcessed) VALUES(@Id, @AccuredByUserId, @AccuredOn, @EventName, @EventTypeName, @EventPayload, @IsProcessed)",
          sqlServer.SchemaName,
          sqlServer.TableName
         );
@@ -59,9 +51,6 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
                 $" [Id][uniqueidentifier] NOT NULL," +
                 $" [AccuredByUserId] [nvarchar](40) NULL," +
                 $" [AccuredOn] [datetime2](7) NOT NULL," +
-                $" [AggregateName] [nvarchar](200) NULL," +
-                $" [AggregateTypeName] [nvarchar](500) NULL," +
-                $" [AggregateId] [nvarchar](40) NULL," +
                 $" [EventName] [nvarchar](100) NULL," +
                 $" [EventTypeName] [nvarchar](500) NULL," +
                 $" [EventPayload] [nvarchar](max)NULL," +
@@ -76,50 +65,31 @@ public class SqlServerOutBoxEventRepository : IOutBoxEventRepository
         connection.Execute(createTableQuery);
     }
 
-    public void AddOutboxEvetItems(List<AggregateRoot> changedAggregates)
+    public async Task AddOutboxEvent(OutBoxEvent outBoxEvent)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
 
-        foreach (var aggregate in changedAggregates)
-        {
-            foreach (var @event in aggregate.GetChanges())
-            {
-                connection.Execute(InsertCommand, new OutBoxEvent
-                {
-                    Id = Guid.NewGuid(),
-                    AccuredByUserId = userInfoService.UserId.ToString(),
-                    AccuredOn = dateTimeService.Now,
-                    AggregateId = aggregate.Id.ToString(),
-                    AggregateName = aggregate.GetType().Name,
-                    AggregateTypeName = aggregate.GetType().FullName,
-                    EventName = @event.GetType().Name,
-                    EventTypeName = @event.GetType().FullName,
-                    EventPayload = jsonService.SerializeObject(@event),
-                    IsProcessed = false
-                });
-            }
-        }
+        await connection.ExecuteAsync(InsertCommand, outBoxEvent);
     }
 
-    public List<OutBoxEvent> GetOutBoxEventItemsForPublish(int maxCount)
+    public async Task<List<OutBoxEvent>> GetOutBoxEventItemsForPublish(int maxCount)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
         string query = string.Format(SelectCommand, maxCount);
 
-        return connection.Query<OutBoxEvent>(query).ToList();
+        return (await connection.QueryAsync<OutBoxEvent>(query)).ToList();
     }
 
-    public void MarkAsRead(List<OutBoxEvent> outBoxEventItems)
+    public async Task MarkAsRead(List<OutBoxEvent> outBoxEvents)
     {
-        string idForMark = string.Join(',', outBoxEventItems.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'").ToList());
+        string idForMark = string.Join(',', outBoxEvents.Where(c => c.IsProcessed).Select(c => $"'{c.Id}'").ToList());
         if (!string.IsNullOrWhiteSpace(idForMark))
         {
             using var connection = new SqlConnection(sqlServer.ConnectionString);
             string query = string.Format(UpdateCommand, idForMark);
-            connection.Execute(query);
+            await connection.ExecuteAsync(query);
         }
     }
-
 }
 
 

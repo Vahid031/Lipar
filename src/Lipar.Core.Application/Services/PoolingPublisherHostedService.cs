@@ -58,7 +58,7 @@ public class PoolingPublisherHostedService : IHostedService
     {
         _timer.Change(Timeout.Infinite, 0);
 
-        var outboxItems = _outBoxEventRepository.GetOutBoxEventItemsForPublish(_liparOptions.PoolingPublisher.SendOutBoxCount);
+        var outboxItems = _outBoxEventRepository.GetOutBoxEventItemsForPublish(_liparOptions.PoolingPublisher.SendOutBoxCount).Result;
 
         foreach (var item in outboxItems)
         {

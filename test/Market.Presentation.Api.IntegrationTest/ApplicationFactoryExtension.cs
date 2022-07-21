@@ -19,6 +19,17 @@ public static class ApplicationFactoryExtension
             o.UseInMemoryDatabase(databaseName));
 
         return services;
+    }   
+    
+    public static IServiceCollection AlterService<TService, TImplementation>(this IServiceCollection services) where TService : class where TImplementation : class, TService
+    {
+        ServiceDescriptor descriptor = services.Single(
+                   d => d.ServiceType == typeof(TService));
+        if (descriptor != null) services.Remove(descriptor);
+
+        services.AddSingleton<TService, TImplementation>();
+
+        return services;
     }
 
 

@@ -12,19 +12,19 @@ public class ParrotTranslator : ITranslator
     private readonly string _currentCulture;
     public ParrotTranslator(LiparOptions liparOptions, IHttpContextAccessor httpContextAccessor)
     {
-        
+
         string accetpLanguage = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString().Trim();
         if (string.IsNullOrEmpty(accetpLanguage) || accetpLanguage == "*" || accetpLanguage.Length < 5)
-        _currentCulture = CultureInfo.CurrentCulture.ToString();
+            _currentCulture = CultureInfo.CurrentCulture.ToString();
         else
-        _currentCulture = accetpLanguage.Substring(0, 5);
-        
+            _currentCulture = accetpLanguage.Substring(0, 5);
+
         _localizer = ParrotDataWrapper.CreateFactory(liparOptions);
     }
-    
-public string this[string name] { get => GetString(name); set => throw new NotImplementedException(); }
-public string this[string name, params string[] arguments] { get => GetString(name, arguments); set => throw new NotImplementedException(); }
-public string this[char separator, params string[] names] { get => GetConcateString(separator, names); set => throw new NotImplementedException(); }
+
+    public string this[string name] { get => GetString(name); set => throw new NotImplementedException(); }
+    public string this[string name, params string[] arguments] { get => GetString(name, arguments); set => throw new NotImplementedException(); }
+    public string this[char separator, params string[] names] { get => GetConcateString(separator, names); set => throw new NotImplementedException(); }
     public string GetString(string name)
     {
         return _localizer.Get(name, _currentCulture);
@@ -38,7 +38,7 @@ public string this[char separator, params string[] names] { get => GetConcateStr
         pattern = GetString(pattern);
         for (int i = 0; i < arguments.Length; i++)
         {
-        string placeHolder = $"{{{i}}}";
+            string placeHolder = $"{{{i}}}";
             pattern = pattern.Replace(placeHolder, arguments[i]);
         }
         return pattern;

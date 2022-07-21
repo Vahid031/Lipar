@@ -1,56 +1,46 @@
+﻿using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using Lipar.Presentation.Api.Extensions;
+using Market.Infrastructure.Data.Identity.Contexts;
+using Market.Infrastructure.Data.Identity.Models;
+using Market.Infrastructure.Data.SqlServer.Commands.Common;
+using Market.Infrastructure.Data.SqlServerQuery.Common;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Lipar.Presentation.Api.Extensions;
-using Market.Infrastructure.Data.SqlServerQuery.Common;
-using Microsoft.EntityFrameworkCore;
-using Lipar.Infrastructure.Tools.Utilities.Configurations;
-using System;
-using Microsoft.OpenApi.Models;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Market.Infrastructure.Data.Identity.Contexts;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using System;
 using System.Text;
-using Market.Infrastructure.Data.Identity.Models;
-using Microsoft.AspNetCore.Identity;
-using Market.Infrastructure.Data.SqlServer.Commands.Common;
-using Microsoft.Extensions.Hosting;
 
 namespace Market.Presentation.Api;
 
-public class Startup
+public static class HostingExtension
 {
-    public Startup(IConfiguration configuration)
+    public static WebApplicationBuilder ConfigureServices(this WebApplicationBuilder builder)
     {
-        Configuration = configuration;
-    }
+        builder.Services.AddLiparServices(builder.Configuration, nameof(Lipar), nameof(Market));
 
-    public IConfiguration Configuration { get; }
-
-    public void ConfigureServices(IServiceCollection services)
-    {
-        services.AddLiparServices(Configuration, nameof(Lipar), nameof(Market));
-
-        services.AddDbContext<MarketCommandDbContext>(
-        c => c.UseSqlServer(Configuration.GetConnectionString("CommandConnectionString")));
+        builder.Services.AddDbContext<MarketCommandDbContext>(
+        c => c.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString")));
 
         //services.AddScoped<MarketCommandDbContext>();
 
-        services.AddDbContext<MarketQueryDbContext>(
-        c => c.UseSqlServer(Configuration.GetConnectionString("QueryConnectionString")));
+        builder.Services.AddDbContext<MarketQueryDbContext>(
+        c => c.UseSqlServer(builder.Configuration.GetConnectionString("QueryConnectionString")));
 
-        services.AddDbContext<IdentityContext>(options =>
-        options.UseSqlServer(
-        Configuration.GetConnectionString("IdentityConnectionString"),
-        b => b.MigrationsAssembly(typeof(IdentityContext).Assembly.FullName)));
+        builder.Services.AddDbContext<IdentityContext>(options =>
+        options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnectionString")));
 
-        services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
+        builder.Services.AddIdentity<ApplicationUser, IdentityRole>().AddEntityFrameworkStores<IdentityContext>();
 
 
-        services.Configure<JWTSetting>(Configuration.GetSection("JWTSetting"));
+        builder.Services.Configure<JWTSetting>(builder.Configuration.GetSection("JWTSetting"));
 
-        services.AddAuthentication(o =>
+        builder.Services.AddAuthentication(o =>
         {
             o.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
             o.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -66,9 +56,9 @@ public class Startup
                 ValidateAudience = true,
                 ValidateLifetime = true,
                 ValidateIssuerSigningKey = true,
-                ValidIssuer = Configuration["JWTSetting:Issuer"],
-                ValidAudience = Configuration["JWTSetting:Audience"],
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["JWTSetting:Key"]))
+                ValidIssuer = builder.Configuration["JWTSetting:Issuer"],
+                ValidAudience = builder.Configuration["JWTSetting:Audience"],
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["JWTSetting:Key"]))
             };
             //options.Events = new JwtBearerEvents()
             //{
@@ -97,7 +87,7 @@ public class Startup
             //};
         });
 
-        services.AddCors(setupAction =>
+        builder.Services.AddCors(setupAction =>
         setupAction.AddPolicy("MyPolicy",
         builder => builder
         .AllowAnyOrigin()
@@ -105,7 +95,7 @@ public class Startup
         .AllowAnyHeader()
         ));
 
-        services.AddSwaggerGen(c =>
+        builder.Services.AddSwaggerGen(c =>
         {
 
             //c.SwaggerDoc("v1", new OpenApiInfo
@@ -142,28 +132,22 @@ public class Startup
             securityRequirement.Add(securitySchema, Array.Empty<string>());
             c.AddSecurityRequirement(securityRequirement);
         });
+
+
+        return builder;
     }
 
-    public void Configure(IApplicationBuilder app, IWebHostEnvironment env, LiparOptions liparOptions)
+    public static WebApplication ConfigurePipelines(this WebApplication app)
     {
+        var env = app.Services.GetRequiredService<IWebHostEnvironment>();
+        var liparOptions = app.Services.GetRequiredService<LiparOptions>();
+
         app.UseCors("MyPolicy");
         app.UseAuthentication();
         app.UseAuthorization();
 
         app.AddLiparConfiguration(env, liparOptions);
 
-        if (env.IsDevelopment())
-        {
-            using (var scope = app.ApplicationServices.CreateScope())
-            {
-                var commandDb = scope.ServiceProvider.GetService<MarketCommandDbContext>();
-                var identityDb = scope.ServiceProvider.GetService<IdentityContext>();
-
-                commandDb.Database.EnsureCreated();
-                identityDb.Database.EnsureCreated();
-            }
-        }
+        return app;
     }
 }
-
-

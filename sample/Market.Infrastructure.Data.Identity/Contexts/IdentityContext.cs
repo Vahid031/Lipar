@@ -18,7 +18,7 @@ public class IdentityContext : IdentityDbContext<ApplicationUser>
         {
             entity.ToTable(name: "User");
         });
-        
+
         builder.Entity<IdentityRole>(entity =>
         {
             entity.ToTable(name: "Role");
@@ -27,23 +27,23 @@ public class IdentityContext : IdentityDbContext<ApplicationUser>
         {
             entity.ToTable("UserRoles");
         });
-        
+
         builder.Entity<IdentityUserClaim<string>>(entity =>
         {
             entity.ToTable("UserClaims");
         });
-        
+
         builder.Entity<IdentityUserLogin<string>>(entity =>
         {
             entity.ToTable("UserLogins");
         });
-        
+
         builder.Entity<IdentityRoleClaim<string>>(entity =>
         {
             entity.ToTable("RoleClaims");
-            
+
         });
-        
+
         builder.Entity<IdentityUserToken<string>>(entity =>
         {
             entity.ToTable("UserTokens");

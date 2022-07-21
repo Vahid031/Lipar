@@ -1,9 +1,9 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Vahid Goodarzi</Authors>
-    <Version>6.0.1</Version>
+    <Version>6.0.4</Version>
     <AssemblyName>Lipar.Infrastructure.Data.SqlServer</AssemblyName>
     <RootNamespace>Lipar.Infrastructure.Data.SqlServer</RootNamespace>
   </PropertyGroup>

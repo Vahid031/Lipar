@@ -20,7 +20,7 @@ public class RabbitMQEventBus : IEventBus
     private readonly IConnection _connection;
     private readonly LiparOptions _liparOptions;
     private readonly Dictionary<string, string> _messageTypeMap;
-    
+
     public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
     {
         _liparOptions = liparOptions;
@@ -32,33 +32,33 @@ public class RabbitMQEventBus : IEventBus
             Uri = liparOptions.MessageBus.RabbitMQ.Uri
         };
         _connection = connectionFactory.CreateConnection();
-        
+
         var channel = _connection.CreateModel();
         channel.ExchangeDeclare(liparOptions.MessageBus.RabbitMQ.ExchangeName,
         ExchangeType.Topic,
         liparOptions.MessageBus.RabbitMQ.ExchangeDurable,
         liparOptions.MessageBus.RabbitMQ.ExchangeAutoDeleted);
-        
-        
+
+
         _messageTypeMap = new Dictionary<string, string>();
         if (_liparOptions?.MessageBus?.Events?.Any() == true)
         {
             foreach (var @event in _liparOptions.MessageBus.Events)
             {
-            _messageTypeMap.Add($"{@event.ServiceId}.{@event.EventName}", @event.MapToClass);
+                _messageTypeMap.Add($"{@event.ServiceId}.{@event.EventName}", @event.MapToClass);
             }
         }
     }
-    
-    public void Publish<T>(T input)
+
+    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
-        string messageName = input.GetType().Name;
+        string messageName = @event.GetType().Name;
         Parcel parcel = new Parcel
         {
             MessageId = Guid.NewGuid().ToString(),
-            MessageBody = _jsonService.SerializeObject(input),
+            MessageBody = _jsonService.SerializeObject(@event),
             MessageName = messageName,
-        Route = $"{_liparOptions.ServiceId}.{messageName}",
+            Route = $"{_liparOptions.ServiceId}.{messageName}",
             Headers = new Dictionary<string, object>
             {
                 ["AccuredOn"] = DateTime.Now.ToString(),
@@ -66,7 +66,7 @@ public class RabbitMQEventBus : IEventBus
         };
         Send(parcel);
     }
-    
+
     private void Send(Parcel parcel)
     {
         var channel = _connection.CreateModel();
@@ -81,24 +81,24 @@ public class RabbitMQEventBus : IEventBus
         basicProperties,
         Encoding.UTF8.GetBytes(parcel.MessageBody));
     }
-    
+
     public void Subscribe(string serviceId, string eventName)
     {
-    var route = $"{serviceId}.{eventName}";
-        
+        var route = $"{serviceId}.{eventName}";
+
         var channel = _connection.CreateModel();
         var consumer = new EventingBasicConsumer(channel);
         consumer.Received += Consumer_EventReceived;
-    var queue = channel.QueueDeclare($"{ _liparOptions.ServiceId}", true, false, false);
-        
+        var queue = channel.QueueDeclare($"{ _liparOptions.ServiceId}", true, false, false);
+
         channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, route);
         channel.BasicConsume(queue.QueueName, true, consumer);
     }
-    
+
     private void Consumer_EventReceived(object sender, BasicDeliverEventArgs e)
     {
         var parcel = e.ToParcel();
-        
+
         if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
         {
             var mapToClass = _messageTypeMap[parcel.Route];
@@ -107,7 +107,7 @@ public class RabbitMQEventBus : IEventBus
             _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
         }
     }
-    
+
     private IEvent GetEvent(string typeName, string data)
     {
         Type type = Type.GetType(typeName);
@@ -115,9 +115,9 @@ public class RabbitMQEventBus : IEventBus
         {
             type = asm.GetType(typeName);
             if (type != null)
-            break;
+                break;
         }
-        
+
         return (IEvent)_jsonService.DeserializeObject(data, type);
     }
 }

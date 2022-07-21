@@ -5,6 +5,7 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Data.SqlClient;
 using System.Collections.Generic;
 using Dapper;
+using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Repositories;
 
@@ -58,7 +59,7 @@ public class SqlServerEntityChangeInterceptorRepository : IEntityChangesIntercep
 
 
 
-    public void AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
+    public async Task AddEntityChanges(IEnumerable<EntityChangesInterception> entities)
     {
         using var connection = new SqlConnection(sqlServer.ConnectionString);
 
@@ -72,7 +73,7 @@ public class SqlServerEntityChangeInterceptorRepository : IEntityChangesIntercep
             foreach (var detail in entity.Details)
                 details.Add(detail.Key, detail.Value);
 
-            connection.Execute(InsertCommand, new
+            await connection.ExecuteAsync(InsertCommand, new
             {
                 entity.Id,
                 entity.Date,
