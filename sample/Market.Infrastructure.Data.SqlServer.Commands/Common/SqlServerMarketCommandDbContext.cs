@@ -3,10 +3,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Common;
 
-public class MarketCommandDbContext : BaseCommandDbContext
+public class SqlServerMarketCommandDbContext : BaseCommandDbContext
 {
     #region Create and Configuration
-    public MarketCommandDbContext(DbContextOptions<MarketCommandDbContext> options) : base(options)
+    public SqlServerMarketCommandDbContext(DbContextOptions<SqlServerMarketCommandDbContext> options) : base(options)
     {
     }
 
@@ -15,12 +15,6 @@ public class MarketCommandDbContext : BaseCommandDbContext
         modelBuilder.ApplyConfigurationsFromAssembly(GetType().Assembly);
 
         base.OnModelCreating(modelBuilder);
-    }
-
-    protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-    {
-        //optionsBuilder.UseSqlServer("Server=(localdb)\\mssqllocaldb;Database=Market;Trusted_Connection=True;");
-        base.OnConfiguring(optionsBuilder);
     }
     #endregion
 }

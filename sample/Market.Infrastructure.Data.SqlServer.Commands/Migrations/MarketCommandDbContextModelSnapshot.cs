@@ -8,7 +8,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
-    [DbContext(typeof(MarketCommandDbContext))]
+    [DbContext(typeof(SqlServerMarketCommandDbContext))]
     partial class MarketCommandDbContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

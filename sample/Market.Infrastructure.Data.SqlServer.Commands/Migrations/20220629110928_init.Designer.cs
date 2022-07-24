@@ -9,7 +9,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Migrations
 {
-    [DbContext(typeof(MarketCommandDbContext))]
+    [DbContext(typeof(SqlServerMarketCommandDbContext))]
     [Migration("20220629110928_init")]
     partial class init
     {

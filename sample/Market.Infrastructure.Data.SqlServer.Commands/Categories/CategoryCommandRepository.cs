@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Categories;
 
-internal class CategoryCommandRepository : BaseCommandRepository<Category, MarketCommandDbContext>, ICategoryCommandRepository
+internal class CategoryCommandRepository : BaseCommandRepository<Category, SqlServerMarketCommandDbContext>, ICategoryCommandRepository
 {
-    public CategoryCommandRepository(MarketCommandDbContext db) : base(db)
+    public CategoryCommandRepository(SqlServerMarketCommandDbContext db) : base(db)
     {
     }
 

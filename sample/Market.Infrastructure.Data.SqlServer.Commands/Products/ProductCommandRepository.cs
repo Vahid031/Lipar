@@ -5,10 +5,10 @@ using Market.Infrastructure.Data.SqlServer.Commands.Common;
 
 namespace Market.Infrastructure.Data.SqlServer.Commands.Products;
 
-public class ProductCommandRepository : BaseCommandRepository<Product, MarketCommandDbContext>,
+public class ProductCommandRepository : BaseCommandRepository<Product, SqlServerMarketCommandDbContext>,
     IProductCommandRepository
 {
-    public ProductCommandRepository(MarketCommandDbContext db) : base(db)
+    public ProductCommandRepository(SqlServerMarketCommandDbContext db) : base(db)
     {
     }
 }

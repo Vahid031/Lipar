@@ -24,7 +24,7 @@ public static class HostingExtension
     {
         builder.Services.AddLiparServices(builder.Configuration, nameof(Lipar), nameof(Market));
 
-        builder.Services.AddDbContext<MarketCommandDbContext>(
+        builder.Services.AddDbContext<SqlServerMarketCommandDbContext>(
         c => c.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString")));
 
         //services.AddScoped<MarketCommandDbContext>();
