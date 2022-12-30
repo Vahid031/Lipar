@@ -5,7 +5,7 @@ using Market.Core.Domain.Accounts.Enums;
 
 namespace Market.Infrastructure.Data.Identity.Seeds;
 
-public static class DefaultRoles
+public static class DefaultRole
 {
     public static async Task SeedAsync(RoleManager<IdentityRole> roleManager)
     {

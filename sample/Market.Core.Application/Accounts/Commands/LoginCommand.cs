@@ -18,6 +18,7 @@ using System.Security.Cryptography;
 using Microsoft.Extensions.Options;
 using System.Net;
 using System.Net.Sockets;
+using Market.Infrastructure.Data.Identity.Seeds;
 
 namespace Market.Core.Application.Accounts.Commands;
 
@@ -29,18 +30,21 @@ public class LoginCommand : IRequest<LoginDto>
     public class LoginCommandHandler : IRequestHandler<LoginCommand, LoginDto>
     {
         private readonly UserManager<ApplicationUser> _userManager;
+        private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly JWTSetting _JWTSetting;
         private readonly IDateTimeService _dateTimeService;
         private readonly IUserInfoService _userInfoService;
 
         public LoginCommandHandler(UserManager<ApplicationUser> userManager,
+        RoleManager<IdentityRole> roleManager,
         SignInManager<ApplicationUser> signInManager,
         IOptions<JWTSetting> options,
         IDateTimeService dateTimeService,
         IUserInfoService userInfoService)
         {
             _userManager = userManager;
+            _roleManager = roleManager;
             _signInManager = signInManager;
             _JWTSetting = options.Value;
             _dateTimeService = dateTimeService;
@@ -49,7 +53,8 @@ public class LoginCommand : IRequest<LoginDto>
 
         public async Task<LoginDto> Handle(LoginCommand request, CancellationToken cancellationToken)
         {
-
+            //await DefaultRole.SeedAsync(_roleManager);
+            //await DefaultUser.SeedAsync(_userManager);
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user == null)
             {

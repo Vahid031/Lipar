@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace Market.Presentation.Api.Products;
 
-//[ApiVersion("1.0")]
+[ApiVersion("1.0")]
 public class ProductController : BaseController
 {
 

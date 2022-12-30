@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 namespace Market.Presentation.Api.Categories;
 
+[ApiVersion("1.0")]
 public class CategoryController : BaseController
 {
     [HttpPost("create")]

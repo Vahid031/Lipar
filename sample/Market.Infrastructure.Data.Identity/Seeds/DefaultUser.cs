@@ -6,9 +6,9 @@ using System.Threading.Tasks;
 
 namespace Market.Infrastructure.Data.Identity.Seeds;
 
-public static class DefaultSuperAdmin
+public static class DefaultUser
 {
-    public static async Task SeedAsync(UserManager<ApplicationUser> userManager, RoleManager<IdentityRole> roleManager)
+    public static async Task SeedAsync(UserManager<ApplicationUser> userManager)
     {
         //Seed Default User
         var defaultUser = new ApplicationUser

@@ -1,4 +1,5 @@
 using Lipar.Core.Contract.Common;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
@@ -8,8 +9,8 @@ using System.Threading.Tasks;
 namespace Lipar.Presentation.Api.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
-//[Route("api/v{version:apiVersion}/[controller]")]
+[Authorize]
+[Route("api/v{version:apiVersion}/[controller]/[action]")]
 public abstract class BaseController : ControllerBase
 {
     private IMediator _mediator;

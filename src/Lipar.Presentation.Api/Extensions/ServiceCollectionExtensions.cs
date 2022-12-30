@@ -9,6 +9,7 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using FluentValidation.AspNetCore;
 using Lipar.Core.Application.Services;
 using Lipar.Infrastructure.Tools.IoC;
+using Microsoft.AspNetCore.Mvc.Versioning;
 
 namespace Lipar.Presentation.Api.Extensions;
 
@@ -41,6 +42,17 @@ public static class ServiceCollectionExtensions
                 Title = liparOptions.Swagger.Title,
                 Version = liparOptions.Swagger.Version
             });
+        });
+
+        services.AddApiVersioning(o =>
+        {
+            o.AssumeDefaultVersionWhenUnspecified = true;
+            o.DefaultApiVersion = new Microsoft.AspNetCore.Mvc.ApiVersion(1, 0);
+            o.ReportApiVersions = true;
+            o.ApiVersionReader = ApiVersionReader.Combine(
+                new QueryStringApiVersionReader("api-version"),
+                new HeaderApiVersionReader("X-Version"),
+                new MediaTypeApiVersionReader("ver"));
         });
     }
 
