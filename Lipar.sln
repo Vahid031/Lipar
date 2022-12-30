@@ -71,7 +71,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Market.Presentation.Api.Int
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Events", "Events", "{30D97201-0747-405D-99E7-93DBD5DA4A8B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Infrastructure.Events", "sample\Market.Infrastructure.Events\Market.Infrastructure.Events\Market.Infrastructure.Events.csproj", "{9772B30B-0C13-46B6-9BF6-5E02FBD7E113}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Market.Infrastructure.Events", "sample\Market.Infrastructure.Events\Market.Infrastructure.Events.csproj", "{9772B30B-0C13-46B6-9BF6-5E02FBD7E113}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
