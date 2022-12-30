@@ -29,7 +29,7 @@ public static class HostingExtension
 
         //services.AddScoped<MarketCommandDbContext>();
 
-        builder.Services.AddDbContext<MarketQueryDbContext>(
+        builder.Services.AddDbContext<SqlServerMarketQueryDbContext>(
         c => c.UseSqlServer(builder.Configuration.GetConnectionString("QueryConnectionString")));
 
         builder.Services.AddDbContext<IdentityContext>(options =>

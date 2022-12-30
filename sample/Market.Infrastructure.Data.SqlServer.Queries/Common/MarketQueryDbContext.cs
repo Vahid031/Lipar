@@ -4,9 +4,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Data.SqlServerQuery.Common;
 
-public partial class MarketQueryDbContext : BaseQueryDbContext
+public partial class SqlServerMarketQueryDbContext : BaseQueryDbContext
 {
-    public MarketQueryDbContext(DbContextOptions<MarketQueryDbContext> options) : base(options)
+    public SqlServerMarketQueryDbContext(DbContextOptions<SqlServerMarketQueryDbContext> options) : base(options)
     {
     }
 

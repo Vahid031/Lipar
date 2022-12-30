@@ -10,10 +10,10 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Market.Infrastructure.Data.SqlServerQuery.Products;
 
-public class ProductQueryRepository : BaseQueryRepository<MarketQueryDbContext>,
+public class ProductQueryRepository : BaseQueryRepository<SqlServerMarketQueryDbContext>,
 IProductQueryRepository
 {
-    public ProductQueryRepository(MarketQueryDbContext db) : base(db)
+    public ProductQueryRepository(SqlServerMarketQueryDbContext db) : base(db)
     {
     }
 

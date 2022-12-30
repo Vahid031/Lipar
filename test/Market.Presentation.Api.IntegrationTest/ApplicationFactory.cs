@@ -16,8 +16,8 @@ public class ApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            services.InMemoryDBContext<MarketQueryDbContext>("TestDb")
-                    .InMemoryDBContext<MarketCommandDbContext>("TestDb")
+            services.InMemoryDBContext<SqlServerMarketQueryDbContext>("TestDb")
+                    .InMemoryDBContext<SqlServerMarketCommandDbContext>("TestDb")
                     .InMemoryDBContext<IdentityContext>("TestDb");
 
 
