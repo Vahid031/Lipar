@@ -1,16 +1,15 @@
 using System;
 using System.Globalization;
 using Lipar.Core.Contract.Services;
-using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.AspNetCore.Http;
 
-namespace Zamin.Infra.Tools.Localizer.Parrot;
+namespace Lipar.Infrastructure.Tools.Localize.Parrot;
 
-public class ParrotTranslator : ITranslator
+public abstract class ParrotTranslator : ITranslator
 {
-    private readonly ParrotDataWrapper _localizer;
+    protected ParrotDataWrapper _localizer;
     private readonly string _currentCulture;
-    public ParrotTranslator(LiparOptions liparOptions, IHttpContextAccessor httpContextAccessor)
+    public ParrotTranslator(IHttpContextAccessor httpContextAccessor)
     {
 
         string accetpLanguage = httpContextAccessor.HttpContext.Request.Headers["Accept-Language"].ToString().Trim();
@@ -18,8 +17,6 @@ public class ParrotTranslator : ITranslator
             _currentCulture = CultureInfo.CurrentCulture.ToString();
         else
             _currentCulture = accetpLanguage.Substring(0, 5);
-
-        _localizer = ParrotDataWrapper.CreateFactory(liparOptions);
     }
 
     public string this[string name] { get => GetString(name); set => throw new NotImplementedException(); }

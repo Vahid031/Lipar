@@ -40,15 +40,15 @@ public abstract class BaseCommandDbContext
 
     public async Task<int> SaveChangesAsync()
     {
-        using (Session = await MongoClient.StartSessionAsync())
+        //using (Session = await MongoClient.StartSessionAsync())
         {
-            Session.StartTransaction();
+            //Session.StartTransaction();
 
             var commandTasks = _commands.Select(c => c());
 
             await Task.WhenAll(commandTasks);
 
-            await Session.CommitTransactionAsync();
+            //await Session.CommitTransactionAsync();
         }
 
         return _commands.Count;

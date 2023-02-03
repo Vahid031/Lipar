@@ -3,6 +3,7 @@
 public class InBoxEventOptions
 {
     public string TypeName { get; init; }
-    public SqlServerOptions SqlServer { get; set; }
+    public SqlServerOptions SqlServer { get; init; }
+    public MongoDbOptions MongoDb { get; init; }
 }
 

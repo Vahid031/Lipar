@@ -2,7 +2,7 @@
 using Lipar.Presentation.Api.Extensions;
 using Market.Infrastructure.Data.Identity.Contexts;
 using Market.Infrastructure.Data.Identity.Models;
-using Market.Infrastructure.Data.SqlServer.Commands.Common;
+using Market.Infrastructure.Data.Mongo.Commands.Common;
 using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
@@ -24,10 +24,10 @@ public static class HostingExtension
     {
         builder.Services.AddLiparServices(builder.Configuration, nameof(Lipar), nameof(Market));
 
-        builder.Services.AddDbContext<SqlServerMarketCommandDbContext>(
-        c => c.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString")));
+        //builder.Services.AddDbContext<SqlServerMarketCommandDbContext>(
+        //c => c.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString")));
 
-        //services.AddScoped<MarketCommandDbContext>();
+        builder.Services.AddScoped<MarketCommandDbContext>();
 
         builder.Services.AddDbContext<SqlServerMarketQueryDbContext>(
         c => c.UseSqlServer(builder.Configuration.GetConnectionString("QueryConnectionString")));

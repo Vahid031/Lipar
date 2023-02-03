@@ -4,6 +4,7 @@ public class TranslationOptions
 {
     public string TypeName { get; init; }
     public SqlServerOptions SqlServer { get; init; }
+    public MongoDbOptions MongoDb { get; init; }
 }
 
 

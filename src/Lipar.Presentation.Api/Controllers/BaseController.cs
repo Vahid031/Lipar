@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 namespace Lipar.Presentation.Api.Controllers;
 
 [ApiController]
-[Authorize]
+//[Authorize]
 [Route("api/v{version:apiVersion}/[controller]/[action]")]
 public abstract class BaseController : ControllerBase
 {
