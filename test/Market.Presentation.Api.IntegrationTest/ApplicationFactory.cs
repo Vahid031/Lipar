@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc.Testing;
-using Market.Infrastructure.Data.SqlServer.Commands.Common;
-using Market.Infrastructure.Data.SqlServerQuery.Common;
 using Market.Infrastructure.Data.Identity.Contexts;
 using Lipar.Core.Contract.Data;
 using Market.Presentation.Api.IntegrationTest.TestRepositories;
@@ -16,9 +14,9 @@ public class ApplicationFactory : WebApplicationFactory<Program>
     {
         builder.ConfigureServices(services =>
         {
-            services.InMemoryDBContext<SqlServerMarketQueryDbContext>("TestDb")
-                    .InMemoryDBContext<SqlServerMarketCommandDbContext>("TestDb")
-                    .InMemoryDBContext<IdentityContext>("TestDb");
+            //services.InMemoryDBContext<SqlServerMarketQueryDbContext>("TestDb")
+            //        .InMemoryDBContext<SqlServerMarketCommandDbContext>("TestDb")
+            //        .InMemoryDBContext<IdentityContext>("TestDb");
 
 
             services.AlterService<IOutBoxEventRepository, TestOutBoxEventRepository>();

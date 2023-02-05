@@ -1,9 +1,11 @@
 using Lipar.Core.Domain.Queries;
-using Market.Core.Domain.Products.QueryResults;
 using Market.Core.Domain.Products.Contracts;
-using Lipar.Infrastructure.Data.Mongo.Queries;
 using Market.Infrastructure.Data.Mongo.Queries.Common;
+using Lipar.Infrastructure.Data.Mongo.Queries;
 using MongoDB.Driver;
+using Lipar.Infrastructure.Data.Mongo.Extensions;
+using Market.Core.Domain.Products.QueryResults;
+using Market.Infrastructure.Data.Mongo.Queries.Models;
 
 namespace Market.Infrastructure.Data.Mongo.Queries.Products;
 
@@ -14,37 +16,43 @@ IProductQueryRepository
     {
     }
 
-    public Task<PagedData<GetProduct>> Select(IGetProduct input)
+    public async Task<PagedData<GetProduct>> Select(IGetProduct input)
     {
-
-        var query = Products.Find().Select(m => new GetProduct
-        {
-            Id = m.Id,
-            Name = m.Name,
-            Barcode = m.Barcode,
-        });
+        var filter = Builders<Product>.Filter.Empty;
 
         if (!string.IsNullOrEmpty(input.Name))
-            query = query.Where(m => m.Name.Contains(input.Name));
-
+            filter &= Builders<Product>.Filter.Where(m => m.Name.Contains(input.Name));
 
         if (!string.IsNullOrEmpty(input.Barcode))
-            query = query.Where(m => m.Barcode.Contains(input.Barcode));
+            filter &= Builders<Product>.Filter.Where(m => m.Barcode.Contains(input.Barcode));
 
 
-        return query.PagingAsync(input);
+
+        var query = _db.Products
+            .Find(filter)
+            .Project(m => new GetProduct
+            {
+                Id = m.Id,
+                Name = m.Name,
+                Barcode = m.Barcode,
+            });
+         
+        return await query.PagingAsync(input);
     }
 
-    public async Task<GetByIdProduct> Select(IGetByIdProduct input) =>
-    await Products
-    .Where(m => m.Id == input.Id)
-    .Select(m => new GetByIdProduct
+    public async Task<GetByIdProduct> Select(IGetByIdProduct input)
     {
-        Barcode = m.Barcode,
-        Name = m.Name,
-        Id = m.Id
-    })
-    .FirstOrDefaultAsync();
+        var query = _db.Products
+           .Find(m => m.Id == input.Id)
+           .Project(m => new GetByIdProduct
+           {
+               Barcode = m.Barcode,
+               Name = m.Name,
+               Id = m.Id
+           });
+
+        return await query.FirstOrDefaultAsync();
+    }
 }
 
 

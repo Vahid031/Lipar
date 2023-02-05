@@ -26,7 +26,7 @@
     <ProjectReference Include="..\..\src\Lipar.Presentation.Api\Lipar.Presentation.Api.csproj" />
     <ProjectReference Include="..\Market.Core.Application\Market.Core.Application.csproj" />
     <ProjectReference Include="..\Market.Infrastructure.Data.Mongo.Commands\Market.Infrastructure.Data.Mongo.Commands.csproj" />
-    <ProjectReference Include="..\Market.Infrastructure.Data.SqlServer.Queries\Market.Infrastructure.Data.SqlServer.Queries.csproj" />
+    <ProjectReference Include="..\Market.Infrastructure.Data.Mongo.Queries\Market.Infrastructure.Data.Mongo.Queries.csproj" />
     <ProjectReference Include="..\Market.Infrastructure.Events\Market.Infrastructure.Events.csproj" />
   </ItemGroup>
 

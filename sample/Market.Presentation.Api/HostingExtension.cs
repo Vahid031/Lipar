@@ -1,10 +1,9 @@
-﻿using Lipar.Infrastructure.Data.Mongo.NewFolder;
-using Lipar.Infrastructure.Tools.Utilities.Configurations;
+﻿using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Lipar.Presentation.Api.Extensions;
 using Market.Infrastructure.Data.Identity.Contexts;
 using Market.Infrastructure.Data.Identity.Models;
 using Market.Infrastructure.Data.Mongo.Commands.Common;
-using Market.Infrastructure.Data.SqlServerQuery.Common;
+using Market.Infrastructure.Data.Mongo.Queries.Common;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +13,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using MongoDB.Bson.Serialization;
 using System;
 using System.Text;
 
@@ -30,10 +28,10 @@ public static class HostingExtension
         //c => c.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString")));
 
         builder.Services.AddScoped<MongoDbMarketCommandDbContext>();
-        //BsonSerializer.RegisterSerializer(new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid>()));
+        builder.Services.AddScoped<MongoDbMarketQueryDbContext>();
 
-        builder.Services.AddDbContext<SqlServerMarketQueryDbContext>(
-        c => c.UseSqlServer(builder.Configuration.GetConnectionString("QueryConnectionString")));
+        //builder.Services.AddDbContext<SqlServerMarketQueryDbContext>(
+        //c => c.UseSqlServer(builder.Configuration.GetConnectionString("QueryConnectionString")));
 
         builder.Services.AddDbContext<IdentityContext>(options =>
         options.UseSqlServer(builder.Configuration.GetConnectionString("IdentityConnectionString")));
