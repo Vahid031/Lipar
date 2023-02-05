@@ -13,11 +13,11 @@ public class UserInfoService : IUserInfoService
         context = httpContextAccessor.HttpContext;
     }
 
-    public Guid UserId
+    public int UserId
     {
         get
         {
-            Guid.TryParse(context.User?.GetClaim(ClaimTypes.NameIdentifier), out Guid userId);
+            int.TryParse(context.User?.GetClaim(ClaimTypes.NameIdentifier), out int userId);
             return userId;
         }
     }

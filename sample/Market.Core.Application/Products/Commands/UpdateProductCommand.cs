@@ -1,6 +1,7 @@
 using FluentValidation;
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Services;
+using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Products.Contracts;
 using System;
 using System.Threading;
@@ -28,7 +29,8 @@ public class UpdateProductCommand : IRequest
             var entity = await _repository.GetAsync(request.Id);
 
             entity.Update(request.Name, request.Barcode);
-
+            
+            _repository.Update(entity);
             await _repository.CommitAsync();
         }
     }
@@ -41,15 +43,15 @@ public class UpdateProductCommand : IRequest
 
             RuleFor(m => m.Id)
             .NotEmpty().WithMessage(translator["not empty"])
-            .Must((entity, prop, context) => repository.Exists(x => prop == x.Id.Value)).WithMessage(translator["not found"]);
+            .Must((entity, prop, context) => repository.Exists((EntityId)entity.Id)).WithMessage(translator["not found"]);
 
             RuleFor(m => m.Name)
             .NotEmpty().WithMessage(translator["not empty"])
-        .MinimumLength(7).WithMessage(translator["must be {0} character", "7"]);
+            .MinimumLength(7).WithMessage(translator["must be {0} character", "7"]);
 
             RuleFor(m => m.Barcode)
             .Must(m => int.TryParse(m, out int s)).WithMessage(translator["must be number"])
-            .Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop) && entity.Id != x.Id.Value)).WithMessage(translator["same barcode already exist"]);
+            .Must((entity, prop, context) => !repository.Exists(x => x.Barcode.Equals(prop) && (EntityId)entity.Id != x.Id)).WithMessage(translator["same barcode already exist"]);
         }
     }
 }

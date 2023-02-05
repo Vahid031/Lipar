@@ -22,7 +22,7 @@ public static class ChangeTrackerExtensions
         .Where(e => e.State == EntityState.Added).ToList()
         .ForEach(entity =>
         {
-            entity.Property<DateTime>(ModelBuilderExtensions.CreatedDate).CurrentValue = DateTime.UtcNow;
+            entity.Property<DateTime>(ModelBuilderExtensions.CreatedOn).CurrentValue = DateTime.UtcNow;
         });
 
 
@@ -39,7 +39,7 @@ public static class ChangeTrackerExtensions
                     break;
                 case EntityState.Modified:
                     entity.Property<Guid?>(ModelBuilderExtensions.ModifedBy).CurrentValue = userId;
-                    entity.Property<DateTime?>(ModelBuilderExtensions.ModifedDate).CurrentValue = DateTime.UtcNow;
+                    entity.Property<DateTime?>(ModelBuilderExtensions.ModifedOn).CurrentValue = DateTime.UtcNow;
                     break;
                 case EntityState.Added:
                     entity.Property<Guid?>(ModelBuilderExtensions.CreatedBy).CurrentValue = userId;
@@ -69,9 +69,9 @@ public static class ChangeTrackerExtensions
         var auditProperties = new List<string>
         {
             ModelBuilderExtensions.CreatedBy,
-            ModelBuilderExtensions.CreatedDate,
+            ModelBuilderExtensions.CreatedOn,
             ModelBuilderExtensions.ModifedBy,
-            ModelBuilderExtensions.ModifedDate,
+            ModelBuilderExtensions.ModifedOn,
             ModelBuilderExtensions.Id,
         };
 

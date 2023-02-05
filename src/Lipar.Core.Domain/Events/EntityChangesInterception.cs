@@ -11,7 +11,7 @@ public class EntityChangesInterception
     public Guid EntityId { get; private set; }
     public string State { get; private set; }
     public DateTime Date { get; private set; }
-    public Guid UserId { get; private set; }
+    public int UserId { get; private set; }
     public IReadOnlyCollection<EntityChangesInterceptionDetail> Details => _details.ToList();
     private HashSet<EntityChangesInterceptionDetail> _details { get; set; } = new HashSet<EntityChangesInterceptionDetail>();
 
@@ -30,7 +30,7 @@ public class EntityChangesInterception
         Date = date;
     }
 
-    public void SetUserId(Guid userId)
+    public void SetUserId(int userId)
     {
         UserId = userId;
     }

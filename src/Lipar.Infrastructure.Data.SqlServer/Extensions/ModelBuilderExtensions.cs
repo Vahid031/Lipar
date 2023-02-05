@@ -25,10 +25,10 @@ public static class ModelBuilderExtensions
             .IsClustered(false);
 
             modelBuilder.Entity(entityType.ClrType)
-            .Property<DateTime>(CreatedDate)
+            .Property<DateTime>(CreatedOn)
             .IsRequired();
             modelBuilder.Entity(entityType.ClrType)
-            .HasIndex(CreatedDate)
+            .HasIndex(CreatedOn)
             .IsUnique()
             .IsClustered(true);
         });
@@ -46,7 +46,7 @@ public static class ModelBuilderExtensions
             modelBuilder.Entity(entityType.ClrType)
             .Property<Guid?>(CreatedBy);
             modelBuilder.Entity(entityType.ClrType)
-            .Property<DateTime?>(ModifedDate);
+            .Property<DateTime?>(ModifedOn);
             modelBuilder.Entity(entityType.ClrType)
             .Property<Guid?>(ModifedBy);
         });
@@ -55,9 +55,9 @@ public static class ModelBuilderExtensions
 
     public const string Id = nameof(Id);
 
-    public const string CreatedDate = nameof(CreatedDate);
+    public const string CreatedOn = nameof(CreatedOn);
 
-    public const string ModifedDate = nameof(ModifedDate);
+    public const string ModifedOn = nameof(ModifedOn);
 
     public const string CreatedBy = nameof(CreatedBy);
 

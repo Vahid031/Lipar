@@ -1,12 +1,19 @@
 using Lipar.Infrastructure.Data.Mongo.Commands;
-using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using System;
 
 namespace Market.Infrastructure.Data.Mongo.Commands.Common;
 
 public class MarketCommandDbContext : BaseCommandDbContext
 {
-    public MarketCommandDbContext(LiparOptions liparOptions) : base(liparOptions)
+    private static bool registeredAllSerializer = false;
+    public MarketCommandDbContext(IServiceProvider serviceProvider) : base(serviceProvider)
     {
+        if (!registeredAllSerializer)
+        {
+
+            registeredAllSerializer = true;
+        }
+
     }
 }
 
