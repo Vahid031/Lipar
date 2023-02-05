@@ -29,7 +29,7 @@ public static class HostingExtension
         //builder.Services.AddDbContext<SqlServerMarketCommandDbContext>(
         //c => c.UseSqlServer(builder.Configuration.GetConnectionString("CommandConnectionString")));
 
-        builder.Services.AddScoped<MarketCommandDbContext>();
+        builder.Services.AddScoped<MongoDbMarketCommandDbContext>();
         //BsonSerializer.RegisterSerializer(new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid>()));
 
         builder.Services.AddDbContext<SqlServerMarketQueryDbContext>(

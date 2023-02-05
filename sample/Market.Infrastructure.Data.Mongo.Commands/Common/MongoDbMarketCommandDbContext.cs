@@ -3,10 +3,10 @@ using System;
 
 namespace Market.Infrastructure.Data.Mongo.Commands.Common;
 
-public class MarketCommandDbContext : BaseCommandDbContext
+public class MongoDbMarketCommandDbContext : BaseCommandDbContext
 {
     private static bool registeredAllSerializer = false;
-    public MarketCommandDbContext(IServiceProvider serviceProvider) : base(serviceProvider)
+    public MongoDbMarketCommandDbContext(IServiceProvider serviceProvider) : base(serviceProvider)
     {
         if (!registeredAllSerializer)
         {

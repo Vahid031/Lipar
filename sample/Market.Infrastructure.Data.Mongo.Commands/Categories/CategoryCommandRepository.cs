@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Market.Infrastructure.Data.Mongo.Commands.Categories;
 
-public class CategoryCommandRepository : BaseCommandRepository<Category, MarketCommandDbContext>,
+public class CategoryCommandRepository : BaseCommandRepository<Category, MongoDbMarketCommandDbContext>,
     ICategoryCommandRepository
 {
-    public CategoryCommandRepository(MarketCommandDbContext db) : base(db)
+    public CategoryCommandRepository(MongoDbMarketCommandDbContext db) : base(db)
     {
     }
 

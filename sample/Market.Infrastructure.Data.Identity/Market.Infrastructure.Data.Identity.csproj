@@ -13,9 +13,4 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="6.0.0" />
   </ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Market.Core.Domain\Market.Core.Domain.csproj" />
-    <ProjectReference Include="..\..\src\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
-  </ItemGroup>
-
 </Project>

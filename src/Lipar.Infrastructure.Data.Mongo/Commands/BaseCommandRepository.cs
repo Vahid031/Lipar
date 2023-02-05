@@ -6,9 +6,7 @@ using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Entities;
 using Microsoft.Extensions.DependencyInjection;
-using MongoDB.Bson;
 using MongoDB.Driver;
-using SharpCompress.Common;
 
 namespace Lipar.Infrastructure.Data.Mongo.Commands;
 
