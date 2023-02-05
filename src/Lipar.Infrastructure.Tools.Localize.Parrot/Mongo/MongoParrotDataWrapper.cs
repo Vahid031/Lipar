@@ -2,13 +2,13 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 namespace Lipar.Infrastructure.Tools.Localize.Parrot.Mongo;
 
 public class MongoParrotDataWrapper : ParrotDataWrapper
 {
-    private readonly IMongoDatabase _database;
     private readonly IMongoCollection<LocalizationRecord> _collection;
     private static ParrotDataWrapper _instance;
     private List<LocalizationRecord> _localizationRecords;
@@ -21,9 +21,10 @@ public class MongoParrotDataWrapper : ParrotDataWrapper
     }
     private MongoParrotDataWrapper(LiparOptions liparOptions)
     {
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var mongoClient = new MongoClient(liparOptions.Translation.MongoDb.Connection);
-        _database = mongoClient.GetDatabase(liparOptions.Translation.MongoDb.DatabaseName);
-        _collection = _database.GetCollection<LocalizationRecord>(liparOptions.Translation.MongoDb.Collection);
+        var database = mongoClient.GetDatabase(liparOptions.Translation.MongoDb.DatabaseName);
+        _collection = database.GetCollection<LocalizationRecord>(liparOptions.Translation.MongoDb.Collection);
 
         _localizationRecords = _collection.Find(Builders<LocalizationRecord>.Filter.Empty).ToList();
     }

@@ -16,9 +16,8 @@ public abstract class BaseQueryDbContext
 
     protected BaseQueryDbContext(IServiceProvider serviceProvider)
     {
-        var liparOptions = serviceProvider.GetService<LiparOptions>();
         MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
-
+        var liparOptions = serviceProvider.GetService<LiparOptions>();
         MongoClient = new MongoClient(liparOptions.MongoDb.Connection);
         Database = MongoClient.GetDatabase(liparOptions.MongoDb.DatabaseName);
         ServiceProvider = serviceProvider;

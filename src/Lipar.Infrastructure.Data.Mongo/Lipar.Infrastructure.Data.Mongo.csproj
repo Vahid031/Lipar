@@ -12,16 +12,12 @@
     <PackageReference Include="Microsoft.AspNetCore.Routing.Abstractions" Version="2.2.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="6.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="6.0.0" />
-    <PackageReference Include="MongoDB.Driver" Version="2.16.1" />
+    <PackageReference Include="MongoDB.Driver" Version="2.19.0" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Lipar.Core.Contract\Lipar.Core.Contract.csproj" />
     <ProjectReference Include="..\Lipar.Infrastructure.Tools.Utilities\Lipar.Infrastructure.Tools.Utilities.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Contracts\" />
   </ItemGroup>
 
 </Project>

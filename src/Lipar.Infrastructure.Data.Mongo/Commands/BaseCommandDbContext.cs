@@ -30,9 +30,8 @@ public abstract class BaseCommandDbContext
 
     protected BaseCommandDbContext(IServiceProvider serviceProvider)
     {
-        var liparOptions = serviceProvider.GetService<LiparOptions>();
         MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
-
+        var liparOptions = serviceProvider.GetService<LiparOptions>();
         MongoClient = new MongoClient(liparOptions.MongoDb.Connection);
         Database = MongoClient.GetDatabase(liparOptions.MongoDb.DatabaseName);
         ServiceProvider = serviceProvider;
