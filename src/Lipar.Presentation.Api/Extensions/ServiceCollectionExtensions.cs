@@ -27,7 +27,8 @@ public static class ServiceCollectionExtensions
 
         services.AddApplication(assembies, liparOptions);
 
-        services.AddHostedService<PoolingPublisherHostedService>();
+        services.AddHostedService(serviceProvider => 
+            new PoolingPublisherHostedService(serviceProvider, services));
 
         services.AddControllers(
         options =>

@@ -3,10 +3,11 @@ using Lipar.Core.Contract.Events;
 using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,21 +18,18 @@ public class PoolingPublisherHostedService : IHostedService
     private readonly LiparOptions _liparOptions;
     private readonly IOutBoxEventRepository _outBoxEventRepository;
     private readonly IEventBus _eventBus;
-    private readonly IEventPublisher _eventPublisher;
+
     private readonly IJsonService _jsonService;
+    private readonly IServiceCollection _services;
     private Timer _timer;
 
-    public PoolingPublisherHostedService(LiparOptions liparOptions,
-    IOutBoxEventRepository outBoxEventRepository,
-    IEventBus eventBus,
-    IEventPublisher eventPublisher,
-    IJsonService jsonService)
+    public PoolingPublisherHostedService(IServiceProvider serviceProvider, IServiceCollection services)
     {
-        _liparOptions = liparOptions;
-        _outBoxEventRepository = outBoxEventRepository;
-        _eventBus = eventBus;
-        _eventPublisher = eventPublisher;
-        _jsonService = jsonService;
+        _liparOptions = serviceProvider.GetRequiredService<LiparOptions>();
+        _outBoxEventRepository = serviceProvider.GetRequiredService<IOutBoxEventRepository>();
+        _eventBus = serviceProvider.GetRequiredService<IEventBus>();
+        _jsonService = serviceProvider.GetRequiredService<IJsonService>();
+        _services = services;
     }
 
     public async Task StartAsync(CancellationToken cancellationToken)
@@ -41,16 +39,31 @@ public class PoolingPublisherHostedService : IHostedService
     }
     private Task SubscribeEvents()
     {
-        if (_liparOptions?.MessageBus?.Events?.Any() == true)
-        {
-            // All events will publish exept current service
-            foreach (var @event in _liparOptions.MessageBus.Events
-                .Where(m => m.ServiceId.Equals(_liparOptions.ServiceId))
-                .ToList())
+        var events = _services
+            .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IEventHandler<>))
+            .Select(m => new
             {
-                _eventBus.Subscribe(@event.ServiceId, @event.EventName);
-            }
+                Type = GetType(m.ServiceType.GetGenericArguments()[0].FullName),
+                Topic = (m.ImplementationType as TypeInfo).GetDeclaredMethod("Handle").GetCustomAttribute<EventTopicAttribute>().Topic
+            })
+            .ToList();
+
+        foreach (var @event in events)
+        {
+            _eventBus.Subscribe(@event.Topic, @event.Type);
         }
+
+
+        //_services
+        //   .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IEventHandler<>))
+        //   .Select(m => new
+        //   {
+        //       Type = GetType(m.ServiceType.GetGenericArguments()[0].FullName),
+        //       Topic = (m.ImplementationType as TypeInfo).GetDeclaredMethod("Handle").GetCustomAttribute<EventTopicAttribute>().Topic
+        //   })
+        //   .ToList()
+        //   .ForEach(@event => _eventBus.Subscribe(@event.Topic, @event.Type));
+
         return Task.CompletedTask;
     }
 
@@ -64,7 +77,6 @@ public class PoolingPublisherHostedService : IHostedService
         {
             // Raize event inside the application
             IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
-            _eventPublisher.Raise(@event);
 
             // Sending on Message Broker
             _eventBus.Publish(@event);
@@ -94,6 +106,19 @@ public class PoolingPublisherHostedService : IHostedService
         }
 
         return (IEvent)_jsonService.DeserializeObject(data, type);
+    }
+
+    private Type GetType(string typeName)
+    {
+        Type type = Type.GetType(typeName);
+        foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
+        {
+            type = asm.GetType(typeName);
+            if (type != null)
+                break;
+        }
+
+        return type;
     }
 
 }

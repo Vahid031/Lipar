@@ -20,9 +20,13 @@ namespace Market.Infrastructure.Events
             _logger.LogInformation($"Publish event has succedded : {_json.SerializeObject(@event)}");
         }
 
-        public void Subscribe(string serviceId, string eventName)
+        public void Subscribe<TEvent>(string topic) where TEvent : IEvent
         {
-            _logger.LogInformation($"Subscribe event from {serviceId} has started : {eventName}");
+        }
+
+        public void Subscribe(string topic, Type type)
+        {
+            _logger.LogInformation($"Subscribe event from {topic} has started");
         }
     }
 }

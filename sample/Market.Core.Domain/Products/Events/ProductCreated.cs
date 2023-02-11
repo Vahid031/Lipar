@@ -1,8 +1,8 @@
 using Lipar.Core.Domain.Events;
-using System;
 
 namespace Market.Core.Domain.Products.Events;
 
+[EventTopic("MarketService.ProductCreated")]
 public class ProductCreated : IEvent
 {
     public string Id { get; }

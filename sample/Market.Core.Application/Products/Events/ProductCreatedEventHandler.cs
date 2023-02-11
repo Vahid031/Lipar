@@ -4,6 +4,7 @@ using Lipar.Core.Domain.Entities;
 using Market.Core.Domain.Products.Events;
 using System.Threading;
 using System.Threading.Tasks;
+using Lipar.Core.Domain.Events;
 
 namespace Market.Core.Application.Products.Events;
 
@@ -17,6 +18,8 @@ public class ProductCreatedEventHandler : IEventHandler<ProductCreated>
         _emailService = emailService;
         _jsonService = jsonService;
     }
+
+    [EventTopic("MarketService.ProductCreated")]
     public async Task Handle(ProductCreated @event, CancellationToken cancellationToken)
     {
         await _emailService.SendAsync(new EmailRequest

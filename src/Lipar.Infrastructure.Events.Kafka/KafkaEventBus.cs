@@ -5,72 +5,93 @@ using Lipar.Core.Domain.Events;
 using Lipar.Core.Contract.Services;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using System.Collections.Generic;
+using System.Reflection;
+using Lipar.Core.Contract.Common;
+using Newtonsoft.Json;
+using System.Text;
+using System.Threading;
+using Lipar.Core.Contract.Data;
 
-namespace KafkaEventBus;
+namespace Lipar.Infrastructure.Events.Kafka;
 
 public class KafkaEventBus : IEventBus
 {
     private readonly IJsonService _jsonService;
     private readonly LiparOptions _liparOptions;
+    private readonly IInBoxEventRepository _inBoxEventRepository;
+    private readonly IEventPublisher _eventPublisher;
+    private readonly KafkaConsumerBuilder _kafkaConsumerBuilder;
+    private readonly Lazy<IProducer<string, string>> _cachedProducer;
 
-    public KafkaEventBus(IJsonService jsonService, LiparOptions liparOptions)
+    public KafkaEventBus(IJsonService jsonService, LiparOptions liparOptions, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
     {
         _jsonService = jsonService;
         _liparOptions = liparOptions;
+        _inBoxEventRepository = inBoxEventRepository;
+        _eventPublisher = eventPublisher;
+        _kafkaConsumerBuilder = KafkaConsumerBuilder.CreateFactoty(liparOptions?.MessageBus?.Kafka);
+        _cachedProducer = new Lazy<IProducer<string, string>>(() =>
+                    KafkaProducerBuilder.CreateFaktory(liparOptions?.MessageBus?.Kafka).Build());
     }
 
-    public void Publish<TEvent>(TEvent input) where TEvent : IEvent
+    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
-        string messageName = input.GetType().Name;
-        Parcel parcel = new Parcel
+        string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
+
+        if (string.IsNullOrEmpty(topic))
+            throw new ArgumentNullException(nameof(EventTopicAttribute));
+
+        Send(new Parcel
         {
             MessageId = Guid.NewGuid().ToString(),
-            MessageBody = _jsonService.SerializeObject(input),
-            MessageName = messageName,
-            Route = $"{_liparOptions.ServiceId}.{messageName}",
+            MessageBody = _jsonService.SerializeObject(@event),
+            MessageName = @event.GetType().Name,
+            Topic = topic,
             Headers = new Dictionary<string, object>
             {
                 ["AccuredOn"] = DateTime.Now.ToString(),
             }
-        };
-        Send(parcel);
+        });
     }
 
 
     private void Send(Parcel parcel)
     {
-        string topicName = "message_stream";
-
-        var config = new ProducerConfig() { BootstrapServers = "172.31.38.195:31200" };
-
-        using (var producer = new ProducerBuilder<string, Parcel>(config).Build())
+        var producedMessage = new Message<string, string>
         {
+            Key = parcel.MessageId,
+            Value = _jsonService.SerializeObject(parcel),
+            Timestamp = Timestamp.Default
+        };
 
-            var result = producer.ProduceAsync(topicName, new Message<string, Parcel> { Key = parcel.MessageId, Value = parcel }).GetAwaiter().GetResult();
-
-            Console.WriteLine($"Event sent on Partition: {result.Partition} with Offset: {result.Offset}");
-
-        }
+        _cachedProducer.Value.Produce(parcel.Topic, producedMessage);
     }
 
-    public void Subscribe(string serviceId, string eventName)
+    public void Subscribe<TEvent>(string topic) where TEvent : IEvent
     {
-        string topicName = "message_stream";
-
-        var config = new ConsumerConfig { GroupId = "messageConsumer", BootstrapServers = "172.31.38.195:31200", EnableAutoCommit = false };
-
-        using (var consumer = new ConsumerBuilder<string, Parcel>(config).Build())
-        {
-            consumer.Subscribe(topicName);
-
-            while (true)
-            {
-                var consumeResult = consumer.Consume();
-                Console.WriteLine($"Received message at {consumeResult.TopicPartitionOffset}: {consumeResult.Message.Value.MessageName}");
-                consumer.Commit();
-            }
-        }
+        Subscribe(topic, typeof(TEvent));
     }
 
+    public void Subscribe(string topic, Type type)
+    {
+
+        using var consumer = _kafkaConsumerBuilder.Build();
+        consumer.Subscribe(topic);
+
+        while (true)
+        {
+            var consumeResult = consumer.Consume();
+            var parcel = JsonConvert.DeserializeObject<Parcel>(consumeResult.Message.Value);
+
+            if (_inBoxEventRepository.AllowReceive(parcel.MessageId, parcel.ServiceId))
+            {
+                var @event = (IEvent)_jsonService.DeserializeObject(parcel.MessageBody, type); ;
+                _eventPublisher.Raise(@event);
+                _inBoxEventRepository.Receive(parcel.MessageId, parcel.ServiceId);
+            }
+            consumer.Commit();
+        }
+
+    }
 }
 
