@@ -20,14 +20,16 @@ public class ProductCreatedEventHandler : IEventHandler<ProductCreated>
     }
 
     [EventTopic("MarketService.ProductCreated")]
-    public async Task Handle(ProductCreated @event, CancellationToken cancellationToken)
+    public Task Handle(ProductCreated @event, CancellationToken cancellationToken)
     {
-        await _emailService.SendAsync(new EmailRequest
-        {
-            Body = _jsonService.SerializeObject(@event),
-            To = "Vahid031@yahoo.com",
-            Subject = "Test"
-        });
+        //await _emailService.SendAsync(new EmailRequest
+        //{
+        //    Body = _jsonService.SerializeObject(@event),
+        //    To = "Vahid031@yahoo.com",
+        //    Subject = "Test"
+        //});
+
+        return Task.CompletedTask;
     }
 }
 

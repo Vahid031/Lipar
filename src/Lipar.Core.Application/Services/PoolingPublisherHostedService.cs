@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace Lipar.Core.Application.Services;
 
-public class PoolingPublisherHostedService : IHostedService
+public class PoolingPublisherHostedService : BackgroundService
 {
     private readonly LiparOptions _liparOptions;
     private readonly IOutBoxEventRepository _outBoxEventRepository;
@@ -32,12 +32,38 @@ public class PoolingPublisherHostedService : IHostedService
         _services = services;
     }
 
-    public async Task StartAsync(CancellationToken cancellationToken)
+    protected override async Task ExecuteAsync(CancellationToken stoppingToken)
     {
-        await SubscribeEvents();
         _timer = new Timer(SendOutBoxItems, null, TimeSpan.Zero, TimeSpan.FromSeconds(_liparOptions.PoolingPublisher.SendOutBoxInterval));
+        await SubscribeEvents(stoppingToken);
     }
-    private Task SubscribeEvents()
+
+    private void SendOutBoxItems(object state)
+    {
+        _timer.Change(Timeout.Infinite, 0);
+
+        var outboxItems = _outBoxEventRepository.GetOutBoxEventItemsForPublish(_liparOptions.PoolingPublisher.SendOutBoxCount).GetAwaiter().GetResult();
+
+        foreach (var item in outboxItems)
+        {
+            // Raize event inside the application
+            IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
+
+            // Sending on Message Broker
+            _eventBus.Publish(@event).GetAwaiter().GetResult();
+
+            item.IsProcessed = true;
+        }
+
+        // Done
+        _outBoxEventRepository.MarkAsRead(outboxItems).GetAwaiter().GetResult();
+        _timer.Change(0, _liparOptions.PoolingPublisher.SendOutBoxInterval);
+
+    }
+
+
+
+    private async Task SubscribeEvents(CancellationToken cancellationToken)
     {
         var events = _services
             .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IEventHandler<>))
@@ -50,49 +76,11 @@ public class PoolingPublisherHostedService : IHostedService
 
         foreach (var @event in events)
         {
-            _eventBus.Subscribe(@event.Topic, @event.Type);
+            await Task.Run(async () =>
+              {
+                  await _eventBus.Subscribe(@event.Topic, @event.Type, cancellationToken);
+              }, cancellationToken);
         }
-
-
-        //_services
-        //   .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IEventHandler<>))
-        //   .Select(m => new
-        //   {
-        //       Type = GetType(m.ServiceType.GetGenericArguments()[0].FullName),
-        //       Topic = (m.ImplementationType as TypeInfo).GetDeclaredMethod("Handle").GetCustomAttribute<EventTopicAttribute>().Topic
-        //   })
-        //   .ToList()
-        //   .ForEach(@event => _eventBus.Subscribe(@event.Topic, @event.Type));
-
-        return Task.CompletedTask;
-    }
-
-    private void SendOutBoxItems(object state)
-    {
-        _timer.Change(Timeout.Infinite, 0);
-
-        var outboxItems = _outBoxEventRepository.GetOutBoxEventItemsForPublish(_liparOptions.PoolingPublisher.SendOutBoxCount).Result;
-
-        foreach (var item in outboxItems)
-        {
-            // Raize event inside the application
-            IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
-
-            // Sending on Message Broker
-            _eventBus.Publish(@event);
-
-            item.IsProcessed = true;
-        }
-
-        // Done
-        _outBoxEventRepository.MarkAsRead(outboxItems);
-        _timer.Change(0, _liparOptions.PoolingPublisher.SendOutBoxInterval);
-
-    }
-
-    public Task StopAsync(CancellationToken cancellationToken)
-    {
-        return Task.CompletedTask;
     }
 
     private IEvent GetEvent(string typeName, string data)
@@ -120,7 +108,6 @@ public class PoolingPublisherHostedService : IHostedService
 
         return type;
     }
-
 }
 
 

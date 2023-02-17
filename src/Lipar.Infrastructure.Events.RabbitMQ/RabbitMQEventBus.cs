@@ -7,9 +7,10 @@ using RabbitMQ.Client;
 using RabbitMQ.Client.Events;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Events.RabbitMQ;
 
@@ -41,7 +42,7 @@ public class RabbitMQEventBus : IEventBus
                                 liparOptions.MessageBus.RabbitMQ.ExchangeAutoDeleted);
     }
 
-    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
+    public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
         string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
 
@@ -59,6 +60,8 @@ public class RabbitMQEventBus : IEventBus
                 ["AccuredOn"] = DateTime.Now.ToString(),
             }
         });
+
+        return Task.CompletedTask;
     }
 
     private void Send(Parcel parcel)
@@ -76,19 +79,6 @@ public class RabbitMQEventBus : IEventBus
         Encoding.UTF8.GetBytes(parcel.MessageBody));
     }
 
-    private void Consumer_EventReceived(object sender, BasicDeliverEventArgs e)
-    {
-        var parcel = e.ToParcel();
-
-        if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
-        {
-            var mapToClass = _messageTypeMap[parcel.Route];
-            var @event = GetEvent(mapToClass, parcel.MessageBody);
-            _eventPublisher.Raise(@event);
-            _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
-        }
-    }
-
     private IEvent GetEvent(string typeName, string data)
     {
         Type type = Type.GetType(typeName);
@@ -102,30 +92,32 @@ public class RabbitMQEventBus : IEventBus
         return (IEvent)_jsonService.DeserializeObject(data, type);
     }
 
-    public void Subscribe<TEvent>(string topic) where TEvent : IEvent
+    public async Task Subscribe<TEvent>(string topic, CancellationToken cancellationToken) where TEvent : IEvent
     {
-        Subscribe(topic, typeof(TEvent));
+        await Subscribe(topic, typeof(TEvent), cancellationToken);
     }
 
-    public void Subscribe(string topic, Type type)
+    public Task Subscribe(string topic, Type type, CancellationToken cancellationToken)
     {
         var channel = _connection.CreateModel();
         var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += (sender, e) =>
+        consumer.Received += async (sender, e) =>
     {
         var parcel = e.ToParcel();
 
         if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
         {
             var @event = (IEvent)_jsonService.DeserializeObject(parcel.MessageBody, type); ;
-            _eventPublisher.Raise(@event);
-            _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
+            await _eventPublisher.Raise(@event);
+            await _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
         }
     };
         var queue = channel.QueueDeclare($"{_liparOptions.ServiceId}", true, false, false);
 
         channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, topic);
         channel.BasicConsume(queue.QueueName, true, consumer);
+
+        return Task.CompletedTask;
     }
 }
 

@@ -4,13 +4,11 @@ using Lipar.Core.Contract.Events;
 using Lipar.Core.Domain.Events;
 using Lipar.Core.Contract.Services;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
-using System.Collections.Generic;
 using System.Reflection;
-using Lipar.Core.Contract.Common;
-using Newtonsoft.Json;
 using System.Text;
-using System.Threading;
 using Lipar.Core.Contract.Data;
+using System.Threading.Tasks;
+using System.Threading;
 
 namespace Lipar.Infrastructure.Events.Kafka;
 
@@ -34,63 +32,55 @@ public class KafkaEventBus : IEventBus
                     KafkaProducerBuilder.CreateFaktory(liparOptions?.MessageBus?.Kafka).Build());
     }
 
-    public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
+    public async Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
         string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
 
         if (string.IsNullOrEmpty(topic))
             throw new ArgumentNullException(nameof(EventTopicAttribute));
 
-        Send(new Parcel
-        {
-            MessageId = Guid.NewGuid().ToString(),
-            MessageBody = _jsonService.SerializeObject(@event),
-            MessageName = @event.GetType().Name,
-            Topic = topic,
-            Headers = new Dictionary<string, object>
-            {
-                ["AccuredOn"] = DateTime.Now.ToString(),
-            }
-        });
-    }
-
-
-    private void Send(Parcel parcel)
-    {
         var producedMessage = new Message<string, string>
         {
-            Key = parcel.MessageId,
-            Value = _jsonService.SerializeObject(parcel),
-            Timestamp = Timestamp.Default
+            Key = Guid.NewGuid().ToString(),
+            Value = _jsonService.SerializeObject(@event),
+            Timestamp = Timestamp.Default,
+            Headers = new Headers()
+            {
+                new Header("TypeName",Encoding.UTF8.GetBytes( @event.GetType().Name)),
+                new Header("ServiceId",Encoding.UTF8.GetBytes( _liparOptions.ServiceId))
+            }
         };
 
-        _cachedProducer.Value.Produce(parcel.Topic, producedMessage);
+        await _cachedProducer.Value.ProduceAsync(topic, producedMessage);
     }
 
-    public void Subscribe<TEvent>(string topic) where TEvent : IEvent
+    public async Task Subscribe<TEvent>(string topic, CancellationToken cancellationToken) where TEvent : IEvent
     {
-        Subscribe(topic, typeof(TEvent));
+        await Subscribe(topic, typeof(TEvent), cancellationToken);
     }
 
-    public void Subscribe(string topic, Type type)
+    public async Task Subscribe(string topic, Type type, CancellationToken cancellationToken)
     {
-
         using var consumer = _kafkaConsumerBuilder.Build();
         consumer.Subscribe(topic);
 
-        while (true)
+        while (!cancellationToken.IsCancellationRequested)
         {
             var consumeResult = consumer.Consume();
-            var parcel = JsonConvert.DeserializeObject<Parcel>(consumeResult.Message.Value);
+            string serviceId;
+            if (consumeResult.Message.Headers.TryGetLastBytes("ServiceId", out byte[] bytes))
+                serviceId = Encoding.UTF8.GetString(bytes);
+            else
+                throw new ArgumentNullException($"ServiceId is null on message : {consumeResult.Message.Key}");
 
-            if (_inBoxEventRepository.AllowReceive(parcel.MessageId, parcel.ServiceId))
+            if (_inBoxEventRepository.AllowReceive(consumeResult.Message.Key, serviceId))
             {
-                var @event = (IEvent)_jsonService.DeserializeObject(parcel.MessageBody, type); ;
-                _eventPublisher.Raise(@event);
-                _inBoxEventRepository.Receive(parcel.MessageId, parcel.ServiceId);
+                var @event = (IEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, type); ;
+                await _eventPublisher.Raise(@event);
+                await _inBoxEventRepository.Receive(consumeResult.Message.Key, serviceId);
             }
-            consumer.Commit();
         }
+        consumer.Close();
 
     }
 }

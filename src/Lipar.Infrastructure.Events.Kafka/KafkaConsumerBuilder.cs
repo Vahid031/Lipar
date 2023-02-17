@@ -1,6 +1,5 @@
 ﻿using Confluent.Kafka;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
-using System;
 
 namespace Lipar.Infrastructure.Events.Kafka;
 
@@ -16,7 +15,7 @@ public class KafkaConsumerBuilder
 
         return _instance;
     }
-
+    private KafkaConsumerBuilder() { }
     private KafkaConsumerBuilder(KafkaOptions kafkaOptions)
     {
         _kafkaOptions = kafkaOptions;
@@ -24,9 +23,6 @@ public class KafkaConsumerBuilder
 
     public IConsumer<string, string> Build()
     {
-        _kafkaOptions = _kafkaOptions?.Value
-                       ?? throw new ArgumentNullException(nameof(_kafkaOptions));
-
         var config = new ClientConfig
         {
             BootstrapServers = _kafkaOptions.BootstrapServer

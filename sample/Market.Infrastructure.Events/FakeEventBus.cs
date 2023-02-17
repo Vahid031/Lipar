@@ -15,18 +15,23 @@ namespace Market.Infrastructure.Events
             _logger = logger;
             _json = json;
         }
-        public void Publish<TEvent>(TEvent @event) where TEvent : IEvent
+        public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
         {
             _logger.LogInformation($"Publish event has succedded : {_json.SerializeObject(@event)}");
+
+            return Task.CompletedTask;
         }
 
-        public void Subscribe<TEvent>(string topic) where TEvent : IEvent
+        public async Task Subscribe<TEvent>(string topic, CancellationToken cancellationToken) where TEvent : IEvent
         {
+            await Subscribe(topic, typeof(TEvent), cancellationToken);
         }
 
-        public void Subscribe(string topic, Type type)
+        public Task Subscribe(string topic, Type type, CancellationToken cancellationToken)
         {
             _logger.LogInformation($"Subscribe event from {topic} has started");
+
+            return Task.CompletedTask;
         }
     }
 }
