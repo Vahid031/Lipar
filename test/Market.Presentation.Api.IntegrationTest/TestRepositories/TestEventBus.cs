@@ -1,19 +1,20 @@
 ﻿using Lipar.Core.Contract.Events;
 using Lipar.Core.Domain.Events;
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 
 namespace Market.Presentation.Api.IntegrationTest.TestRepositories;
 internal class TestEventBus : IEventBus
 {
-    public void Publish<TEvent>(TEvent input) where TEvent : IEvent
+    public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
     {
+        return Task.CompletedTask;
     }
 
-    public void Subscribe<TEvent>(string topic) where TEvent : IEvent
+    public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
     {
-    }
-
-    public void Subscribe(string topic, Type type)
-    {
+        return Task.CompletedTask;
     }
 }
