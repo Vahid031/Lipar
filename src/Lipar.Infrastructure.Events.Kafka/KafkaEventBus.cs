@@ -65,7 +65,7 @@ public class KafkaEventBus : IEventBus
         {
             try
             {
-                var consumeResult = consumer.Consume();
+                var consumeResult = consumer.Consume(cancellationToken);
                 string serviceId;
                 if (consumeResult.Message.Headers.TryGetLastBytes("ServiceId", out byte[] bytes))
                     serviceId = Encoding.UTF8.GetString(bytes);

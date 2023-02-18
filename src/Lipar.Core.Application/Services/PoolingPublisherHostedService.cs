@@ -83,8 +83,6 @@ public class PoolingPublisherHostedService : BackgroundService
         {
             await _eventBus.Subscribe(topics, cancellationToken);
         }).Start();
-
-
     }
 
     private IEvent GetEvent(string typeName, string data)
