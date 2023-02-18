@@ -6,6 +6,7 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Threading;
@@ -61,8 +62,6 @@ public class PoolingPublisherHostedService : BackgroundService
 
     }
 
-
-
     private async Task SubscribeEvents(CancellationToken cancellationToken)
     {
         var events = _services
@@ -74,13 +73,18 @@ public class PoolingPublisherHostedService : BackgroundService
             })
             .ToList();
 
+        Dictionary<string, Type> topics = new Dictionary<string, Type>();
         foreach (var @event in events)
         {
-            await Task.Run(async () =>
-              {
-                  await _eventBus.Subscribe(@event.Topic, @event.Type, cancellationToken);
-              }, cancellationToken);
+            topics.Add(@event.Topic, @event.Type);
         }
+
+        new Thread(async () =>
+        {
+            await _eventBus.Subscribe(topics, cancellationToken);
+        }).Start();
+
+
     }
 
     private IEvent GetEvent(string typeName, string data)

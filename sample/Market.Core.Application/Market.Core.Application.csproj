@@ -16,7 +16,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Categories\Events\" />
     <Folder Include="Categories\Queries\" />
   </ItemGroup>
 

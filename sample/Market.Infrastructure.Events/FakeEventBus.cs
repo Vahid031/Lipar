@@ -22,14 +22,9 @@ namespace Market.Infrastructure.Events
             return Task.CompletedTask;
         }
 
-        public async Task Subscribe<TEvent>(string topic, CancellationToken cancellationToken) where TEvent : IEvent
+        public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
         {
-            await Subscribe(topic, typeof(TEvent), cancellationToken);
-        }
-
-        public Task Subscribe(string topic, Type type, CancellationToken cancellationToken)
-        {
-            _logger.LogInformation($"Subscribe event from {topic} has started");
+            _logger.LogInformation($"Subscribe event from {topics} has started");
 
             return Task.CompletedTask;
         }

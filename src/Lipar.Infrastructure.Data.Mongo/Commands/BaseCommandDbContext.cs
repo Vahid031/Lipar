@@ -39,7 +39,7 @@ public abstract class BaseCommandDbContext
 
         if (!registeredAllSerializer)
         {
-            BsonSerializer.RegisterSerializer(new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid>()));
+            BsonSerializer.RegisterSerializer(new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid?>()));
             registeredAllSerializer = true;
         }
 

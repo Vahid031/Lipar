@@ -31,7 +31,9 @@ public class KafkaConsumerBuilder
         var consumerConfig = new ConsumerConfig(config)
         {
             GroupId = _kafkaOptions.GroupId,
-            AutoOffsetReset = AutoOffsetReset.Earliest
+            AutoOffsetReset = AutoOffsetReset.Latest,
+            AllowAutoCreateTopics = true,
+
         };
 
         var consumerBuilder = new ConsumerBuilder<string, string>(consumerConfig);

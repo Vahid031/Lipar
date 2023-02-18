@@ -3,6 +3,7 @@ using System;
 
 namespace Market.Core.Domain.Categories.Events;
 
+[EventTopic("MarketService.CategoryCreated")]
 public class CategoryCreated : IEvent
 {
     public string Id { get; }

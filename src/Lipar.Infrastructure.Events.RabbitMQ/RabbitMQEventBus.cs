@@ -92,29 +92,28 @@ public class RabbitMQEventBus : IEventBus
         return (IEvent)_jsonService.DeserializeObject(data, type);
     }
 
-    public async Task Subscribe<TEvent>(string topic, CancellationToken cancellationToken) where TEvent : IEvent
-    {
-        await Subscribe(topic, typeof(TEvent), cancellationToken);
-    }
-
-    public Task Subscribe(string topic, Type type, CancellationToken cancellationToken)
+    public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
     {
         var channel = _connection.CreateModel();
         var consumer = new EventingBasicConsumer(channel);
-        consumer.Received += async (sender, e) =>
-    {
-        var parcel = e.ToParcel();
-
-        if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
-        {
-            var @event = (IEvent)_jsonService.DeserializeObject(parcel.MessageBody, type); ;
-            await _eventPublisher.Raise(@event);
-            await _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
-        }
-    };
         var queue = channel.QueueDeclare($"{_liparOptions.ServiceId}", true, false, false);
 
-        channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, topic);
+        foreach (var topic in topics)
+        {
+            consumer.Received += async (sender, e) =>
+            {
+                var parcel = e.ToParcel();
+
+                if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
+                {
+                    var @event = (IEvent)_jsonService.DeserializeObject(parcel.MessageBody, topic.Value); ;
+                    await _eventPublisher.Raise(@event);
+                    await _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
+                }
+            };
+            channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, topic.Key);
+        }       
+
         channel.BasicConsume(queue.QueueName, true, consumer);
 
         return Task.CompletedTask;

@@ -9,6 +9,8 @@ using System.Text;
 using Lipar.Core.Contract.Data;
 using System.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace Lipar.Infrastructure.Events.Kafka;
 
@@ -54,30 +56,52 @@ public class KafkaEventBus : IEventBus
         await _cachedProducer.Value.ProduceAsync(topic, producedMessage);
     }
 
-    public async Task Subscribe<TEvent>(string topic, CancellationToken cancellationToken) where TEvent : IEvent
-    {
-        await Subscribe(topic, typeof(TEvent), cancellationToken);
-    }
-
-    public async Task Subscribe(string topic, Type type, CancellationToken cancellationToken)
+    public async Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
     {
         using var consumer = _kafkaConsumerBuilder.Build();
-        consumer.Subscribe(topic);
+        consumer.Subscribe(topics.Keys.ToList());
 
         while (!cancellationToken.IsCancellationRequested)
         {
-            var consumeResult = consumer.Consume();
-            string serviceId;
-            if (consumeResult.Message.Headers.TryGetLastBytes("ServiceId", out byte[] bytes))
-                serviceId = Encoding.UTF8.GetString(bytes);
-            else
-                throw new ArgumentNullException($"ServiceId is null on message : {consumeResult.Message.Key}");
-
-            if (_inBoxEventRepository.AllowReceive(consumeResult.Message.Key, serviceId))
+            try
             {
-                var @event = (IEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, type); ;
-                await _eventPublisher.Raise(@event);
-                await _inBoxEventRepository.Receive(consumeResult.Message.Key, serviceId);
+                var consumeResult = consumer.Consume();
+                string serviceId;
+                if (consumeResult.Message.Headers.TryGetLastBytes("ServiceId", out byte[] bytes))
+                    serviceId = Encoding.UTF8.GetString(bytes);
+                else
+                    throw new ArgumentNullException($"ServiceId is null on message : {consumeResult.Message.Key}");
+
+                if (consumeResult.Message?.Value == null)
+                    continue;
+
+                if (_inBoxEventRepository.AllowReceive(consumeResult.Message.Key, serviceId))
+                {
+
+                    var @event = (IEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, topics[consumeResult.Topic]); ;
+                    await _eventPublisher.Raise(@event);
+                    await _inBoxEventRepository.Receive(consumeResult.Message.Key, serviceId);
+                }
+
+            }
+            catch (ConsumeException ex)
+            {
+                var producedMessage = new Message<string, string>
+                {
+                    Key = Guid.NewGuid().ToString(),
+                    Value = null,
+                    Timestamp = Timestamp.Default,
+                    Headers = new Headers()
+                    {
+                        new Header("ServiceId",Encoding.UTF8.GetBytes( _liparOptions.ServiceId))
+                    }
+                };
+
+                await _cachedProducer.Value.ProduceAsync(ex.ConsumerRecord.Topic, producedMessage);
+            }
+            catch(Exception ex)
+            {
+                throw;
             }
         }
         consumer.Close();
