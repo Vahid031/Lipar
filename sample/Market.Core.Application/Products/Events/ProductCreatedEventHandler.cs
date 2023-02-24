@@ -8,7 +8,7 @@ using Lipar.Core.Domain.Events;
 
 namespace Market.Core.Application.Products.Events;
 
-public class ProductCreatedEventHandler : IEventHandler<ProductCreated>
+public class ProductCreatedEventHandler : IDomainEventHandler<ProductCreated>
 {
     private readonly IEmailService _emailService;
     private readonly IJsonService _jsonService;

@@ -48,7 +48,7 @@ public class PoolingPublisherHostedService : BackgroundService
         foreach (var item in outboxItems)
         {
             // Raize event inside the application
-            IEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
+            IDomainEvent @event = GetEvent(item.EventTypeName, item.EventPayload);
 
             // Sending on Message Broker
             _eventBus.Publish(@event).GetAwaiter().GetResult();
@@ -65,7 +65,7 @@ public class PoolingPublisherHostedService : BackgroundService
     private async Task SubscribeEvents(CancellationToken cancellationToken)
     {
         var events = _services
-            .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IEventHandler<>))
+            .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IDomainEventHandler<>))
             .Select(m => new
             {
                 Type = GetType(m.ServiceType.GetGenericArguments()[0].FullName),
@@ -85,7 +85,7 @@ public class PoolingPublisherHostedService : BackgroundService
         }).Start();
     }
 
-    private IEvent GetEvent(string typeName, string data)
+    private IDomainEvent GetEvent(string typeName, string data)
     {
         Type type = Type.GetType(typeName);
         foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -95,7 +95,7 @@ public class PoolingPublisherHostedService : BackgroundService
                 break;
         }
 
-        return (IEvent)_jsonService.DeserializeObject(data, type);
+        return (IDomainEvent)_jsonService.DeserializeObject(data, type);
     }
 
     private Type GetType(string typeName)

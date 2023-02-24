@@ -15,7 +15,7 @@ namespace Market.Infrastructure.Events
             _logger = logger;
             _json = json;
         }
-        public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
+        public Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent
         {
             _logger.LogInformation($"Publish event has succedded : {_json.SerializeObject(@event)}");
 

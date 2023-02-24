@@ -34,7 +34,7 @@ public class KafkaEventBus : IEventBus
                     KafkaProducerBuilder.CreateFaktory(liparOptions?.MessageBus?.Kafka).Build());
     }
 
-    public async Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
+    public async Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent
     {
         string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
 
@@ -78,7 +78,7 @@ public class KafkaEventBus : IEventBus
                 if (_inBoxEventRepository.AllowReceive(consumeResult.Message.Key, serviceId))
                 {
 
-                    var @event = (IEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, topics[consumeResult.Topic]); ;
+                    var @event = (IDomainEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, topics[consumeResult.Topic]); ;
                     await _eventPublisher.Raise(@event);
                     await _inBoxEventRepository.Receive(consumeResult.Message.Key, serviceId);
                 }
@@ -99,7 +99,7 @@ public class KafkaEventBus : IEventBus
 
                 await _cachedProducer.Value.ProduceAsync(ex.ConsumerRecord.Topic, producedMessage);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 throw;
             }

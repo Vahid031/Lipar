@@ -19,7 +19,7 @@ public class EventPublisher : IEventPublisher
         _serviceFactory = serviceFactory;
     }
 
-    public async Task Raise<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : class, IEvent
+    public async Task Raise<TDomainEvent>(TDomainEvent @event, CancellationToken cancellationToken = default) where TDomainEvent : class, IDomainEvent
     {
         var eventType = @event.GetType();
         var handler = _eventHandlers.GetOrAdd(eventType,
@@ -29,7 +29,7 @@ public class EventPublisher : IEventPublisher
         await handler.Handle(@event, cancellationToken, _serviceFactory, RaiseCore);
     }
 
-    private async Task RaiseCore(IEnumerable<Func<IEvent, CancellationToken, Task>> allHandlers, IEvent @event, CancellationToken cancellationToken)
+    private async Task RaiseCore(IEnumerable<Func<IDomainEvent, CancellationToken, Task>> allHandlers, IDomainEvent @event, CancellationToken cancellationToken)
     {
         foreach (var handler in allHandlers)
             await handler(@event, cancellationToken).ConfigureAwait(false);

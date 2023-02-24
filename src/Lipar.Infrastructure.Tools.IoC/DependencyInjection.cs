@@ -33,7 +33,7 @@ public static partial class DependencyInjection
 
         services.AddValidatorsFromAssemblies(assemblies);
         services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
-        services.AddWithTransientLifetime(assemblies, typeof(IEventHandler<>));
+        services.AddWithTransientLifetime(assemblies, typeof(IDomainEventHandler<>));
         services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
         services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository));
 

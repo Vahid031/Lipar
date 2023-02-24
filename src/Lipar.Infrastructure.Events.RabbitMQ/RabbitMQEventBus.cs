@@ -42,7 +42,7 @@ public class RabbitMQEventBus : IEventBus
                                 liparOptions.MessageBus.RabbitMQ.ExchangeAutoDeleted);
     }
 
-    public Task Publish<TEvent>(TEvent @event) where TEvent : IEvent
+    public Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent
     {
         string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
 
@@ -79,7 +79,7 @@ public class RabbitMQEventBus : IEventBus
         Encoding.UTF8.GetBytes(parcel.MessageBody));
     }
 
-    private IEvent GetEvent(string typeName, string data)
+    private IDomainEvent GetEvent(string typeName, string data)
     {
         Type type = Type.GetType(typeName);
         foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -89,7 +89,7 @@ public class RabbitMQEventBus : IEventBus
                 break;
         }
 
-        return (IEvent)_jsonService.DeserializeObject(data, type);
+        return (IDomainEvent)_jsonService.DeserializeObject(data, type);
     }
 
     public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
@@ -106,7 +106,7 @@ public class RabbitMQEventBus : IEventBus
 
                 if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
                 {
-                    var @event = (IEvent)_jsonService.DeserializeObject(parcel.MessageBody, topic.Value); ;
+                    var @event = (IDomainEvent)_jsonService.DeserializeObject(parcel.MessageBody, topic.Value); ;
                     await _eventPublisher.Raise(@event);
                     await _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
                 }
