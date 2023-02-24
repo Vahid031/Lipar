@@ -23,7 +23,7 @@ public abstract class BaseCommandDbContext
     public IServiceProvider ServiceProvider { get; }
 
     private readonly List<Func<Task>> _commands = new();
-    private readonly List<IEvent> _events = new();
+    private readonly List<IDomainEvent> _events = new();
     private static bool registeredAllSerializer = false;
 
     private BaseCommandDbContext() { }
@@ -105,7 +105,7 @@ public abstract class BaseCommandDbContext
 
 
     public void AddCommand(Func<Task> func) => _commands.Add(func);
-    public void AddEvents(IEnumerable<IEvent> events) => _events.AddRange(events);
+    public void AddEvents(IEnumerable<IDomainEvent> events) => _events.AddRange(events);
 
     public IMongoCollection<T> GetCollection<T>(string name) => Database.GetCollection<T>(name);
 

@@ -6,7 +6,7 @@ using Market.Core.Domain.Categories.Events;
 
 namespace Market.Core.Application.Categories.Events;
 
-public class CategoryCreatedEventHandler : IEventHandler<CategoryCreated>
+public class CategoryCreatedEventHandler : IDomainEventHandler<CategoryCreated>
 {
 
     [EventTopic("MarketService.CategoryCreated")]

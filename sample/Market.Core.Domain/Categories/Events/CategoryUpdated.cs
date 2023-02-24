@@ -3,7 +3,7 @@ using System;
 
 namespace Market.Core.Domain.Categories.Events;
 
-public class CategoryUpdated : IEvent
+public class CategoryUpdated : IDomainEvent
 {
     public string Id { get; }
     public string Name { get; }

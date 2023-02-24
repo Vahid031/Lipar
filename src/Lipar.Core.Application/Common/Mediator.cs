@@ -57,7 +57,7 @@ public class Mediator : IMediator
         return handler.Handle(request, cancellationToken, serviceFactory);
     }
 
-    public async Task Publish<TEvent>(TEvent @event, CancellationToken cancellationToken = default) where TEvent : IEvent
+    public async Task Publish<TDomainEvent>(TDomainEvent @event, CancellationToken cancellationToken = default) where TDomainEvent : IDomainEvent
     {
         await _outBoxEventRepository.AddOutboxEvent(
             new OutBoxEvent
