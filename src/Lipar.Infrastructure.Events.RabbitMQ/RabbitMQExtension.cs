@@ -1,4 +1,3 @@
-using Lipar.Core.Domain.Events;
 using RabbitMQ.Client.Events;
 using System.Collections.Generic;
 using System.Text;

@@ -1,19 +1,18 @@
 ﻿using System;
 
-namespace Lipar.Core.Domain.Events
+namespace Lipar.Core.Domain.Events;
+
+[AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
+public class EventTopicAttribute : Attribute
 {
-    [AttributeUsage(AttributeTargets.Method | AttributeTargets.Class)]
-    public class EventTopicAttribute : Attribute
+    public string Topic { get; set; }
+
+    private EventTopicAttribute() { }
+    public EventTopicAttribute(string topic)
     {
-        public string Topic { get; set; }
+        if (string.IsNullOrEmpty(topic))
+            throw new ArgumentNullException();
 
-        private EventTopicAttribute() { }
-        public EventTopicAttribute(string topic)
-        {
-            if (string.IsNullOrEmpty(topic))
-                throw new ArgumentNullException();
-
-            Topic = topic;
-        }
+        Topic = topic;
     }
 }

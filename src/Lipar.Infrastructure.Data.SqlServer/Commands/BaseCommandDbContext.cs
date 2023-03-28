@@ -8,6 +8,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Common;
+using Lipar.Core.Contract.Events;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 
@@ -62,12 +64,11 @@ public abstract class BaseCommandDbContext : DbContext
 
     private async Task PublishEvents()
     {
-        var mediator = this.GetService<IMediator>();
-
+        var eventPublisher = this.GetService<IDomainEventPublisher>();
 
         foreach (var aggregate in ChangeTracker.GetAggregatesWithEvent())
             foreach (var @event in aggregate.GetEvents())
-                await mediator.Publish(@event);
+                await eventPublisher.Raise(@event);
 
     }
 

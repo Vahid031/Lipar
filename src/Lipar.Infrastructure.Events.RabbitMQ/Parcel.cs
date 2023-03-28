@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Lipar.Core.Domain.Events;
+namespace Lipar.Infrastructure.Events.RabbitMQ;
 
 public class Parcel
 {

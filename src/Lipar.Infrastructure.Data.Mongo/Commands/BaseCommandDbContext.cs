@@ -1,5 +1,6 @@
 using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Data;
+using Lipar.Core.Contract.Events;
 using Lipar.Core.Domain.Entities;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Data.Mongo.NewFolder;
@@ -93,10 +94,10 @@ public abstract class BaseCommandDbContext
 
     private async Task PublishEvents()
     {
-        var mediator = ServiceProvider.GetService<IMediator>();
+        var eventPublisher = ServiceProvider.GetService<IDomainEventPublisher>();
 
         foreach (var @event in _events)
-            await mediator.Publish(@event);
+            await eventPublisher.Raise(@event);
     }
 
     #endregion

@@ -10,11 +10,11 @@ using Lipar.Core.Domain.Events;
 namespace Lipar.Core.Application.Events;
 
 
-public class EventPublisher : IEventPublisher
+public class DomainEventPublisher : IDomainEventPublisher
 {
     private readonly ServiceFactory _serviceFactory;
-    private static readonly ConcurrentDictionary<Type, EventHandlerWrapper> _eventHandlers = new();
-    public EventPublisher(ServiceFactory serviceFactory)
+    private static readonly ConcurrentDictionary<Type, DomainEventHandlerWrapper> _eventHandlers = new();
+    public DomainEventPublisher(ServiceFactory serviceFactory)
     {
         _serviceFactory = serviceFactory;
     }
@@ -23,7 +23,7 @@ public class EventPublisher : IEventPublisher
     {
         var eventType = @event.GetType();
         var handler = _eventHandlers.GetOrAdd(eventType,
-        static t => (EventHandlerWrapper)(Activator.CreateInstance(typeof(EventHandlerWrapperImpl<>).MakeGenericType(t))
+        static t => (DomainEventHandlerWrapper)(Activator.CreateInstance(typeof(DomainEventHandlerWrapperImpl<>).MakeGenericType(t))
     ?? throw new InvalidOperationException($"Could not create wrapper for type {t}")));
 
         await handler.Handle(@event, cancellationToken, _serviceFactory, RaiseCore);
