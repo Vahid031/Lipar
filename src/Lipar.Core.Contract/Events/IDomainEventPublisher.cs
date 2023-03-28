@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 
 namespace Lipar.Core.Contract.Events;
 
-public interface IEventPublisher
+public interface IDomainEventPublisher
 {
     Task Raise<TDomainEvent>(TDomainEvent @event, CancellationToken cancellationToken = default) where TDomainEvent : class, IDomainEvent;
 }
-
 

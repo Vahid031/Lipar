@@ -19,7 +19,6 @@ public class ProductCreatedEventHandler : IDomainEventHandler<ProductCreated>
         _jsonService = jsonService;
     }
 
-    [EventTopic("MarketService.ProductCreated")]
     public Task Handle(ProductCreated @event, CancellationToken cancellationToken)
     {
         //await _emailService.SendAsync(new EmailRequest

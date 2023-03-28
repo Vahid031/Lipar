@@ -10,13 +10,13 @@ using System.Threading.Tasks;
 
 namespace Lipar.Core.Application.Events;
 
-public abstract class EventHandlerWrapper
+public abstract class DomainEventHandlerWrapper
 {
     public abstract Task Handle(IDomainEvent Event, CancellationToken cancellationToken, ServiceFactory serviceFactory,
     Func<IEnumerable<Func<IDomainEvent, CancellationToken, Task>>, IDomainEvent, CancellationToken, Task> publish);
 }
 
-public class EventHandlerWrapperImpl<TDomainEvent> : EventHandlerWrapper
+public class DomainEventHandlerWrapperImpl<TDomainEvent> : DomainEventHandlerWrapper
 where TDomainEvent : IDomainEvent
 {
     public override Task Handle(IDomainEvent Event, CancellationToken cancellationToken, ServiceFactory serviceFactory,
@@ -29,5 +29,4 @@ where TDomainEvent : IDomainEvent
         return publish(handlers, Event, cancellationToken);
     }
 }
-
 

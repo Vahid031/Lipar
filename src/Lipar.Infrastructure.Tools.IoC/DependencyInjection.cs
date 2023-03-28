@@ -22,7 +22,8 @@ public static partial class DependencyInjection
     {
         services.AddTransient<ServiceFactory>(p => p.GetService);
         services.AddTransient<IMediator, Mediator>();
-        services.AddTransient<IEventPublisher, EventPublisher>();
+        services.AddTransient<IDomainEventPublisher, DomainEventPublisher>();
+        services.AddTransient<IIntegrationEventPublisher, IntegrationEventPublisher>();
         services.AddTransient<IEmailService, EmailService>();
 
         services.AddWithTransientLifetime(assemblies, liparOptions.MessageBus.TypeName, typeof(IEventBus));
@@ -33,7 +34,7 @@ public static partial class DependencyInjection
 
         services.AddValidatorsFromAssemblies(assemblies);
         services.AddWithTransientLifetime(assemblies, typeof(IRequestHandler<>), typeof(IRequestHandler<,>));
-        services.AddWithTransientLifetime(assemblies, typeof(IDomainEventHandler<>));
+        services.AddWithTransientLifetime(assemblies, typeof(IDomainEventHandler<>), typeof(IIntegrationEventHandler<>));
         services.AddWithTransientLifetime(assemblies, typeof(IPipelineBehavior<,>), typeof(IPipelineBehavior<>));
         services.AddWithTransientLifetime(assemblies, typeof(ICommandRepository<>), typeof(IQueryRepository));
 

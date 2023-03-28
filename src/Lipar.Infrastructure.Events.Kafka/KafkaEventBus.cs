@@ -19,11 +19,11 @@ public class KafkaEventBus : IEventBus
     private readonly IJsonService _jsonService;
     private readonly LiparOptions _liparOptions;
     private readonly IInBoxEventRepository _inBoxEventRepository;
-    private readonly IEventPublisher _eventPublisher;
+    private readonly IIntegrationEventPublisher _eventPublisher;
     private readonly KafkaConsumerBuilder _kafkaConsumerBuilder;
     private readonly Lazy<IProducer<string, string>> _cachedProducer;
 
-    public KafkaEventBus(IJsonService jsonService, LiparOptions liparOptions, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
+    public KafkaEventBus(IJsonService jsonService, LiparOptions liparOptions, IInBoxEventRepository inBoxEventRepository, IIntegrationEventPublisher eventPublisher)
     {
         _jsonService = jsonService;
         _liparOptions = liparOptions;
@@ -34,7 +34,7 @@ public class KafkaEventBus : IEventBus
                     KafkaProducerBuilder.CreateFaktory(liparOptions?.MessageBus?.Kafka).Build());
     }
 
-    public async Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent
+    public async Task Publish<TIntegrationEvent>(TIntegrationEvent @event) where TIntegrationEvent : IntegrationEvent
     {
         string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
 
@@ -58,6 +58,9 @@ public class KafkaEventBus : IEventBus
 
     public async Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
     {
+        if (!topics.Any())
+            return;
+
         using var consumer = _kafkaConsumerBuilder.Build();
         consumer.Subscribe(topics.Keys.ToList());
 
@@ -78,7 +81,7 @@ public class KafkaEventBus : IEventBus
                 if (_inBoxEventRepository.AllowReceive(consumeResult.Message.Key, serviceId))
                 {
 
-                    var @event = (IDomainEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, topics[consumeResult.Topic]); ;
+                    var @event = (IntegrationEvent)_jsonService.DeserializeObject(consumeResult.Message?.Value, topics[consumeResult.Topic]); ;
                     await _eventPublisher.Raise(@event);
                     await _inBoxEventRepository.Receive(consumeResult.Message.Key, serviceId);
                 }

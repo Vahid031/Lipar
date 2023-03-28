@@ -8,7 +8,7 @@ namespace Lipar.Core.Contract.Events;
 
 public interface IEventBus
 {
-    Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent;
+    Task Publish<TIntegrationEvent>(TIntegrationEvent @event) where TIntegrationEvent : IntegrationEvent;
     Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken);
 }
 

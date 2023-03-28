@@ -9,7 +9,6 @@ namespace Market.Core.Application.Categories.Events;
 public class CategoryCreatedEventHandler : IDomainEventHandler<CategoryCreated>
 {
 
-    [EventTopic("MarketService.CategoryCreated")]
     public Task Handle(CategoryCreated @event, CancellationToken cancellationToken)
     {
         //await _emailService.SendAsync(new EmailRequest

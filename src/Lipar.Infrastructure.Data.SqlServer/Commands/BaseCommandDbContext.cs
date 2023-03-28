@@ -66,12 +66,11 @@ public abstract class BaseCommandDbContext : DbContext
 
     private async Task PublishEvents()
     {
-        var mediator = this.GetService<IMediator>();
-
+        var eventPublisher = this.GetService<IDomainEventPublisher>();
 
         foreach (var aggregate in ChangeTracker.GetAggregatesWithEvent())
             foreach (var @event in aggregate.GetEvents())
-                await mediator.Publish(@event);
+                await eventPublisher.Raise(@event);
 
     }
 

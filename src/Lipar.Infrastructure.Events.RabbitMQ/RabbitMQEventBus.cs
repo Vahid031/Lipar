@@ -18,12 +18,12 @@ public class RabbitMQEventBus : IEventBus
 {
     private readonly IJsonService _jsonService;
     private readonly IInBoxEventRepository _inBoxEventRepository;
-    private readonly IEventPublisher _eventPublisher;
+    private readonly IIntegrationEventPublisher _eventPublisher;
     private readonly IConnection _connection;
     private readonly LiparOptions _liparOptions;
     private readonly Dictionary<string, string> _messageTypeMap;
 
-    public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IEventPublisher eventPublisher)
+    public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IIntegrationEventPublisher eventPublisher)
     {
         _liparOptions = liparOptions;
         _jsonService = jsonService;
@@ -42,7 +42,7 @@ public class RabbitMQEventBus : IEventBus
                                 liparOptions.MessageBus.RabbitMQ.ExchangeAutoDeleted);
     }
 
-    public Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent
+    public Task Publish<TIntegrationEvent>(TIntegrationEvent @event) where TIntegrationEvent : IntegrationEvent
     {
         string topic = @event.GetType().GetCustomAttribute<EventTopicAttribute>()?.Topic;
 
@@ -79,7 +79,7 @@ public class RabbitMQEventBus : IEventBus
         Encoding.UTF8.GetBytes(parcel.MessageBody));
     }
 
-    private IDomainEvent GetEvent(string typeName, string data)
+    private IntegrationEvent GetEvent(string typeName, string data)
     {
         Type type = Type.GetType(typeName);
         foreach (var asm in AppDomain.CurrentDomain.GetAssemblies())
@@ -89,7 +89,7 @@ public class RabbitMQEventBus : IEventBus
                 break;
         }
 
-        return (IDomainEvent)_jsonService.DeserializeObject(data, type);
+        return (IntegrationEvent)_jsonService.DeserializeObject(data, type);
     }
 
     public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
@@ -106,7 +106,7 @@ public class RabbitMQEventBus : IEventBus
 
                 if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
                 {
-                    var @event = (IDomainEvent)_jsonService.DeserializeObject(parcel.MessageBody, topic.Value); ;
+                    var @event = (IntegrationEvent)_jsonService.DeserializeObject(parcel.MessageBody, topic.Value); ;
                     await _eventPublisher.Raise(@event);
                     await _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
                 }
