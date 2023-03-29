@@ -6,23 +6,24 @@ namespace Lipar.Core.Domain.Entities;
 
 public abstract class AggregateRoot : Entity
 {
-    private readonly List<IDomainEvent> _events;
+    private readonly List<DomainEvent> _events;
 
-    protected AggregateRoot() => _events = new List<IDomainEvent>();
+    protected AggregateRoot() => _events = new List<DomainEvent>();
 
-    public AggregateRoot(IEnumerable<IDomainEvent> events)
+    public AggregateRoot(IEnumerable<DomainEvent> events)
     {
         if (events == null) return;
         foreach (var @event in events)
             ((dynamic)this).On((dynamic)@event);
     }
 
-    protected void Apply(IDomainEvent @event)
+    protected void Apply(DomainEvent @event)
     {
+        @event.SetAggregateId(Id.Value);
         _events.Add(@event);
     }
 
-    public IEnumerable<IDomainEvent> GetEvents() => _events.AsEnumerable();
+    public IEnumerable<DomainEvent> GetEvents() => _events.AsEnumerable();
 
     public void ClearEvents() => _events.Clear();
 }

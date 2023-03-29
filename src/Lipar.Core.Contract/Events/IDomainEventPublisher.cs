@@ -6,6 +6,6 @@ namespace Lipar.Core.Contract.Events;
 
 public interface IDomainEventPublisher
 {
-    Task Raise<TDomainEvent>(TDomainEvent @event, CancellationToken cancellationToken = default) where TDomainEvent : class, IDomainEvent;
+    Task Raise<TDomainEvent>(TDomainEvent @event, CancellationToken cancellationToken = default) where TDomainEvent : DomainEvent;
 }
 
