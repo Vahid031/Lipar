@@ -62,7 +62,7 @@ public class PoolingPublisherHostedService : BackgroundService
 
     }
 
-    private async Task SubscribeEvents(CancellationToken cancellationToken)
+    private Task SubscribeEvents(CancellationToken cancellationToken)
     {
         var events = _services
             .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))
@@ -83,6 +83,8 @@ public class PoolingPublisherHostedService : BackgroundService
         {
             await _eventBus.Subscribe(topics, cancellationToken);
         }).Start();
+
+        return Task.CompletedTask;
     }
 
     private IntegrationEvent GetEvent(string typeName, string data)

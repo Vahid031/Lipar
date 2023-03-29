@@ -16,7 +16,7 @@ public class Product : AggregateRoot, IAuditable
         Name = name;
         Barcode = barcode;
 
-        Apply(new ProductCreated(Id.ToString(), Name, Barcode));
+        Apply(new ProductCreated(Id.Value, Name, Barcode));
     }
 
     public void Update(string name, string barcode)
@@ -24,11 +24,11 @@ public class Product : AggregateRoot, IAuditable
         Name = name;
         Barcode = barcode;
 
-        Apply(new ProductUpdated(Id.ToString(), Name, Barcode));
+        Apply(new ProductUpdated(Id.Value, Name, Barcode));
     }
 
     public void Delete()
     {
-        Apply(new ProductDeleted(Id.ToString()));
+        Apply(new ProductDeleted(Id.Value));
     }
 }

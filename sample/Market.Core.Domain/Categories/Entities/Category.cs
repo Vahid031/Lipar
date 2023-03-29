@@ -16,7 +16,7 @@ public class Category : AggregateRoot, IAuditable
         Name = name;
         ParentId = parentId;
 
-        Apply(new CategoryCreated(Id.ToString(), Name, ParentId?.Value));
+        Apply(new CategoryCreated(Id.Value, Name, ParentId?.Value));
     }
 
     public void Update(string name, EntityId parentId)
@@ -24,11 +24,11 @@ public class Category : AggregateRoot, IAuditable
         Name = name;
         ParentId = parentId;
 
-        Apply(new CategoryUpdated(Id.ToString(), Name, ParentId?.Value));
+        Apply(new CategoryUpdated(Id.Value, Name, ParentId?.Value));
     }
 
     public void Delete()
     {
-        Apply(new CategoryDeleted(Id.ToString()));
+        Apply(new CategoryDeleted(Id.Value));
     }
 }

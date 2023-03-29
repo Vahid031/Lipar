@@ -12,19 +12,19 @@ namespace Lipar.Core.Application.Events;
 
 public abstract class DomainEventHandlerWrapper
 {
-    public abstract Task Handle(IDomainEvent Event, CancellationToken cancellationToken, ServiceFactory serviceFactory,
-    Func<IEnumerable<Func<IDomainEvent, CancellationToken, Task>>, IDomainEvent, CancellationToken, Task> publish);
+    public abstract Task Handle(DomainEvent Event, CancellationToken cancellationToken, ServiceFactory serviceFactory,
+    Func<IEnumerable<Func<DomainEvent, CancellationToken, Task>>, DomainEvent, CancellationToken, Task> publish);
 }
 
 public class DomainEventHandlerWrapperImpl<TDomainEvent> : DomainEventHandlerWrapper
-where TDomainEvent : IDomainEvent
+where TDomainEvent : DomainEvent
 {
-    public override Task Handle(IDomainEvent Event, CancellationToken cancellationToken, ServiceFactory serviceFactory,
-    Func<IEnumerable<Func<IDomainEvent, CancellationToken, Task>>, IDomainEvent, CancellationToken, Task> publish)
+    public override Task Handle(DomainEvent Event, CancellationToken cancellationToken, ServiceFactory serviceFactory,
+    Func<IEnumerable<Func<DomainEvent, CancellationToken, Task>>, DomainEvent, CancellationToken, Task> publish)
     {
         var handlers = serviceFactory
         .GetInstances<IDomainEventHandler<TDomainEvent>>()
-        .Select(x => new Func<IDomainEvent, CancellationToken, Task>((theEvent, theToken) => x.Handle((TDomainEvent)theEvent, theToken)));
+        .Select(x => new Func<DomainEvent, CancellationToken, Task>((theEvent, theToken) => x.Handle((TDomainEvent)theEvent, theToken)));
 
         return publish(handlers, Event, cancellationToken);
     }

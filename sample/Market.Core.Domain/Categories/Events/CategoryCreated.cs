@@ -3,15 +3,13 @@ using System;
 
 namespace Market.Core.Domain.Categories.Events;
 
-public class CategoryCreated : IDomainEvent
+public class CategoryCreated : DomainEvent
 {
-    public string Id { get; }
+    public Guid Id { get; }
     public string Name { get; }
     public Guid? ParentId { get; }
 
-    private CategoryCreated() { }
-
-    public CategoryCreated(string id, string name, Guid? parentId)
+    public CategoryCreated(Guid id, string name, Guid? parentId)
     {
         Id = id;
         Name = name;

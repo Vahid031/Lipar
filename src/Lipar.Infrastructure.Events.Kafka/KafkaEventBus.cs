@@ -102,7 +102,7 @@ public class KafkaEventBus : IEventBus
 
                 await _cachedProducer.Value.ProduceAsync(ex.ConsumerRecord.Topic, producedMessage);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 throw;
             }

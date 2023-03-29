@@ -21,7 +21,6 @@ public class RabbitMQEventBus : IEventBus
     private readonly IIntegrationEventPublisher _eventPublisher;
     private readonly IConnection _connection;
     private readonly LiparOptions _liparOptions;
-    private readonly Dictionary<string, string> _messageTypeMap;
 
     public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IIntegrationEventPublisher eventPublisher)
     {

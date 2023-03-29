@@ -3,13 +3,11 @@ using System;
 
 namespace Market.Core.Domain.Categories.Events;
 
-public class CategoryDeleted : IDomainEvent
+public class CategoryDeleted : DomainEvent
 {
-    public string Id { get; }
+    public Guid Id { get; }
 
-    private CategoryDeleted() { }
-
-    public CategoryDeleted(string id)
+    public CategoryDeleted(Guid id) 
     {
         Id = id;
     }
