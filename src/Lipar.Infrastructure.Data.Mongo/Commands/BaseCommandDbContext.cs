@@ -52,12 +52,14 @@ public abstract class BaseCommandDbContext
         //using (Session = MongoClient.StartSession())
         //    Session.StartTransaction();
 
+        PublishEvents(DomainEventType.BeforeCommit).GetAwaiter();
+
         var commandTasks = _commands.Select(c => c());
 
         Task.WhenAll(commandTasks);
 
         AddEntityChangesInterceptors().GetAwaiter();
-        PublishEvents().GetAwaiter();
+        PublishEvents(DomainEventType.AfterCommit).GetAwaiter();
         //Session.CommitTransaction();
 
         return _commands.Count;
@@ -71,13 +73,14 @@ public abstract class BaseCommandDbContext
         //using (Session = await MongoClient.StartSessionAsync())
         //Session.StartTransaction();
 
-
         var commandTasks = _commands.Select(c => c());
+
+        await PublishEvents(DomainEventType.BeforeCommit);
 
         await Task.WhenAll(commandTasks);
 
         await AddEntityChangesInterceptors();
-        await PublishEvents();
+        await PublishEvents(DomainEventType.AfterCommit);
         //await Session.CommitTransactionAsync();
 
         return _commands.Count;
@@ -92,11 +95,11 @@ public abstract class BaseCommandDbContext
         await repository.AddEntityChanges(entityChangesInterceptors);
     }
 
-    private async Task PublishEvents()
+    private async Task PublishEvents(DomainEventType domainEventType)
     {
-        var eventPublisher = ServiceProvider.GetService<IDomainEventPublisher>();
+        var eventPublisher = ServiceProvider.GetService<IDomainEventDispatcher>();
 
-        foreach (var @event in _events)
+        foreach (var @event in _events.Where(m => m.DomainEventType == domainEventType))
             await eventPublisher.Raise(@event);
     }
 

@@ -9,11 +9,11 @@ using Lipar.Core.Domain.Events;
 
 namespace Lipar.Core.Application.Events;
 
-public class IntegrationEventPublisher : IIntegrationEventPublisher
+public class IntegrationEventDispatcher : IIntegrationEventDispatcher
 {
     private readonly ServiceFactory _serviceFactory;
     private static readonly ConcurrentDictionary<Type, IntegrationEventHandlerWrapper> _eventHandlers = new();
-    public IntegrationEventPublisher(ServiceFactory serviceFactory)
+    public IntegrationEventDispatcher(ServiceFactory serviceFactory)
     {
         _serviceFactory = serviceFactory;
     }

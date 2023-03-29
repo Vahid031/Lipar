@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Lipar.Core.Contract.Events;
 
-public interface IIntegrationEventPublisher
+public interface IIntegrationEventDispatcher
 {
     Task Raise<TIntegrationEvent>(TIntegrationEvent @event, CancellationToken cancellationToken = default) where TIntegrationEvent : IntegrationEvent;
 }

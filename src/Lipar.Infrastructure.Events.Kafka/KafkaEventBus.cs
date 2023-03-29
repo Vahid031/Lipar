@@ -19,11 +19,11 @@ public class KafkaEventBus : IEventBus
     private readonly IJsonService _jsonService;
     private readonly LiparOptions _liparOptions;
     private readonly IInBoxEventRepository _inBoxEventRepository;
-    private readonly IIntegrationEventPublisher _eventPublisher;
+    private readonly IIntegrationEventDispatcher _eventPublisher;
     private readonly KafkaConsumerBuilder _kafkaConsumerBuilder;
     private readonly Lazy<IProducer<string, string>> _cachedProducer;
 
-    public KafkaEventBus(IJsonService jsonService, LiparOptions liparOptions, IInBoxEventRepository inBoxEventRepository, IIntegrationEventPublisher eventPublisher)
+    public KafkaEventBus(IJsonService jsonService, LiparOptions liparOptions, IInBoxEventRepository inBoxEventRepository, IIntegrationEventDispatcher eventPublisher)
     {
         _jsonService = jsonService;
         _liparOptions = liparOptions;

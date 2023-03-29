@@ -56,21 +56,6 @@ public class Mediator : IMediator
 
         return handler.Handle(request, cancellationToken, serviceFactory);
     }
-
-    public async Task Publish<TDomainEvent>(TDomainEvent @event, CancellationToken cancellationToken = default) where TDomainEvent : DomainEvent
-    {
-        await _outBoxEventRepository.AddOutboxEvent(
-            new OutBoxEvent
-            {
-                Id = Guid.NewGuid(),
-                AccuredByUserId = _userInfoService.UserId.ToString(),
-                AccuredOn = _dateTimeService.Now,
-                EventName = @event.GetType().Name,
-                EventPayload = _jsonService.SerializeObject(@event),
-                EventTypeName = @event.GetType().FullName,
-                IsProcessed = false
-            });
-    }
 }
 
 

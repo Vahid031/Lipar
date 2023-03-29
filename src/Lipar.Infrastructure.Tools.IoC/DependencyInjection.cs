@@ -22,8 +22,8 @@ public static partial class DependencyInjection
     {
         services.AddTransient<ServiceFactory>(p => p.GetService);
         services.AddTransient<IMediator, Mediator>();
-        services.AddTransient<IDomainEventPublisher, DomainEventPublisher>();
-        services.AddTransient<IIntegrationEventPublisher, IntegrationEventPublisher>();
+        services.AddTransient<IDomainEventDispatcher, DomainEventDispatcher>();
+        services.AddTransient<IIntegrationEventDispatcher, IntegrationEventDispatcher>();
         services.AddTransient<IEmailService, EmailService>();
 
         services.AddWithTransientLifetime(assemblies, liparOptions.MessageBus.TypeName, typeof(IEventBus));
