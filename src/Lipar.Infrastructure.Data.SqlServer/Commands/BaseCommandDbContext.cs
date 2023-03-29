@@ -8,8 +8,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Common;
-using Lipar.Presentation.Api.Services;
-using Lipar.Core.Contract.Services;
+using Lipar.Core.Contract.Events;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 
@@ -47,9 +47,11 @@ public abstract class BaseCommandDbContext : DbContext
 
         ChangeTracker.SetShadowProperties(userInfo.UserId);
         await AddEntityChangesInterceptors();
-        await PublishEvents();
+        await PublishEvents(DomainEventType.BeforeCommit);
 
         var rowAffect = await base.SaveChangesAsync();
+
+        await PublishEvents(DomainEventType.AfterCommit);
 
         ChangeTracker.AutoDetectChangesEnabled = true;
 
@@ -64,12 +66,12 @@ public abstract class BaseCommandDbContext : DbContext
         await repository.AddEntityChanges(entityChangesInterceptors);
     }
 
-    private async Task PublishEvents()
+    private async Task PublishEvents(DomainEventType domainEventType)
     {
-        var eventPublisher = this.GetService<IDomainEventPublisher>();
+        var eventPublisher = this.GetService<IDomainEventDispatcher>();
 
         foreach (var aggregate in ChangeTracker.GetAggregatesWithEvent())
-            foreach (var @event in aggregate.GetEvents())
+            foreach (var @event in aggregate.GetEvents().Where(m=>m.DomainEventType == domainEventType))
                 await eventPublisher.Raise(@event);
 
     }

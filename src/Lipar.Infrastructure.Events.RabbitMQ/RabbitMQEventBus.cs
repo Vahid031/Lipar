@@ -18,11 +18,11 @@ public class RabbitMQEventBus : IEventBus
 {
     private readonly IJsonService _jsonService;
     private readonly IInBoxEventRepository _inBoxEventRepository;
-    private readonly IIntegrationEventPublisher _eventPublisher;
+    private readonly IIntegrationEventDispatcher _eventPublisher;
     private readonly IConnection _connection;
     private readonly LiparOptions _liparOptions;
 
-    public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IIntegrationEventPublisher eventPublisher)
+    public RabbitMQEventBus(LiparOptions liparOptions, IJsonService jsonService, IInBoxEventRepository inBoxEventRepository, IIntegrationEventDispatcher eventPublisher)
     {
         _liparOptions = liparOptions;
         _jsonService = jsonService;

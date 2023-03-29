@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Market.Presentation.Api.IntegrationTest.TestRepositories;
 internal class TestEventBus : IEventBus
 {
-    public Task Publish<TDomainEvent>(TDomainEvent @event) where TDomainEvent : IDomainEvent
+    public Task Publish<TIntegrationEvent>(TIntegrationEvent @event) where TIntegrationEvent : IntegrationEvent
     {
         return Task.CompletedTask;
     }

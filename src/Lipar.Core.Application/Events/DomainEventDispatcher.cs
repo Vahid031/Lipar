@@ -10,11 +10,11 @@ using Lipar.Core.Domain.Events;
 namespace Lipar.Core.Application.Events;
 
 
-public class DomainEventPublisher : IDomainEventPublisher
+public class DomainEventDispatcher : IDomainEventDispatcher
 {
     private readonly ServiceFactory _serviceFactory;
     private static readonly ConcurrentDictionary<Type, DomainEventHandlerWrapper> _eventHandlers = new();
-    public DomainEventPublisher(ServiceFactory serviceFactory)
+    public DomainEventDispatcher(ServiceFactory serviceFactory)
     {
         _serviceFactory = serviceFactory;
     }
