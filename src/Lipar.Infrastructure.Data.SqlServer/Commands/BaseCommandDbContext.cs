@@ -8,6 +8,8 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Common;
+using Lipar.Presentation.Api.Services;
+using Lipar.Core.Contract.Services;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 
@@ -38,10 +40,12 @@ public abstract class BaseCommandDbContext : DbContext
 
     public async Task<int> SaveChangesAsync()
     {
+        var userInfo = this.GetService<IUserInfoService>();
+
         ChangeTracker.DetectChanges();
         ChangeTracker.AutoDetectChangesEnabled = false;
 
-        ChangeTracker.SetShadowProperties();
+        ChangeTracker.SetShadowProperties(userInfo.UserId);
         await AddEntityChangesInterceptors();
         await PublishEvents();
 

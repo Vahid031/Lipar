@@ -12,17 +12,15 @@ namespace Lipar.Infrastructure.Data.SqlServer.Extensions;
 
 public static class ChangeTrackerExtensions
 {
-    public static void SetShadowProperties(this ChangeTracker changeTracker)
+    public static void SetShadowProperties(this ChangeTracker changeTracker, int userId)
     {
-        var userId = Guid.NewGuid();
-
         // add Entity shadow properties
         changeTracker
         .Entries<Entity>()
         .Where(e => e.State == EntityState.Added).ToList()
         .ForEach(entity =>
         {
-            entity.Property<DateTime>(ModelBuilderExtensions.CreatedOn).CurrentValue = DateTime.UtcNow;
+            entity.Property(m => m.CreatedOn).CurrentValue = DateTime.UtcNow;
         });
 
 
@@ -38,11 +36,11 @@ public static class ChangeTrackerExtensions
                     /// when configuration for soft delete were develope, complete this place
                     break;
                 case EntityState.Modified:
-                    entity.Property<Guid?>(ModelBuilderExtensions.ModifedBy).CurrentValue = userId;
+                    entity.Property<int?>(ModelBuilderExtensions.ModifedBy).CurrentValue = userId;
                     entity.Property<DateTime?>(ModelBuilderExtensions.ModifedOn).CurrentValue = DateTime.UtcNow;
                     break;
                 case EntityState.Added:
-                    entity.Property<Guid?>(ModelBuilderExtensions.CreatedBy).CurrentValue = userId;
+                    entity.Property<int>(ModelBuilderExtensions.CreatedBy).CurrentValue = userId;
                     break;
                 default:
                     break;
