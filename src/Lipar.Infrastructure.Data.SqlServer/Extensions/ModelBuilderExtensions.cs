@@ -44,11 +44,11 @@ public static class ModelBuilderExtensions
         entityType =>
         {
             modelBuilder.Entity(entityType.ClrType)
-            .Property<Guid?>(CreatedBy);
+            .Property<int>(CreatedBy);
             modelBuilder.Entity(entityType.ClrType)
             .Property<DateTime?>(ModifedOn);
             modelBuilder.Entity(entityType.ClrType)
-            .Property<Guid?>(ModifedBy);
+            .Property<int?>(ModifedBy);
         });
     }
 
