@@ -50,14 +50,17 @@ public abstract class BaseCommandDbContext
         //using (Session = MongoClient.StartSession())
         //    Session.StartTransaction();
 
-        PublishEvents(DomainEventType.BeforeCommit).GetAwaiter();
-
         var commandTasks = _commands.Select(c => c());
 
-        Task.WhenAll(commandTasks);
+        Task.Run(async () =>
+        {
+            await PublishEvents(DomainEventType.BeforeCommit);
+            await Task.WhenAll(commandTasks);
+            await AddEntityChangesInterceptors();
+            await PublishEvents(DomainEventType.AfterCommit);
+        }).Wait();
 
-        AddEntityChangesInterceptors().GetAwaiter();
-        PublishEvents(DomainEventType.AfterCommit).GetAwaiter();
+
         //Session.CommitTransaction();
 
         return _commands.Count;
