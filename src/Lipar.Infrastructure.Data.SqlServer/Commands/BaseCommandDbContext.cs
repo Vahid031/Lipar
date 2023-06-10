@@ -8,8 +8,6 @@ using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Common;
-using Lipar.Core.Contract.Events;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 
