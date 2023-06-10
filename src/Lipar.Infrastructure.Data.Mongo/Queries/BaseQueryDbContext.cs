@@ -15,11 +15,10 @@ public abstract class BaseQueryDbContext
     private BaseQueryDbContext() { }
 
     static BaseQueryDbContext() =>
-    MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
 
     protected BaseQueryDbContext(IServiceProvider serviceProvider)
     {
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var liparOptions = serviceProvider.GetService<LiparOptions>();
         MongoClient = new MongoClient(liparOptions.MongoDb.Connection);
         Database = MongoClient.GetDatabase(liparOptions.MongoDb.DatabaseName);
