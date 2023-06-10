@@ -14,10 +14,11 @@ public class MongoDbInBoxEventRepository : IInBoxEventRepository
     private readonly IDateTimeService _dateTimeService;
     private readonly IMongoCollection<InBoxEvent> _collection;
 
+    static MongoDbInBoxEventRepository() =>
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
 
     public MongoDbInBoxEventRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
     {
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var mongoClient = new MongoClient(liparOptions.InBoxEvent.MongoDb.Connection);
         var database = mongoClient.GetDatabase(liparOptions.InBoxEvent.MongoDb.DatabaseName);
         _collection = database.GetCollection<InBoxEvent>(liparOptions.InBoxEvent.MongoDb.Collection);

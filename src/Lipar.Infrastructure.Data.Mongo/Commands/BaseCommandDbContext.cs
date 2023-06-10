@@ -1,7 +1,5 @@
-using Lipar.Core.Contract.Common;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Events;
-using Lipar.Core.Domain.Entities;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Data.Mongo.NewFolder;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
@@ -29,9 +27,11 @@ public abstract class BaseCommandDbContext
 
     private BaseCommandDbContext() { }
 
+    static BaseCommandDbContext() =>
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+
     protected BaseCommandDbContext(IServiceProvider serviceProvider)
     {
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var liparOptions = serviceProvider.GetService<LiparOptions>();
         MongoClient = new MongoClient(liparOptions.MongoDb.Connection);
         Database = MongoClient.GetDatabase(liparOptions.MongoDb.DatabaseName);
@@ -43,8 +43,6 @@ public abstract class BaseCommandDbContext
             BsonSerializer.RegisterSerializer(new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid?>()));
             registeredAllSerializer = true;
         }
-
-        //Database.Settings.GuidRepresentation = GuidRepresentation.Standard;
     }
 
     public int SaveChanges()

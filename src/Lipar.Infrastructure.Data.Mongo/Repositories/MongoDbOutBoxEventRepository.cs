@@ -14,9 +14,11 @@ public class MongoDbOutBoxEventRepository : IOutBoxEventRepository
 {
     private readonly IMongoCollection<OutBoxEvent> _collection;
 
+    static MongoDbOutBoxEventRepository() =>
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+
     public MongoDbOutBoxEventRepository(LiparOptions liparOptions)
     {
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var mongoClient = new MongoClient(liparOptions.OutBoxEvent.MongoDb.Connection);
         var database = mongoClient.GetDatabase(liparOptions.OutBoxEvent.MongoDb.DatabaseName);
         _collection = database.GetCollection<OutBoxEvent>(liparOptions.OutBoxEvent.MongoDb.Collection);

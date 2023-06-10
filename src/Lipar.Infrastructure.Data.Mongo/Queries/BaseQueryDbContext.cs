@@ -14,6 +14,9 @@ public abstract class BaseQueryDbContext
 
     private BaseQueryDbContext() { }
 
+    static BaseQueryDbContext() =>
+    MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+
     protected BaseQueryDbContext(IServiceProvider serviceProvider)
     {
         MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;

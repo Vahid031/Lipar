@@ -17,9 +17,11 @@ public class MongoDbEntityChangeInterceptorRepository : IEntityChangesIntercepto
     private readonly IJsonService _jsonService;
     private readonly IMongoCollection<EntityChangesInterception> _collection;
 
+    static MongoDbEntityChangeInterceptorRepository() =>
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+
     public MongoDbEntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
     {
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var mongoClient = new MongoClient(liparOptions.EntityChangesInterception.MongoDb.Connection);
         var database = mongoClient.GetDatabase(liparOptions.EntityChangesInterception.MongoDb.DatabaseName);
         _collection = database.GetCollection<EntityChangesInterception>(liparOptions.EntityChangesInterception.MongoDb.Collection);

@@ -7,7 +7,9 @@ using System;
 using System.Linq;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Lipar.Core.Contract.Data;
-using Lipar.Core.Contract.Common;
+using Lipar.Core.Contract.Services;
+using Lipar.Core.Domain.Events;
+using Lipar.Core.Contract.Events;
 
 namespace Lipar.Infrastructure.Data.SqlServer.Commands;
 

@@ -19,9 +19,12 @@ public class MongoParrotDataWrapper : ParrotDataWrapper
 
         return _instance;
     }
+
+    static MongoParrotDataWrapper() =>
+        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+
     private MongoParrotDataWrapper(LiparOptions liparOptions)
     {
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
         var mongoClient = new MongoClient(liparOptions.Translation.MongoDb.Connection);
         var database = mongoClient.GetDatabase(liparOptions.Translation.MongoDb.DatabaseName);
         _collection = database.GetCollection<LocalizationRecord>(liparOptions.Translation.MongoDb.Collection);
