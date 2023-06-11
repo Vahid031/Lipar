@@ -7,6 +7,8 @@ using Lipar.Core.Contract.Services;
 using MongoDB.Bson;
 using MongoDB.Driver;
 using System.Linq;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 
 namespace Lipar.Infrastructure.Data.Mongo.Repositories;
 
@@ -15,7 +17,8 @@ public class MongoDbOutBoxEventRepository : IOutBoxEventRepository
     private readonly IMongoCollection<OutBoxEvent> _collection;
 
     static MongoDbOutBoxEventRepository() =>
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+        BsonSerializer.TryRegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
 
     public MongoDbOutBoxEventRepository(LiparOptions liparOptions)
     {

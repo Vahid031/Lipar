@@ -6,6 +6,7 @@ using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization;
+using MongoDB.Bson.Serialization.Serializers;
 using MongoDB.Driver;
 using System;
 using System.Collections.Generic;
@@ -23,12 +24,16 @@ public abstract class BaseCommandDbContext
 
     private readonly List<Func<Task>> _commands = new();
     private readonly List<DomainEvent> _events = new();
-    private static bool registeredAllSerializer = false;
 
     private BaseCommandDbContext() { }
 
-    static BaseCommandDbContext() =>
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+    static BaseCommandDbContext()
+    {
+        BsonSerializer.TryRegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
+        BsonSerializer.TryRegisterSerializer(
+            new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid?>()));
+    }
 
     protected BaseCommandDbContext(IServiceProvider serviceProvider)
     {
@@ -36,13 +41,6 @@ public abstract class BaseCommandDbContext
         MongoClient = new MongoClient(liparOptions.MongoDb.Connection);
         Database = MongoClient.GetDatabase(liparOptions.MongoDb.DatabaseName);
         ServiceProvider = serviceProvider;
-
-
-        if (!registeredAllSerializer)
-        {
-            BsonSerializer.RegisterSerializer(new EntityIdSerializer(BsonSerializer.SerializerRegistry.GetSerializer<Guid?>()));
-            registeredAllSerializer = true;
-        }
     }
 
     public int SaveChanges()

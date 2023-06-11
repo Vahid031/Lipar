@@ -91,7 +91,7 @@ public class RabbitMQEventBus : IEventBus
         return (IntegrationEvent)_jsonService.DeserializeObject(data, type);
     }
 
-    public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
+    public Task Subscribe(Dictionary<string, string> topics, CancellationToken cancellationToken)
     {
         var channel = _connection.CreateModel();
         var consumer = new EventingBasicConsumer(channel);
@@ -103,15 +103,21 @@ public class RabbitMQEventBus : IEventBus
             {
                 var parcel = e.ToParcel();
 
-                if (_inBoxEventRepository.AllowReceive(parcel.MessageId, e.BasicProperties.AppId))
+                var @event = new InBoxEvent
                 {
-                    var @event = (IntegrationEvent)_jsonService.DeserializeObject(parcel.MessageBody, topic.Value); ;
-                    await _eventPublisher.Raise(@event);
-                    await _inBoxEventRepository.Receive(parcel.MessageId, e.BasicProperties.AppId);
-                }
+                    MessageId = parcel.MessageId,
+                    OwnerService = e.BasicProperties.AppId,
+                    Paload = parcel.MessageBody,
+                    ReceivedAt = DateTime.Now,
+                    RetryCount = 0,
+                    Status = InBoxEventStatus.Scheduled,
+                    TypeName = topic.Value
+                };
+
+                await _inBoxEventRepository.ReceiveNewEvent(@event);
             };
             channel.QueueBind(queue.QueueName, _liparOptions.MessageBus.RabbitMQ.ExchangeName, topic.Key);
-        }       
+        }
 
         channel.BasicConsume(queue.QueueName, true, consumer);
 

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 
 namespace Lipar.Infrastructure.Tools.Localize.Parrot.Mongo;
@@ -21,14 +23,14 @@ public class MongoParrotDataWrapper : ParrotDataWrapper
     }
 
     static MongoParrotDataWrapper() =>
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+        BsonSerializer.TryRegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
 
     private MongoParrotDataWrapper(LiparOptions liparOptions)
     {
         var mongoClient = new MongoClient(liparOptions.Translation.MongoDb.Connection);
         var database = mongoClient.GetDatabase(liparOptions.Translation.MongoDb.DatabaseName);
         _collection = database.GetCollection<LocalizationRecord>(liparOptions.Translation.MongoDb.Collection);
-
         _localizationRecords = _collection.Find(Builders<LocalizationRecord>.Filter.Empty).ToList();
     }
 

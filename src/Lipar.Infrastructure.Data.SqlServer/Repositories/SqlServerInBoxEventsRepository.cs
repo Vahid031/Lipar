@@ -1,9 +1,11 @@
 using Dapper;
 using Lipar.Core.Contract.Data;
 using Lipar.Core.Contract.Services;
+using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Data.SqlClient;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -78,6 +80,31 @@ public class SqlServerInBoxEventRepository : IInBoxEventRepository
             MessageId = messageId,
             ReceivedDate = dateTimeService.Now
         });
+    }
+
+    public Task ReceiveNewEvent(InBoxEvent @event)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<InBoxEvent> ScheduleIncomingEvent()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SuccessEventHandeling(InBoxEvent @event)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task FailEventHandeling(InBoxEvent @event)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<bool> MakeUnknownStatus(List<InBoxEvent> events)
+    {
+        throw new NotImplementedException();
     }
 }
 

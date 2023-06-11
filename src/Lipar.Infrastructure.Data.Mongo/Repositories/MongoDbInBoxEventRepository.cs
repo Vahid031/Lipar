@@ -3,8 +3,11 @@ using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Lipar.Infrastructure.Data.Mongo.Repositories;
@@ -15,7 +18,8 @@ public class MongoDbInBoxEventRepository : IInBoxEventRepository
     private readonly IMongoCollection<InBoxEvent> _collection;
 
     static MongoDbInBoxEventRepository() =>
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+        BsonSerializer.TryRegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
 
     public MongoDbInBoxEventRepository(LiparOptions liparOptions, IDateTimeService dateTimeService)
     {
@@ -25,24 +29,42 @@ public class MongoDbInBoxEventRepository : IInBoxEventRepository
         _dateTimeService = dateTimeService;
     }
 
-    public bool AllowReceive(string messageId, string fromService)
+    public Task FailEventHandeling(InBoxEvent @event)
     {
-        var result = _collection.Find(m => m.OwnerService == fromService && m.MessageId == messageId).Any();
-
-        return !result;
+        throw new NotImplementedException();
     }
 
-    public async Task Receive(string messageId, string fromService)
+    public Task<bool> MakeUnknownStatus(List<InBoxEvent> events)
     {
-        await _collection.InsertOneAsync(
-            new InBoxEvent
-            {
-                Id = Guid.NewGuid(),
-                OwnerService = fromService,
-                MessageId = messageId,
-                ReceivedDate = _dateTimeService.Now
-            });
+        throw new NotImplementedException();
     }
+
+    public Task ReceiveNewEvent(InBoxEvent @event)
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task<InBoxEvent> ScheduleIncomingEvent()
+    {
+        throw new NotImplementedException();
+    }
+
+    public Task SuccessEventHandeling(InBoxEvent @event)
+    {
+        throw new NotImplementedException();
+    }
+
+    //public async Task<bool> AllowReceiveAsync(string messageId)
+    //{
+    //    var result = await _collection.FindAsync(m => m.MessageId == messageId);
+
+    //    return !result.Any();
+    //}
+
+    //public async Task Receive(InBoxEvent @event)
+    //{
+    //    await _collection.InsertOneAsync(@event);
+    //}
 }
 
 

@@ -1,6 +1,8 @@
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System;
 
@@ -15,7 +17,8 @@ public abstract class BaseQueryDbContext
     private BaseQueryDbContext() { }
 
     static BaseQueryDbContext() =>
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+       BsonSerializer.TryRegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
 
     protected BaseQueryDbContext(IServiceProvider serviceProvider)
     {

@@ -68,15 +68,15 @@ public class PoolingPublisherHostedService : BackgroundService
             .Where(m => m.ServiceType.IsGenericType && m.ServiceType.GetGenericTypeDefinition() == typeof(IIntegrationEventHandler<>))
             .Select(m => new
             {
-                Type = GetType(m.ServiceType.GetGenericArguments()[0].FullName),
+                TypeName = m.ServiceType.GetGenericArguments()[0].FullName,
                 Topic = (m.ImplementationType as TypeInfo).GetDeclaredMethod("Handle").GetCustomAttribute<EventTopicAttribute>().Topic
             })
             .ToList();
 
-        Dictionary<string, Type> topics = new Dictionary<string, Type>();
+        Dictionary<string, string> topics = new();
         foreach (var @event in events)
         {
-            topics.Add(@event.Topic, @event.Type);
+            topics.Add(@event.Topic, @event.TypeName);
         }
 
         new Thread(async () =>

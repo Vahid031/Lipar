@@ -3,6 +3,8 @@ using Lipar.Core.Contract.Services;
 using Lipar.Core.Domain.Events;
 using Lipar.Infrastructure.Tools.Utilities.Configurations;
 using MongoDB.Bson;
+using MongoDB.Bson.Serialization.Serializers;
+using MongoDB.Bson.Serialization;
 using MongoDB.Driver;
 using System.Collections.Generic;
 using System.Linq;
@@ -18,7 +20,8 @@ public class MongoDbEntityChangeInterceptorRepository : IEntityChangesIntercepto
     private readonly IMongoCollection<EntityChangesInterception> _collection;
 
     static MongoDbEntityChangeInterceptorRepository() =>
-        MongoDefaults.GuidRepresentation = GuidRepresentation.Standard;
+        BsonSerializer.TryRegisterSerializer(
+            new GuidSerializer(GuidRepresentation.Standard));
 
     public MongoDbEntityChangeInterceptorRepository(LiparOptions liparOptions, IUserInfoService userInfoService, IJsonService jsonService, IDateTimeService dateTimeService)
     {

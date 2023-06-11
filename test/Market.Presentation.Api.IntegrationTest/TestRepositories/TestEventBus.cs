@@ -13,7 +13,7 @@ internal class TestEventBus : IEventBus
         return Task.CompletedTask;
     }
 
-    public Task Subscribe(Dictionary<string, Type> topics, CancellationToken cancellationToken)
+    public Task Subscribe(Dictionary<string, string> topics, CancellationToken cancellationToken)
     {
         return Task.CompletedTask;
     }
